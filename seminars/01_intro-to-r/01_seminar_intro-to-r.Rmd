@@ -1,0 +1,210 @@
+---
+title: "PSY260 - Research Methods and Analysis"
+subtitle: "R Workshop 1 - Using R for Data Processing"
+output: 
+  html_document:
+    css: "../../style.css"
+    toc: true
+    toc_float: true
+    theme: united
+    highlight: tango
+author: "Dr Glenn Williams"
+date: "2020-09-17 (Updated `r Sys.Date()`)"
+---
+
+# Getting Started in R
+
+Please make sure that you have watched the three [introductory videos on Using R for Data Processing](https://canvas.sunderland.ac.uk/courses/40018/pages/lecture-4-using-r-for-data-processing). These cover why you might use R, how to install and create notebooks in R for data processing, and how to do basic data manipulation in R.
+
+# Installing R
+
+Please watch videos 1b for details on installing R. Some details are provided below. Please note that Option 1 is preferable.
+
+## Option 1: Local Install
+
+Download and install R: Follow the link to [https://cloud.r-project.org/](https://cloud.r-project.org/) to install R. 
+
+Choose Download R for Linux, Mac (OS X), or Windows as appropriate and follow the install instructions.
+
+```{r r-download-1, echo = FALSE, out.width = 750, fig.align = "center", fig.cap=" "}
+knitr::include_graphics(c(
+   "../../img/r-download.png"
+))
+```
+
+Choose a mirror from which to download R. Any will do.
+
+```{r r-download-2, echo = FALSE, out.width = 750, fig.align = "center", fig.cap=" "}
+knitr::include_graphics(c(
+   "../../img/cran-mirrors.png"
+))
+```
+
+You'll see a new page. Here you need to download R for your specific operating system:
+
+- For Linux, click on **Download R for Linux.**
+- For Mac, click on **"Download R for (Mac) OS X."**
+- For Windows, click on **"Download R for Windows."**
+
+```{r r-download-3, echo = FALSE, out.width = 750, fig.align = "center", fig.cap=" "}
+knitr::include_graphics(c(
+   "../../img/r-install.png"
+))
+```
+
+Download and install RStudio: Follow the link directly to **Products** from their home page and choose **RStudio**. Alternatively, click here: [https://rstudio.com/products/rstudio/download/](https://rstudio.com/products/rstudio/download/).
+
+```{r rstudio-products, echo = FALSE, out.width = 750, fig.align = "center"}
+knitr::include_graphics(c(
+  "../../img/rstudio-products.png"
+))
+```
+
+
+Click download RStudio for Linux, Mac, or Windows as appropriate and follow the install instructions.
+
+## Option 2: R in the Cloud
+
+Register an account at [https://rstudio.cloud/](https://rstudio.cloud/) by clicking **Sign Up**.
+
+```{r rstudiocloud-signup, echo = FALSE, out.width = 750, fig.align = "center", fig.cap="rstudio.cloud signup page"}
+knitr::include_graphics(c(
+   "../../img/rstudio-cloud-signup.png"
+))
+```
+
+That's it! 
+
+Please note that you are limited to 15 hours per month at the free tier of this service.
+
+## Option 3: R at the University
+
+We will have local installations of R/RStudio for use on the computers in Psychology. These are controlled so that you do not have admin rights, so cannot install any additional packages. However, we will have the core packages (e.g. here, tidyverse) installed for you so you do not need to install any packages.
+
+## Some Housekeeping
+
+RStudio and R by default will ask you if you want to save your workspace and restore it when opening RStudio again. What does this mean? Well, anything you create in R (e.g. objects holding data) in one session can be saved to a file and loaded back up every time you open R. This may sound convenient, but it's terrible for reproducibility and will likely cause you problems down the line; you'll have objects accessible to you that you haven't actually created in a session. It's best to just never save this information and to explicitly save and load anything back into R as and when you need it.
+
+To stop RStudio from asking if you want to save your workspace every time you close it, go to Preferences (e.g. RStudio then Preferences on Mac). You'll see a screen like this:
+
+```{r r-workspace, echo = FALSE, out.width = 750, fig.align = "center", fig.cap=""}
+knitr::include_graphics(c(
+   "../../img/r-workspace.png"
+))
+```
+
+Make sur ethat the checkbox in **Workspace** saying "Restore .RData into workspace at startup" is unchecked like in the above image. Then make sure the line saying "Save workspae to R.Data on exit:" it set to **Never**. Click OK, and you're ready to get started.
+
+You'll only have to do this once in RStudio and it'll remember these options.
+
+# Getting Started
+
+## Assuming you're using a local installation of R/RStudio (including on University computers)
+
+### Setting up an R Project
+
+Open RStudio. In RStudio, click **File $\rightarrow$ New Project...**. You should see a window like this with some other options. Click on the **New Directory** button:
+
+```{r project-directory, echo = FALSE, out.width = 750, fig.align = "center", fig.cap="creating a new project"}
+knitr::include_graphics(c(
+   "../../img/project-directory.png"
+))
+```
+
+Click **New Project** and then set a **Directory Name** for your folder (e.g. "r_lesson_one"). This will create a folder wherever you have it set to in **Create project as a subdirectory of:**. Below, this is just on my Desktop, so this will make a folder called "r_lesson_one" on my Desktop. Inside this folder, there'll be a file with the folder name ending in **.Rproj**.
+
+```{r project-project, echo = FALSE, out.width = 750, fig.align = "center", fig.cap="creating a new project"}
+knitr::include_graphics(c(
+   "../../img/r-project.png"
+))
+```
+
+## Assuming you're using rstudio.cloud
+
+### Setting up an R Project
+
+Make a new **Space** and give it a name, then **click New Project**.
+
+You now have a **folder and an rstudio project** for your work. You can put data and code in here, and all outputs will be saved in this place.
+
+## Using your R Project to Use R
+
+Double click the **.Rproj** file every time you want to work on this project. This will open RStudio and reading and writing files will be easy.
+
+### Why to Use R Projects
+
+Why did we do all of this instead of just making a folder and saving code there? When it comes to reading files in and saving files to your computer, R doesn't know what the **working directory** should be. For one user, it could be the Desktop, for another it could be a different folder depending upon how you opened up R. But, we'd like our files to all be saved in one place so we can access them later. Setting up an RStudio project makes R treat this folder as your working directory. That way, when you tell R to save a file it'll save it within that folder. When you tell R to read in a file, it'll look in that folder for it. This makes sharing your folder (and the code in it) so much easier for collaboration and for us to help you out.
+
+If you don't set an RStudio Project up, you might end up sharing your folder with us and we can't run your code because we don't have the same file structure (e.g. I might have an R file in **Users/Glenn/r_lesson_one/my_r_file.R**, but you most certainly won't have a file path like **Users/Glenn/...**).
+
+# Making a Notebook
+
+## A Note on Notebooks
+
+You can write R code just in a .R file, which will only run properly if you include only R code and/or code comments (anything after a # on a line). However, with notebooks we can write plain text, include pictures, gifs etc along with chunks of R code. This is really useful for documenting what you did and why. 
+
+In fact, you could write up all your results in a notebook so that your analyses are conducted with R code and presented nicely in a document without you doing any manual editing (e.g. copy and pasting results and formatting tables).
+
+Notebooks are a great way for us to get started with using R, so in these sessions we'll use them to document all of our work.
+
+## Creating your First Notebook
+
+Click File $\rightarrow$ New File $\rightarrow$ R Notebook. This will open an R notebook in the Editor. It should look like this below (but maybe not in the darkmode I use):
+
+```{r rstudio-interface, echo = FALSE, out.width = 500, fig.align = "center", fig.cap="RStudio Interface"}
+knitr::include_graphics(c(
+   "../../img/rstudio-interface.png"
+))
+```
+
+The notebook you've just created contains some example rmarkdown text and a code chunk. Click the **Preview button** (towards the top of the editor) to render your notebook. Every time you make a change in this notebook and save your work, the editor will update itself. 
+
+If you check your folder, you'll notice you now have two files with similar names: one is the .Rmd file you work in, the other is the output of if (an html file you can open in any browser). Notice how the text, written in R markdown is formatted. For example, words surrounded by * are presented in italics. Click the link more information on [R Markdown](http://rmarkdown.rstudio.com).
+
+Back in RStudio, you'll also notice the code chunk that has code reading `plot(cars)` (cars is an inbuilt data set). When you execute code contained within the chunks (in grey) within the notebook, the results appear beneath the code. This way, you can easily see how your r code works on first glance.
+
+To run the code within a chunk, click the *Run* button within the chunk in RStudio or place your cursor inside it and press *Ctrl+Shift+Enter*. 
+
+If you'd like to add a new code chunk, do so by clicking the *Insert Chunk* button on the toolbar in RStudio or by pressing *Ctrl/Cmd+Alt+I*.
+
+# Exercises
+
+Now you've opened up your first project and notebook, we can get started on running some R code.
+
+Here, we'll get used to performing some basic operations on data in R.
+
+## Exercise 1
+
+Make a code chunk. In this, add together the numbers 1, 5, 999, and 67819.
+
+## Exercise 2
+
+Make a code chunk. In this, divide 1825031 by 534.
+
+## Exercise 3
+
+Make a code chunk. Perform a boolean operation to check whether "Dog" is equal to "Cat".
+
+## Exercise 4
+
+Make a code chunk. Concatenate the string "I'm using R" with the number 7. What output do you get? Can you explain why it is presented in this way?
+
+## Exercise 5
+
+Make a code chunk. In this, calculate the mean of the numbers 1 through to 10 (using `mean()`). Also in this chunk, calculate the median of the numbers 1 through to 10 (using `median()`). Also in this chunk, calculate the standard deviation of the numbers 1 through to 10 (using `sd()`). 
+
+Can you simplify your code to cut down on repetition? 
+
+*Note*: If you don't get the numbers you'd expect from e.g. `mean()`, make sure you're concatenating your values with `c()`. If you don't, it will just return the mean of the first value.
+
+## Exercise 6
+
+Make a code chunk. Create an object called "numbers" that has the numbers 1, 5, 10, and 267 in it. Access the final number. After this, replace the final number with 3.
+
+## Exercise 7
+
+Replace the text in your R markdown file to explain what you did with your data. It's usually best to explain what you did at each step before each code chunk.
+
+# Questions
+
+Download the questions file from Canvas and place this file in your folder. This file is an R markdown file already populated with some R code chunks. Follow the instructions to test your knowledge of R.

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Using R for Data Processing</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Glenn Williams" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Using R for Data Processing
+## Getting Started in R
+### Glenn Williams
+### University of Sunderland
+### 2020-09-14 (updated: 2020-09-22)
+
+---
+
+
+
+
+
+
+# How Do I Install R?
+## Local Installation
+
+.pull-left[
+- To get started, at the very least you'll have to [download R from CRAN](https://www.r-project.org/).
+
+- Choose a mirror from which to download R. Any will do.
+
+- Select the correct distribution for your operating system and then click through to **install R for the first time** if on Windows, or just click the most recent install version for Mac/Linux.
+
+- You'll see a new page; For Windows, click on **"Download R [version number] for Windows."**.
+]
+
+.pull-right[
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="../../img/r-download.png" alt=" " width="350" /&gt;
+&lt;p class="caption"&gt; &lt;/p&gt;
+&lt;/div&gt;&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="../../img/cran-mirrors.png" alt=" " width="350" /&gt;
+&lt;p class="caption"&gt; &lt;/p&gt;
+&lt;/div&gt;&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="../../img/r-install.png" alt=" " width="350" /&gt;
+&lt;p class="caption"&gt; &lt;/p&gt;
+&lt;/div&gt;
+]
+
+---
+# What is RStudio? How Do I Install It?
+## Local Installation
+
+.pull-left[
+
+**Integrated Development Environment for R**: makes working with R and extensions to it easier.
+
+- Download from the [RStudio website](https://rstudio.com/).
+
+- Select products and choose **RStudio**. Scroll down until you see **Download RStudio Desktop**.
+
+&lt;img src="../../img/rstudio-products.png" width="250" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="../../img/rstudio-desktop-install.png" width="300" style="display: block; margin: auto;" /&gt;
+
+- Click the **Download** button in the free tier and select the correct installer for your operating system.
+]
+
+---
+# Getting Started in the Cloud
+
+Alternatively, we can use [RStudio Cloud](https://rstudio.cloud) to do everything online. For consistency.
+
+.pull-left[
+- This may be the **easiest** route, especially if your system is locked down (e.g. on University controlled computers).
+
+- This may be a little more limited than using R on your machine, but **most things you need will be available without effort on your behalf**.
+]
+
+.pull-right[
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="../../img/rstudio-cloud-signup.png" alt="rstudio.cloud signup page" width="350" /&gt;
+&lt;p class="caption"&gt;rstudio.cloud signup page&lt;/p&gt;
+&lt;/div&gt;
+]
+
+- **Works with Chromebooks** etc. that do not allow local installs of R.
+
+- Please note that [rstudio.cloud](https://rstudio.cloud/) **has usage limits**. You can only do 15 hours per month in it. If you can, get a local install.
+
+Sign up for an account by clicking sign up on the [homepage](https://rstudio.cloud/). 
+
+---
+# Starting Your First Project
+
+Assuming you're using a local installation of R/RStudio:
+
+- Make a folder somewhere on your computer.
+- Open RStudio.
+- **Click File `\(\rightarrow\)` New Project `\(\rightarrow\)` New Directory `\(\rightarrow\)` New Project**.
+- Give this a name and save it somewhere you can access on your computer (e.g. Desktop)
+
+Assuming you're using rstudio.cloud:
+
+- Make a new Space and give it a name, then **click New Project**.
+
+You now have a **folder and an rstudio project** for your work. You can put data and code in here, and all outputs will be saved in this place.
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="../../img/project-directory.png" alt="creating a new project" width="350" /&gt;
+&lt;p class="caption"&gt;creating a new project&lt;/p&gt;
+&lt;/div&gt;
+
+---
+# Now What?
+
+Click File `\(\rightarrow\)` New File `\(\rightarrow\)` R Notebook. This will open an R notebook in the Editor.
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="../../img/rstudio-interface.png" alt="RStudio Interface" width="500" /&gt;
+&lt;p class="caption"&gt;RStudio Interface&lt;/p&gt;
+&lt;/div&gt;
+
+---
+# Understanding the Editor?
+
+.pull-left[
+&lt;div class="figure"&gt;
+&lt;img src="../../img/rstudio-interface.png" alt="The RStudio Interface" width="450" /&gt;
+&lt;p class="caption"&gt;The RStudio Interface&lt;/p&gt;
+&lt;/div&gt;
+]
+
+.pull-right[
+**&lt;span style='color: purple;'&gt;Editor&lt;/span&gt;** (top-left): Where you **write your code**. Anything you write here can be saved to the file.
+
+**Console** (bottom-left): Where we run your code. Once code is entered here you cannot edit it. **Don't work in the console!!!**
+
+**Environment** (top-right): Lists any **variables avaiable in your global environment**. More on this later.
+
+]
+
+**Files/Plots/Help/Viewer** (bottom-right): See any plots in your **working dirctory (i.e. in your project)**, view any recently created plots or help on how to use R functions.
+
+---
+# Making a Notebook
+
+Now, we can make a notebook to get started in R. Go to **File `\(\rightarrow\)` New File `\(\rightarrow\)` R Notebook**. Give your file a title by changing `title:` at the top. Then save it with a sensible name in your folder.
+
+Notebooks are made up of:
+
+.pull-left[
+- **Markdown text**: which allows you to **write in plain English** (or other languages). You **add decoration** to text (e.g. italics, bold, links) using markdown commands. They have some examples in the text for you.
+
+- **R code chunks**: These only accept R code. Press the play button to run the code.
+]
+
+.pull-right[
+&lt;div class="figure"&gt;
+&lt;img src="../../img/r-notebook-example2.png" alt="An R Notebook" width="450" /&gt;
+&lt;p class="caption"&gt;An R Notebook&lt;/p&gt;
+&lt;/div&gt;
+]
+
+When you save your notebook, you can **preview it**. It will create an HTML file that contains your markdown text and r code with output made pretty.
+
+---
+# Preview Your Notebook
+
+Make sure you press play on your code chunks. When done, save your work (Command/Ctrl + S) and **click Preview**. You should see this:
+
+&lt;img src="../../img/r-notebook-output.png" width="350" style="display: block; margin: auto;" /&gt;
+
+---
+# Avoiding Repetition
+
+In **R code chunks**, we can code things up by hand, or make **functions** that allow us to repeat a sequence of commands easily. For example, let's say we want to add 1 to several numbers. 
+
+.pull-left[
+We could do it by hand:
+
+
+```r
+1 + 1
+```
+
+```
+## [1] 2
+```
+
+```r
+2 + 1
+```
+
+```
+## [1] 3
+```
+
+```r
+3 + 1
+```
+
+```
+## [1] 4
+```
+]
+
+.pull-right[
+Or we could write a function, and apply this to our numbers:
+
+
+```r
+add_one &lt;- function(x) {x + 1}
+
+add_one(1)
+```
+
+```
+## [1] 2
+```
+
+```r
+add_one(2)
+```
+
+```
+## [1] 3
+```
+
+```r
+add_one(3)
+```
+
+```
+## [1] 4
+```
+]
+
+---
+# Making Life Easy with Pre-built Functions
+
+Some users know that functions they write can be useful to others, so they put them together in a **package**. 
+
+- The two packages (or pacakge of packages) we'll use are `tidyverse` and `here`. 
+
+    - **Tidyverse**: has several functions for making working with data and creating plots easier.
+
+    - **Here**: makes your R-scripts read and write files relative to where the project is. This means you can write scripts that work on any PC, and not just your own.
+    
+This will be made clear once we start using these packages.
+
+.pull-left[
+You only need to **install a package once per computer** (or cloud project):
+
+
+```r
+install.packages("tidyverse")
+install.packages("here")
+```
+]
+
+.pull-right[
+But, you **must load the packages (or libraries) every time you start R**:
+
+
+```r
+library("tidyverse")
+library("here")
+```
+]
+
+---
+# What Next?
+
+Now we know the basics, we'll perform some calculations in R.
+
+&lt;img src="https://media.giphy.com/media/kaBU6pgv0OsPHz2yxy/giphy.gif" width="450" style="display: block; margin: auto;" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
