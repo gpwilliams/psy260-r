@@ -111,7 +111,15 @@ knitr::include_graphics(c(
 ))
 ```
 
-Click **New Project** and then set a **Directory Name** for your folder (e.g. "r_lesson_one"). This will create a folder wherever you have it set to in **Create project as a subdirectory of:**. Below, this is just on my Desktop, so this will make a folder called "r_lesson_one" on my Desktop. Inside this folder, there'll be a file with the folder name ending in **.Rproj**.
+Click **New Project** and then set a **Directory Name** for your folder (e.g. "my-r-work"). 
+
+Be sure to save this folder somewhere where you can have access to it after class, e.g. on your Desktop or on a USB.
+
+This will create a folder wherever you have it set to in **Create project as a subdirectory of:**. 
+
+Below, this is just on my Desktop, so this will make a folder called "my-r-work" on my Desktop. Inside this folder, there will be a file with the folder name ending in **.Rproj**.
+
+**IMPORTANT: We will work out of this folder each week in seminars, so save all your work here and make sure you don't lose it.**
 
 ```{r project-project, echo = FALSE, out.width = 750, fig.align = "center", fig.cap="creating a new project"}
 knitr::include_graphics(c(
@@ -156,6 +164,8 @@ knitr::include_graphics(c(
    "../../img/rstudio-interface.png"
 ))
 ```
+
+**Once created, save this in your folder titled "my-r-work" as "seminar-one.Rmd".**
 
 The notebook you've just created contains some example rmarkdown text and a code chunk. Click the **Preview button** (towards the top of the editor) to render your notebook. Every time you make a change in this notebook and save your work, the editor will update itself. 
 

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Managing Data in R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Glenn Williams" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Managing Data in R
+## Manipulating Data in R
+### Glenn Williams
+### University of Sunderland
+### 2020-09-29 (updated: 2020-10-13)
+
+---
+
+
+
+
+
+
+# Loading our Cleaned Data
+
+Let's load up our cleaned data from the prior mini-lecture.
+
+Remember, `read_csv()` takes one argument: where is your data!
+
+
+```r
+cleaned_data &lt;- read_csv(here("data", "cleaned_data.csv"))
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   subj_id = col_double(),
+##   list_id = col_double(),
+##   item_id = col_double(),
+##   A = col_character(),
+##   B = col_character(),
+##   Y = col_double()
+## )
+```
+Nicely, you can see the hard work we did! The ID columns are all numbers now, and only the A and B columns are characters.
+
+---
+# Tidy Data
+
+Our data is in a tidy format.
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="../../img/allison-horst_illustrations/tidy-data/tidydata_1.jpg" alt="Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst" width="700" /&gt;
+&lt;p class="caption"&gt;Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst&lt;/p&gt;
+&lt;/div&gt;
+
+---
+# Why Ensure Tidy Data?
+
+This makes cleaning, summarising, plotting, and modelling easier!
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="../../img/allison-horst_illustrations/tidy-data/tidydata_3.jpg" alt="Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst" width="700" /&gt;
+&lt;p class="caption"&gt;Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst&lt;/p&gt;
+&lt;/div&gt;
+
+---
+# Common Data Processing Tasks
+
+The most common data manipulation problems can be handled effectively by `dplyr` in the tidyverse:
+
+**One Table**:
+
+- `filter()`: filters our data to keep observations that only meet given conditions.
+
+- `select()`: selects a subset of columns in our table.
+
+- `mutate()`: changes our data in some way by the instructions you provide.
+
+**Multiple Tables**:
+
+- `bind_rows()`: adds rows from one data frame to another (if they have the same columns).
+
+- `bind_cols()`: adds columns to one data frame from another (if they have the same number of rows).
+
+---
+# Filter
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="../../img/allison-horst_illustrations/general/dplyr_filter.jpg" alt="Artwork by @allison_horst" width="700" /&gt;
+&lt;p class="caption"&gt;Artwork by @allison_horst&lt;/p&gt;
+&lt;/div&gt;
+
+---
+# Filter
+
+Let's say we want to keep only observations from our first participant. This might be useful for exploring data individually.
+
+
+```r
+filter(cleaned_data, subj_id == 1)
+```
+
+```
+## # A tibble: 40 x 6
+##   subj_id list_id item_id A     B         Y
+##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1       1       4       1 a2    b2     234.
+## 2       1       4       2 a2    b2     295.
+## 3       1       4       3 a2    b2     285.
+## 4       1       4       4 a2    b2     258.
+## # … with 36 more rows
+```
+We have only 40 observations now, all from subject 1.
+
+---
+# Combining Filter Conditions
+
+Maybe we want to check if subject 1 has any missing data in the variable Y. How might we do this? 
+
+We could apply two separate filters, or combine our filter conditions using logical operations.
+
+
+```r
+filter(cleaned_data, subj_id == 1 &amp; is.na(Y))
+```
+
+```
+## # A tibble: 4 x 6
+##   subj_id list_id item_id A     B         Y
+##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1       1       4      17 a1    b1       NA
+## 2       1       4      24 a1    b2       NA
+## 3       1       4      32 a2    b1       NA
+## 4       1       4      33 a2    b1       NA
+```
+
+Note that NAs are special in R, so we have to use is.na() which checks for any NA values explicitly, rather than Y == NA. (Confusing, I know...)
+
+*It looks like subject 1 has four missing responses!*
+
+---
+# Select
+
+Select works by defining the names of columns you'd like to keep, and in what order!
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="../../img/allison-horst_illustrations/general/dplyr_select.png" alt="Artwork by @allison_horst" width="500" /&gt;
+&lt;p class="caption"&gt;Artwork by @allison_horst&lt;/p&gt;
+&lt;/div&gt;
+
+---
+# Select
+
+Imagine we only want to keep the subject_ids.
+
+
+```r
+select(cleaned_data, subj_id)
+```
+
+```
+## # A tibble: 2,400 x 1
+##   subj_id
+##     &lt;dbl&gt;
+## 1       1
+## 2       1
+## 3       1
+## 4       1
+## # … with 2,396 more rows
+```
+
+---
+# Select
+
+Imagine we decide that we no longer care about the list_id. We simply put a minus before the column name.
+
+
+```r
+select(cleaned_data, -list_id)
+```
+
+```
+## # A tibble: 2,400 x 5
+##   subj_id item_id A     B         Y
+##     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1       1       1 a2    b2     234.
+## 2       1       2 a2    b2     295.
+## 3       1       3 a2    b2     285.
+## 4       1       4 a2    b2     258.
+## # … with 2,396 more rows
+```
+
+---
+# Select
+
+Maybe we'd like to reorganise our columns so condition comes first and everything else after. We have to tell select we want A and B, and then everything else using `everything()`; a dplyr helper function
+
+
+```r
+select(cleaned_data, A, B, everything())
+```
+
+```
+## # A tibble: 2,400 x 6
+##   A     B     subj_id list_id item_id     Y
+##   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+## 1 a2    b2          1       4       1  234.
+## 2 a2    b2          1       4       2  295.
+## 3 a2    b2          1       4       3  285.
+## 4 a2    b2          1       4       4  258.
+## # … with 2,396 more rows
+```
+
+---
+# Muatate
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="../../img/allison-horst_illustrations/general/dplyr_mutate.png" alt="Artwork by @allison_horst" width="700" /&gt;
+&lt;p class="caption"&gt;Artwork by @allison_horst&lt;/p&gt;
+&lt;/div&gt;
+
+---
+# Mutate
+
+With mutate, we can change our data in place. This means we can change the data within columns, or create new columns of data entirely.
+
+Let's create a new column. We might want to make a column which combines the strings of columns A and B. We'll use the paste function to do this, telling R to paste together strings from cells in columns A and B, and include a + sign between them.
+
+
+```r
+mutate(cleaned_data, AB = paste(A, B, sep = "+"))
+```
+
+```
+## # A tibble: 2,400 x 7
+##   subj_id list_id item_id A     B         Y AB   
+##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;
+## 1       1       4       1 a2    b2     234. a2+b2
+## 2       1       4       2 a2    b2     295. a2+b2
+## 3       1       4       3 a2    b2     285. a2+b2
+## 4       1       4       4 a2    b2     258. a2+b2
+## # … with 2,396 more rows
+```
+
+---
+# Mutate
+
+Perhaps instead we want to change the data in a column in place? Let's multiply the scores for Y by 100.
+
+
+```r
+mutate(cleaned_data, Y = Y*100)
+```
+
+```
+## # A tibble: 2,400 x 6
+##   subj_id list_id item_id A     B          Y
+##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
+## 1       1       4       1 a2    b2    23351.
+## 2       1       4       2 a2    b2    29467.
+## 3       1       4       3 a2    b2    28462.
+## 4       1       4       4 a2    b2    25798.
+## # … with 2,396 more rows
+```
+---
+# Mutate
+
+Or we can use cases instead to change only specific values.
+
+
+```r
+mutate(
+  cleaned_data, 
+  item_id = case_when(
+    item_id == 1 ~ 20,
+    TRUE ~ item_id
+  )
+)
+```
+
+```
+## # A tibble: 2,400 x 6
+##   subj_id list_id item_id A     B         Y
+##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1       1       4      20 a2    b2     234.
+## 2       1       4       2 a2    b2     295.
+## 3       1       4       3 a2    b2     285.
+## 4       1       4       4 a2    b2     258.
+## # … with 2,396 more rows
+```
+
+---
+# Bind Rows
+
+Let's imagine we had our data stored in two separate tables. How might we join the rows of the tables together?
+
+Making this easy, we'll just take out the first two rows of our data and all their columns.
+
+We'll then join the rows together using `bind_rows()`.
+
+
+```r
+# get our data
+row_one &lt;- cleaned_data[1, ]
+row_two &lt;- cleaned_data[2, ]
+
+# bind it together
+bind_rows(row_one, row_two)
+```
+
+```
+## # A tibble: 2 x 6
+##   subj_id list_id item_id A     B         Y
+##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1       1       4       1 a2    b2     234.
+## 2       1       4       2 a2    b2     295.
+```
+
+---
+# Bind Cols
+
+We have a similar process when we bind columns.
+
+First, we'll extract the columns A and B, both only having the first 4 rows of our data each. 
+
+Then to show how the function works, we'll bind these objects together using `bind_cols()`.
+
+
+```r
+# get our data
+col_a &lt;- cleaned_data[1:4, "A"]
+col_b &lt;- cleaned_data[1:4, "B"]
+
+# bind it together
+bind_cols(col_a, col_b)
+```
+
+```
+## # A tibble: 4 x 2
+##   A     B    
+##   &lt;chr&gt; &lt;chr&gt;
+## 1 a2    b2   
+## 2 a2    b2   
+## 3 a2    b2   
+## 4 a2    b2
+```
+
+---
+# Recap
+
+We know...
+
+- What tidy data is, and why we want our data to be in this format.
+
+- How to manipulate one-table data for cleaning and preparation for analysis/graphing, including:
+
+    - How to filter observations out of our data set.
+
+    - How to select particular columns in our data set.
+
+    - How to mutate or modify existing data and even create new columns of data.
+
+    - How to bind rows and columns together from multiple tables.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

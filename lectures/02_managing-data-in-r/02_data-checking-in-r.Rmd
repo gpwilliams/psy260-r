@@ -1,0 +1,257 @@
+---
+title: "Managing Data in R"
+subtitle: "Data Checking in R"
+author: "Glenn Williams"
+institute: "University of Sunderland"
+date: "2020-09-29 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+set.seed(100)
+library(tidyverse)
+library(here)
+
+options(tibble.print_min = 4)
+```
+
+```{r functions, include = FALSE}
+colorise <- function(x, color) {
+  if (knitr::is_latex_output()) {
+    sprintf("\\textcolor{%s}{%s}", color, x)
+  } else if (knitr::is_html_output()) {
+    sprintf("<span style='color: %s;'>%s</span>", color, 
+      x)
+  } else x
+}
+```
+
+# Understanding our Data
+
+To have a good understanding of how you should clean and analyse your data, you have to understand how your data was collected. Ask yourself:
+
+- How was the study performed?
+
+- What do the variables in the data set represent?
+
+- What levels can these variables take?
+
+- Was a consistent coding scheme used throughout?
+
+- How is missing data coded (if at all)?
+
+---
+# Reading in Data
+
+Let's assume we performed an experiment. Let's read the data from this experiment into R assuming it is stored as a .csv file:
+
+```{r read-csv}
+raw_data <- read_csv(here("data", "factorial_data.csv"))
+```
+
+Let's take a look at this data so we can understand it...
+
+---
+# Some Notes on the Data
+
+Let's take a look at our data. What does it look like? The `head()` function allows you to see the top of your data set. (`tail()` does the opposite.)
+
+```{r raw-data-inspect}
+head(raw_data)
+```
+
+Let's assume the data is from an experiment. 
+
+Next, we'll explain what these mean.
+
+---
+# Understanding our Data
+
+Let's assume we gave people a task where they had to read sentences with an upwards or downwards motion (variable A) and then identify targets at the top or bottom of the screen (variable B) as quickly as they could. We captured their response times in the task (variable Y).
+
+It looks like we have the following columns:
+
+- **X1** = Row number for the data.
+
+- **subj_id** = Subject/participant ID for the person who gave the data to us.
+
+- **list_id** = list ID for how items were randomised.
+
+- **item_id** = Item ID.
+
+- **variable A** = Implied sentence location (upwards or downwards); e.g. "the bird flew in the sky."
+
+- **variable B** = Location of target (up or down on the screen).
+
+We should check that all of our data are coded as expected.
+
+---
+# Inspecting Data
+
+Our first step to understanding out data should be to check that we have read it into R correctly, and that `read_csv()` has sensibly guessed at our data types.
+
+We can do this using the `glimpse()` function. This gives us a look at our data rotated, so we can see how our data are stored and how they are coded. There's a few problems here...
+
+```{r inspect-data-types}
+glimpse(raw_data)
+```
+
+---
+# Identifying Problems
+
+First off, we don't need a count of row numbers (R does this for us), so we can remove the X1 column. Let's do that now.
+
+We'll use the `select()` function from dplyr in the tidyverse. 
+
+This takes our data as an argument and any columns we want to select (keep) when named or given a column number. Nicely, we can also use the minus sign to say "keep everything except this".
+
+```{r select-out-column}
+# select out the X1 column from our data, assign this to our new data
+cleaned_data <- select(raw_data, -X1)
+
+cleaned_data
+```
+
+---
+# Identifying Problems
+
+We can also see that subject IDs are stored as characters. Why is that? Let's see what unique values we have here.
+
+The `unique()` function tells us what unique observations we have in a column.
+
+```{r inspect-subject-id}
+unique(cleaned_data$subj_id)
+```
+
+OK, we have a pretty terrible naming system here. Surely we should make these all numbers.
+
+---
+# Converting Values
+
+Let's make the unique values in our data set for the subject IDs all numbers instead of a mix of numbers and characters.
+
+This looks through the IDs in our data (e.g. "one", "one", ...2, 2,...). Then it checks where in the unique IDs (e.g. "one", 2, 3) it occurs, returning that number.
+
+So, "one" gets a 1, as it's the first unique ID, 2 gets a 2 as it's the second, etc.
+
+**Note: this is a complex function; don't worry if this doesn't make sense!**
+
+```{r convert-subj-id}
+cleaned_data$subj_id <- match(
+  cleaned_data$subj_id, 
+  unique(cleaned_data$subj_id)
+)
+# check new values
+unique(cleaned_data$subj_id)
+```
+
+Nicely, the numbers now go from 1 to 60!
+
+---
+# Fixing Remaining Problems
+
+Our list IDs and Item IDs are properly coded, but we should check our variables A and B, which indicate the conditions of the study. Which unique values do we have here?
+
+```{r unique-A-and-B}
+unique(cleaned_data$A)
+unique(cleaned_data$B)
+```
+
+It looks like we have a mix of issues here. R is case sensitive, meaning A is different to a. We can make some initial fixes here by making everything the same case. Do this by using the `tolower()` function.
+
+---
+# Fixing Remaining Problems
+
+```{r unique-A-and-B-tolower}
+# change values
+cleaned_data$A <- tolower(cleaned_data$A)
+cleaned_data$B <- tolower(cleaned_data$B)
+
+# check values
+unique(cleaned_data$A)
+unique(cleaned_data$B)
+```
+
+That looks good, most of the codes are now consistent. But it looks like someone also mistakenly entered e.g. aa1 instead of just a1. The same happens with bb1 and bb2. Let's change these!
+
+---
+# Fixing Remaining Problems
+
+We'll need to use some logic here. 
+
+We can set up an `ifelse()` statement where we tell R to do something if it finds a match to our request, but that can get repetitive. Instead, one option is to use `case_when()`. 
+
+We give this function an argument relating to what **case** we care about (e.g. when A is "aa1") then to the right of the ~ we tell it what value to take.
+
+We finally set a default value (TRUE) which in this case is just the original value.
+
+```{r case_when-A}
+# if column A has a value called "aa1", change it to "a1", else leave it alone.
+cleaned_data$A <- case_when(
+  cleaned_data$A == "aa1" ~ "a1",
+  TRUE ~ cleaned_data$A
+)
+
+# check the new values
+unique(cleaned_data$A)
+```
+
+---
+# Fixing Remaining Problems
+
+We can put multiple cases in `case_when()`! This way, it can be **more flexible and less repetitive** than other methods.
+
+```{r}
+cleaned_data$B <- case_when(
+  cleaned_data$B == "bb1" ~ "b1",
+  cleaned_data$B == "bb2" ~ "b2",
+  TRUE ~ cleaned_data$B
+)
+
+# check new values
+unique(cleaned_data$B)
+```
+
+Now we only have B1 and B2! It looks like our data is nicely tidied up now.
+
+---
+# Save our Cleaned Data
+
+Finally, we did all that work with our data. To save repeating all these steps again, we can save it to an external file. We do this using 'write_csv()`.
+
+Let's save our file in the data folder. This takes two arguments: (1) which R object will you save to file? (2) Where should you save it?
+
+```{r cleaned-data-save}
+write_csv(
+  cleaned_data, 
+  here("data", "cleaned_data.csv")
+)
+```
+
+The nice thing is, if you made a mistake in one of your steps, you can just change that step and rerun your code. 
+
+If you change things by hand, who knows if you'll even detect the mistake, never mind how difficult it t might be to fix it! 
+
+---
+# Recap
+
+We know...
+
+- how to read data into R.
+
+- how to know how our data is coded.
+
+- how to inspect subsets of our data.
+
+- how to identify unique elements of our data.
+
+- how to convert and clean up data.
+
+- how to perform case-specific operations using logic.
