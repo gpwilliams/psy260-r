@@ -1,0 +1,130 @@
+---
+title: "PSY260 - Research Methods and Analysis"
+subtitle: "R Workshop 2 - Managing Data in R"
+output: 
+  html_document:
+    css: "../../style.css"
+    toc: true
+    toc_float: true
+    theme: united
+    highlight: tango
+author: "Dr Glenn Williams"
+date: "2020-10-13 (Updated `r Sys.Date()`)"
+---
+
+# Getting Started in R
+
+Please make sure that you have watched the three [introductory videos on Using R for Data Processing](https://canvas.sunderland.ac.uk/courses/40018/pages/lecture-4-using-r-for-data-processing). These cover why you might use R, how to install and create notebooks in R for data processing, and how to do basic data manipulation in R.
+
+Seminar 1 covers this content in detail, so please also refer to that lecture if you haven't gotten started in R yet.
+
+# Getting Started
+
+## Assuming you haven't got an RProject in a folder called "my-r-work"
+
+**PLEASE SEE SEMINAR ONE FOR DETAILS.**
+
+Open RStudio. In RStudio, click **File $\rightarrow$ New Project...**. You should see a window like this with some other options. Click on the **New Directory** button:
+
+```{r project-directory, echo = FALSE, out.width = 750, fig.align = "center", fig.cap="creating a new project"}
+knitr::include_graphics(c(
+   "../../img/project-directory.png"
+))
+```
+
+Click **New Project** and then set a **Directory Name** for your folder (e.g. "my-r-work"). 
+
+Be sure to save this folder somewhere where you can have access to it after class, e.g. on your Desktop or on a USB.
+
+This will create a folder wherever you have it set to in **Create project as a subdirectory of:**. 
+
+Below, this is just on my Desktop, so this will make a folder called "my-r-work" on my Desktop. Inside this folder, there will be a file with the folder name ending in **.Rproj**.
+
+**IMPORTANT: We will work out of this folder each week in seminars, so save all your work here and make sure you don't lose it.**
+
+```{r project-project, echo = FALSE, out.width = 750, fig.align = "center", fig.cap="creating a new project"}
+knitr::include_graphics(c(
+   "../../img/r-project.png"
+))
+```
+
+## Assuming you already have an RProject set up in the folder named "my-r-work"
+
+Double click your project called **my-r-work.RProj** in the folder called "my-r-work".
+
+You have now opened RStudio up from your project. Confirm whether this is the case by looking in the very top right of RStudio. Does it have a Project logo with the name "my-r-work"?
+
+if so, we can be sure all the file paths will work now. If not, be sure you're working from your RProject by following the steps above.
+
+## Creating a Notebook
+
+Click File $\rightarrow$ New File $\rightarrow$ R Notebook. This will open an R notebook in the Editor. It should look like this below (but maybe not in the darkmode I use):
+
+```{r rstudio-interface, echo = FALSE, out.width = 500, fig.align = "center", fig.cap="RStudio Interface"}
+knitr::include_graphics(c(
+   "../../img/rstudio-interface.png"
+))
+```
+
+Save this notebook as "seminar-two.Rmd" in the "my-r-work" folder.
+
+# Exercises
+
+Copy and paste the data called **seminar_two_data.csv** from the "psy260-r" folder to your folder called "my-r-work".
+
+This data is made up, but we can assume it looks at how quickly people can respond to a target on screen by pressing a button after having had caffeine or not, and when responding with their **dominant or non-dominant hands**. The dependent variable is thus reaction time in milliseconds and the indipendent variables are caffeine and response hand. We also have ages for our participants.
+
+Now you've opened up RStudio project and notebook, we can get started.
+
+Load the data called "seminar-two-data.csv" into this R session as follows. To do this, create an R code chunk and copy and paste the following code into it.
+
+```{r getting-started, eval = FALSE}
+library(tidyverse)
+library(here)
+
+raw_data <- read_csv(here("seminar_two_data.csv"))
+```
+
+Here, we'll get used to performing some basic data manipulation exercises in R.
+
+## Exercise 1
+
+Make a code chunk. Print out the beginning of the data set either by just typing its name or using `glimpse(raw_data)`. Which columns can you identify as being initially problematic? Are there any?
+
+## Exercise 2
+
+Make a code chunk. Check the unique values for each variable in your data set. Are there any issues with the data set? If so, make a note of them.
+
+## Exercise 5
+
+Make a code chunk. Remove the age data from the data set. Save this new data set as "anonymised_data" within R. 
+
+**Remember to assign this new data to an object in R. Name this anon_data**
+
+## Exercise 4
+
+Make a code chunk. Using your data from Exercise 3, clean up any issues you might have with the caffeine variable. Remember, you can use `mutate()` and `case_when()` together to solve this.
+
+**Assign this to a new object called cleaned_data_one**
+
+If you're unsure how these functions work, type `?mutate` and then `?case_when` in the console. The Help pane outlines how these functions work, and gives examples of working code.
+
+If you're still stuck, refer back to Lecture 2 part 3.
+
+## Exercise 5
+
+Make a code chunk. Using your data from Exercise 4, clean up any issues you might have with the response variable using the same methods outlined in Exercise 3.
+
+**Assign this to a new object called cleaned_data_two**
+
+## Exercise 6
+
+Make a code chunk. Add the age data from your initial data (raw_data) back in to the cleaned data (cleaned_data_two).
+
+## Exercise 7
+
+Make a code chunk. Filter out any observations on the dependent variable which are NAs. Remember, to use `is.na()`. Assign this new data to a object called "cleaned_data_three".
+
+# Questions
+
+Download the questions file from Canvas and place this file in your folder. This file is an R markdown file already populated with some R code chunks. Follow the instructions to test your knowledge of R.

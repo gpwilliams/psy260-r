@@ -1,0 +1,6 @@
+General: cite as "Artwork by @allison_horst"
+
+Please cite the following Tidy Data illustrations as: "Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst"
+
+Openscapes link: https://www.openscapes.org/
+Tidy data...collaboration link: https://www.openscapes.org/blog/2020/10/12/tidy-data/
