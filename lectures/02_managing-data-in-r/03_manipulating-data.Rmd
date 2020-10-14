@@ -161,7 +161,7 @@ select(cleaned_data, A, B, everything())
 ---
 # Muatate
 
-```{r dplyr-mutate, echo = FALSE, out.width = 700, fig.align = "center", fig.cap="Artwork by @allison_horst"}
+```{r dplyr-mutate, echo = FALSE, out.width = 500, fig.align = "center", fig.cap="Artwork by @allison_horst"}
 knitr::include_graphics(c(
    "../../img/allison-horst_illustrations/general/dplyr_mutate.png"
 ))

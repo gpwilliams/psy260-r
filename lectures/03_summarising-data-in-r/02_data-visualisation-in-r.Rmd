@@ -1,0 +1,35 @@
+---
+title: "Summarising and Plotting Data in R"
+subtitle: "Visualising Data"
+author: "Glenn Williams"
+institute: "University of Sunderland"
+date: "2020-09-29 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+set.seed(100)
+library(tidyverse)
+library(here)
+
+options(tibble.print_min = 4)
+```
+
+```{r functions, include = FALSE}
+colorise <- function(x, color) {
+  if (knitr::is_latex_output()) {
+    sprintf("\\textcolor{%s}{%s}", color, x)
+  } else if (knitr::is_html_output()) {
+    sprintf("<span style='color: %s;'>%s</span>", color, 
+      x)
+  } else x
+}
+```
+
