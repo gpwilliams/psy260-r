@@ -1,0 +1,81 @@
+---
+title: "Summarising and Plotting Data in R"
+subtitle: "Summarising Data"
+author: "Glenn Williams"
+institute: "University of Sunderland"
+date: "2020-09-29 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+set.seed(100)
+library(tidyverse)
+library(here)
+
+options(tibble.print_min = 4)
+```
+
+```{r functions, include = FALSE}
+colorise <- function(x, color) {
+  if (knitr::is_latex_output()) {
+    sprintf("\\textcolor{%s}{%s}", color, x)
+  } else if (knitr::is_html_output()) {
+    sprintf("<span style='color: %s;'>%s</span>", color, 
+      x)
+  } else x
+}
+```
+
+# Summarising Data
+
+Individual data points are some abstraction away from reality, essentially removing some detail.
+
+- Even with trial level data, we will summarise someone's responses in terms of reaction times or correct responses.
+
+- This removes a lot of the details of the real experience, but allows us to see patterns.
+
+- Similarly, we can summarise trial level data in a number of ways to help communicate a pattern or idea.
+
+We can present summaries of data as a plot, or even as a table of descriptive statistics.
+
+---
+# Descriptive Statistics
+
+We can often summarise data from individual trials in terms of measures of **central tendency** and **dispersion**.
+
+- **Central tendency**: What is the average score? This can be determined in a few ways.
+
+    - Mean: used to describe data that are normally distributed. Can be misleading when outliers are present.
+
+    - Median: used to describe data that are skewed in some way away from a normal distribution. Suppresses the impact of outliers.
+
+- **Dispersion**: What is the spread of scores (e.g. for individuals) around the average score?
+
+    - Standard Deviation: the spread of the data from the sample mean. With a normal distribution approximately 1, 2, and 3 SDs capture approximately 68, 95, and 99.7% of the data.
+
+    - Interquartile Range: Rank orders data into four equal parts. We get 3 values: the middle part of the first region – or quartile – (i.e. 25%), the median (i.e. 50%), and the middle part of the third quartile (i.e. 75%). Used for non-normal data.
+
+---
+# Why Make these in R?
+
+---
+# Summarise
+
+
+---
+# Summarise
+
+
+---
+# Grouping
+
+
+---
+# Group by and Summarise
