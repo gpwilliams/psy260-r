@@ -1,19 +1,26 @@
----
-title: "Summarising and Plotting Data in R"
-subtitle: "Advanced Data Visualisation and Putting it All Together"
-author: "Glenn Williams"
-institute: "University of Sunderland"
-date: "2020-09-29 (updated: `r Sys.Date()`)"
-output:
-  xaringan::moon_reader:
-    lib_dir: libs
-    nature:
-      highlightStyle: github
-      highlightLines: true
-      countIncrementalSlides: false
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Summarising and Plotting Data in R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Glenn Williams" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Summarising and Plotting Data in R
+## Advanced Data Visualisation and Putting it All Together
+### Glenn Williams
+### University of Sunderland
+### 2020-09-29 (updated: 2020-10-15)
+
 ---
 
-<style type="text/css">
+
+&lt;style type="text/css"&gt;
 .left-code {
   width: 49%;
   height: 92%;
@@ -28,28 +35,11 @@ output:
   margin: auto;
   width: 25%;
 ]
-</style>
+&lt;/style&gt;
 
-```{r setup, include=FALSE}
-options(htmltools.dir.version = FALSE)
-set.seed(100)
-library(tidyverse)
-library(here)
 
-options(tibble.print_min = 4)
-knitr::opts_chunk$set(dpi = 600, retina = 1)
-```
 
-```{r functions, include = FALSE}
-colorise <- function(x, color) {
-  if (knitr::is_latex_output()) {
-    sprintf("\\textcolor{%s}{%s}", color, x)
-  } else if (knitr::is_html_output()) {
-    sprintf("<span style='color: %s;'>%s</span>", color, 
-      x)
-  } else x
-}
-```
+
 
 # Exploring Different Geoms
 
@@ -65,9 +55,10 @@ We aren't restricted to dot plots in R, but we can make many different plots by 
 
 - **Histograms**: the same as density plots, but more **useful with fewer observations**.
 
-```{r load-data}
+
+```r
 data(starwars) # load data first
-starwars <- filter(starwars, mass < 300) # filter out Jabba the Hutt
+starwars &lt;- filter(starwars, mass &lt; 300) # filter out Jabba the Hutt
 ```
 
 
@@ -82,7 +73,8 @@ We then use `geom_bar()` to make the bar plot.
 
 This is what this looks like for counting up characters of different sexes.
 
-```{r barplot, fig.show="hide"}
+
+```r
 ggplot(
   data = starwars, 
   aes(x = sex)
@@ -93,7 +85,7 @@ ggplot(
 ]
 
 .right-plot[
-![](`r knitr::fig_chunk("barplot", "png")`)
+![](03_advanced-data-visualisation-in-r_files/figure-html/barplot-1.png)
 ]
 
 ---
@@ -105,7 +97,8 @@ What if we want to display a **continuous variable** across groups? A **boxplot*
 
 Let's get heights of characters from each sex. Now, we just add height to the y-axis, and change `geom_bar()` to `geom_boxplot()`
 
-```{r boxplot, fig.show="hide", message = FALSE, warning = FALSE}
+
+```r
 ggplot(
   data = starwars, 
   aes(
@@ -121,7 +114,7 @@ Remember, the dark line is the median, the box the middle 50% of scores.
 ]
 
 .right-plot[
-![](`r knitr::fig_chunk("boxplot", "png")`)
+![](03_advanced-data-visualisation-in-r_files/figure-html/boxplot-1.png)
 
 Lines represent the remainder, and dots represent outliers.
 
@@ -134,7 +127,8 @@ Lines represent the remainder, and dots represent outliers.
 
 We can keep all code the same in the `ggplot()` call, but change the geom to `geom_violin()`.
 
-```{r violinplot, fig.show="hide", message = FALSE, warning = FALSE}
+
+```r
 ggplot(
   data = starwars, 
   aes(
@@ -154,7 +148,7 @@ ggplot(
 
 This takes some **optional arguments**. Here, I've told it to not trim the tails of scores, and to draw lines at the .25, .50, and .75 quantiles to be similar to a boxplot.
 
-![](`r knitr::fig_chunk("violinplot", "png")`)
+![](03_advanced-data-visualisation-in-r_files/figure-html/violinplot-1.png)
 ]
 
 ---
@@ -164,7 +158,8 @@ This takes some **optional arguments**. Here, I've told it to not trim the tails
 
 We can see how a variable is distributed by making a **density plot**. Use `geom_density()` and only have variable mapped to the x-axis. (The y-axis is reserved for density.)
 
-```{r density, fig.show="hide"}
+
+```r
 ggplot(
   data = starwars, 
   aes(x = height)
@@ -175,7 +170,7 @@ ggplot(
 ]
 
 .right-plot[
-![](`r knitr::fig_chunk("density", "png")`)
+![](03_advanced-data-visualisation-in-r_files/figure-html/density-1.png)
 ]
 
 ---
@@ -187,7 +182,8 @@ We can see many categories for the variable by adding a variable to the `fill` a
 
 I've also changed the alpha (opacity) in `geom_density()` so we can see overlapping data.
 
-```{r densitycol, fig.show="hide", message = FALSE, warning = FALSE}
+
+```r
 ggplot(
   data = starwars, 
   aes(
@@ -201,7 +197,7 @@ ggplot(
 ]
 
 .right-plot[
-![](`r knitr::fig_chunk("densitycol", "png")`)
+![](03_advanced-data-visualisation-in-r_files/figure-html/densitycol-1.png)
 ]
 
 ---
@@ -215,7 +211,8 @@ Change `geom_density()` to `geom_histogram()`.
 
 I've changed some the looks of the bars too using fill and colour arguments.
 
-```{r histogram, fig.show="hide", message = FALSE, warning = FALSE}
+
+```r
 ggplot(
   data = starwars, 
   aes(x = height)
@@ -232,7 +229,7 @@ ggplot(
 .right-plot[
 We have to set the binwidth here, which is how we group continuous scores into bars. **Large bins = big bars**. We'll remove sex from the fill aesthetic too.
 
-![](`r knitr::fig_chunk("histogram", "png")`)
+![](03_advanced-data-visualisation-in-r_files/figure-html/histogram-1.png)
 ]
 
 ---
@@ -261,7 +258,8 @@ If you don't have a variable to present in e.g. **rows**, then put a full stop t
 
 Facet wrap wraps plots next to each other only for cases where we have the data to make a plot. It tries to **maximise plotting space**.
 
-```{r facetwrap, fig.show="hide", message = FALSE, warning = FALSE}
+
+```r
 ggplot(
   data = starwars, 
   aes(
@@ -276,7 +274,7 @@ ggplot(
 ]
 
 .right-plot[
-![](`r knitr::fig_chunk("facetwrap", "png")`)
+![](03_advanced-data-visualisation-in-r_files/figure-html/facetwrap-1.png)
 ]
 
 ---
@@ -286,7 +284,8 @@ ggplot(
 
 Facet grid **completes cases** in your panel. So even missing combinations of data get a pane.
 
-```{r facetgrid, fig.show="hide", message = FALSE, warning = FALSE}
+
+```r
 ggplot(
   data = starwars, 
   aes(
@@ -303,7 +302,7 @@ ggplot(
 .right-plot[
 Data is only presented in dimensions that you ask it to be presented in (e.g. columns here).
 
-![](`r knitr::fig_chunk("facetgrid", "png")`)
+![](03_advanced-data-visualisation-in-r_files/figure-html/facetgrid-1.png)
 ]
 
 ---
@@ -313,7 +312,8 @@ We can save graphics from R using a number of methods, but for plots produced in
 
 We can either make our plot without assigning it to a variable, and then save it as follows:
 
-```{r saving-last-plot, eval = FALSE}
+
+```r
 ggplot(data = starwars, aes(x = height)) + 
   geom_density()
 
@@ -322,8 +322,9 @@ ggsave(here("myplot.png"), last_plot())
 
 Or we can make a plot and assign it to a variable, and save it as follows:
 
-```{r saving-variable, eval = FALSE}
-my_plot <- ggplot(data = starwars, aes(x = height)) + 
+
+```r
+my_plot &lt;- ggplot(data = starwars, aes(x = height)) + 
   geom_density()
 
 ggsave(here("myplot.png"), my_plot)
@@ -331,7 +332,8 @@ ggsave(here("myplot.png"), my_plot)
 
 I prefer the latter. Why? Once a plot is stored as a variable, you can change it by adding `ggplot` arguments! For example...
 
-```{r adding-to-plot-variables, eval = FALSE}
+
+```r
 my_plot + coord_cartesian(xlim = c(0, 180))
 ```
 
@@ -340,19 +342,31 @@ my_plot + coord_cartesian(xlim = c(0, 180))
 
 We can make a summary of our data using tidyverse functions.
 
-```{r starwars-desc, message = FALSE}
-descriptives <- starwars %>% 
-  group_by(species) %>% 
+
+```r
+descriptives &lt;- starwars %&gt;% 
+  group_by(species) %&gt;% 
   summarise(
     total_n = n(),
     mean_height = mean(height, na.rm = TRUE),
     sd_height = sd(height, na.rm = TRUE)
-  ) %>% 
-  filter(total_n > 1) %>% 
+  ) %&gt;% 
+  filter(total_n &gt; 1) %&gt;% 
   mutate(se_height = sd_height/sqrt(total_n))
 
 # inspect our summary
 descriptives
+```
+
+```
+## # A tibble: 5 x 5
+##   species  total_n mean_height sd_height se_height
+##   &lt;chr&gt;      &lt;int&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Droid          4        140      52.0      26.0 
+## 2 Gungan         2        210      19.8      14.0 
+## 3 Human         22        180.     11.4       2.43
+## 4 Mirialan       2        168       2.83      2   
+## 5 Wookiee        2        231       4.24      3.00
 ```
 
 ---
@@ -360,7 +374,8 @@ descriptives
 
 ...and use this summary in plotting, or pipe it directly into `ggplot2`.
 
-```{r starwars-desc-plot, fig.show = "hide"}
+
+```r
 ggplot(descriptives, aes(x = species, y = mean_height)) +
   geom_bar(stat = "identity") +
   geom_errorbar(
@@ -382,9 +397,7 @@ ggplot(descriptives, aes(x = species, y = mean_height)) +
 ---
 # Putting it Together
 
-```{r starwars-desc-plot-out, echo = FALSE, out.width = "500px"}
-knitr::include_graphics("03_advanced-data-visualisation-in-r_files/figure-html/starwars-desc-plot-1.png")
-```
+&lt;img src="03_advanced-data-visualisation-in-r_files/figure-html/starwars-desc-plot-1.png" width="500px" /&gt;
 
 ---
 # Recap
@@ -400,3 +413,126 @@ We've learned...
 - How to **save plots** for use in your reports.
 
 - How to **chain functions together** to make a summary, and then plot it!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
