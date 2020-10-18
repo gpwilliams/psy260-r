@@ -40,5 +40,5 @@ vignettes/*.pdf
 R/99_exploratory/
 
 # answers files
-seminars/01_intro-to-r/01_answers.Rmd
-seminars/01_intro-to-r/01_answers.html
+*_answers*
+

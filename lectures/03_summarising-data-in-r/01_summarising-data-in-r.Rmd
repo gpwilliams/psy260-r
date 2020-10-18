@@ -148,20 +148,21 @@ We set the argument na.rm in `mean()` to TRUE, meaning "Should R remove NAs? TRU
 ---
 # Many Summaries
 
-What if we want to summarise a few different factors? Imagine we want the count, mean, and standard deviation of height?
+What if we want to get different types of summaries? Imagine we want the count, mean, and standard deviation of height?
+
+We can tell R to generate these summaries on the data by first dropping any observations with missing values (NA) in height.
 
 ```{r summarise-n-mean-sd}
 summarise(
-  starwars, 
+  drop_na(starwars, height), 
   n = n(),
-  sd = sd(height, na.rm = TRUE),
-  mean_height = mean(height, na.rm = TRUE)
+  sd = sd(height),
+  mean_height = mean(height)
 )
 ```
+How might we interpret this? We have 81 measured heights of characters. The mean height is 174.36cm, while the standard deviation is 34.77. 
 
-There you have it! How might we interpret this? We have 87 measured heights of characters. The mean height is 174.36cm, while the standard deviation is 34.77. 
-
-**What's the SD mean again**? Remember, with normally distributed data 95% of values fall within $\pm$ 1.96 standard deviations of the mean, so most people are between 106.2 and 242cm tall!
+**What's the SD mean again**? With normally distributed data 95% of values fall within $\pm$ 1.96 SD of the mean; most are between 106.2 and 242cm tall!
 
 ---
 # Grouping
@@ -172,7 +173,7 @@ We can add an argument to our data in `summarise()` called `group_by()`.
 
 Within `group_by()`, we again specify our data, but also give a column by which to separate the summaries.
 
-```{r group-by-summarise}
+```{r group-by-summarise, message=FALSE}
 summarise(
   group_by(starwars, species), 
   mean_height = mean(height, na.rm = TRUE)
@@ -189,7 +190,7 @@ So far, I've avoided showing you some R magic so you get the principles of funct
 
 The pipe in R (`%>%`) passes data from one function to another.
 
-```{r pipe-it}
+```{r pipe-it, message=FALSE}
 starwars %>% 
   group_by(species) %>% 
   summarise(mean_height = mean(height, na.rm = TRUE))
@@ -202,28 +203,30 @@ starwars %>%
 
 We can **add as many groups as we like** to group by, and as many summaries as we like to summary. For example:
 
-```{r many-group-summary}
+```{r many-group-summary, message=FALSE}
 starwars %>% 
-  group_by(species, eye_color) %>% 
+  drop_na(height) %>% 
+  group_by(sex, gender) %>% 
   summarise( 
     n = n(),
-    sd = sd(height, na.rm = TRUE),
-    mean_height = mean(height, na.rm = TRUE)
+    sd = sd(height),
+    mean_height = mean(height)
   )
 ```
 
 ---
-# All Tidyverse Functions Wwork with the Pipe!
+# All Tidyverse Functions Work with the Pipe!
 
 Let's keep only humans over 70kg in mass, and calculate their height and weight.
 
 ```{r}
 starwars %>% 
-  filter(species == "Human" & mass > 70) %>% 
+  filter(species == "Human" & mass > 70) %>%
+  drop_na(height) %>% 
   summarise(
     n = n(),
-    mean_height = mean(height, na.rm = TRUE),
-    sd_height = sd(height, na.rm = TRUE)
+    mean_height = mean(height),
+    sd_height = sd(height)
   )
 ```
 We could even add `select()` and `mutate()` in here if we wanted.

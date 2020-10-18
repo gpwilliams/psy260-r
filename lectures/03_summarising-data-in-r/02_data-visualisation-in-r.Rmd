@@ -16,12 +16,12 @@ output:
 
 <style type="text/css">
 .left-code {
-  width: 38%;
+  width: 58%;
   height: 92%;
   float: left;
 }
 .right-plot {
-  width: 50%;
+  width: 40%;
   float: right;
   padding-left: 1%;
 }
@@ -34,6 +34,7 @@ library(tidyverse)
 library(here)
 
 options(tibble.print_min = 4)
+knitr::opts_chunk$set(dpi = 600, retina = 1, warning = FALSE, out.width="75%")
 ```
 
 ```{r functions, include = FALSE}
@@ -132,10 +133,7 @@ Here, we tell R to map the mass and height data from starwars onto the X and Y a
 ```{r blank-hw, fig.show="hide"}
 ggplot(
   data = starwars, 
-  mapping = aes(
-    x = mass, 
-    y = height
-  )
+  mapping = aes(x = mass, y = height)
 )
 ```
 
@@ -159,10 +157,7 @@ We do this by defining the **geometric shapes** of the data, or geoms.
 ```{r blank-hw-point, fig.show="hide"}
 ggplot(
   data = starwars, 
-  mapping = aes(
-    x = mass, 
-    y = height
-  )
+  mapping = aes(x = mass, y = height)
 ) +
   geom_point()
 ```
@@ -185,11 +180,7 @@ We can add additional arguments to our mappings, for example **mapping colour on
 ```{r blank-hw-point-col, fig.show="hide"}
 ggplot(
   data = starwars, 
-  mapping = aes(
-    x = mass, 
-    y = height,
-    colour = sex
-  )
+  mapping = aes(x = mass, y = height, colour = sex)
 ) +
   geom_point()
 ```
@@ -207,26 +198,18 @@ As you can see, we get different groups of data depending upon the sex of the in
 
 .left-code[
 
-Previously we found that it's difficult to see the pattern between height and mass due to an extreme outlier (Jabba the Hutt).
+It's difficult to see the pattern between height and mass due to an extreme outlier.
 
-We can exclude this individual either by:
-
-- Restricting limits on the axis of the plot using, e.g. `xlim()`.
+We can exclude this individual either by (a) Filtering observations first, (b) restricting limits on the axis of the plot using, e.g. `xlim()` in `coord_cartesian()`.
 
 ```{r filter-plot, fig.show="hide", message = FALSE}
 ggplot(
   data = starwars, 
-  mapping = aes(
-    x = mass, 
-    y = height,
-    colour = sex
-  )
+  mapping = aes(x = mass, y = height, colour = sex)
 ) +
   geom_point() +
   coord_cartesian(xlim = c(0, 180))
 ```
-
-One method to do this is using the Cartesian coordinate system. Here, we tell R to restrict the X-axis of this coordinate to be between 0 and 180 (kgs in mass).
 
 ]
 
@@ -247,11 +230,7 @@ We can exclude this individual either by:
 starwars %>% 
   filter(mass < 180) %>% 
   ggplot(
-    mapping = aes(
-      x = mass, 
-      y = height,
-      colour = sex
-    )
+    mapping = aes(x = mass, y = height, colour = sex)
   ) +
   geom_point()
 ```
@@ -277,12 +256,7 @@ What if you want all points to be the same colour? Don't map it to a group. Set 
 ```{r filter-data-fixedcol-geom, fig.show="hide"}
 starwars %>% 
   filter(mass < 180) %>% 
-  ggplot(
-    mapping = aes(
-      x = mass, 
-      y = height
-    )
-  ) +
+  ggplot(mapping = aes(x = mass, y = height)) +
   geom_point(colour = "purple")
 ```
 
@@ -355,7 +329,7 @@ starwars %>%
 ]
 
 .right-plot[
-![](`r knitr::fig_chunk("filter-data-contcol", "png")`)
+![](`r knitr::fig_chunk("filter-data-smooth", "png")`)
 
 ]
 

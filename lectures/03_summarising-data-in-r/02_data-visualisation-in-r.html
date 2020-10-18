@@ -15,19 +15,19 @@ class: center, middle, inverse, title-slide
 ## Visualising Data
 ### Glenn Williams
 ### University of Sunderland
-### 2020-09-29 (updated: 2020-10-14)
+### 2020-09-29 (updated: 2020-10-16)
 
 ---
 
 
 &lt;style type="text/css"&gt;
 .left-code {
-  width: 38%;
+  width: 58%;
   height: 92%;
   float: left;
 }
 .right-plot {
-  width: 50%;
+  width: 40%;
   float: right;
   padding-left: 1%;
 }
@@ -117,10 +117,7 @@ Here, we tell R to map the mass and height data from starwars onto the X and Y a
 ```r
 ggplot(
   data = starwars, 
-  mapping = aes(
-    x = mass, 
-    y = height
-  )
+  mapping = aes(x = mass, y = height)
 )
 ```
 
@@ -145,16 +142,9 @@ We do this by defining the **geometric shapes** of the data, or geoms.
 ```r
 ggplot(
   data = starwars, 
-  mapping = aes(
-    x = mass, 
-    y = height
-  )
+  mapping = aes(x = mass, y = height)
 ) +
   geom_point()
-```
-
-```
-## Warning: Removed 28 rows containing missing values (geom_point).
 ```
 
 Now we can see how mass and height relate to one another.
@@ -176,17 +166,9 @@ We can add additional arguments to our mappings, for example **mapping colour on
 ```r
 ggplot(
   data = starwars, 
-  mapping = aes(
-    x = mass, 
-    y = height,
-    colour = sex
-  )
+  mapping = aes(x = mass, y = height, colour = sex)
 ) +
   geom_point()
-```
-
-```
-## Warning: Removed 28 rows containing missing values (geom_point).
 ```
 
 As you can see, we get different groups of data depending upon the sex of the individual.
@@ -202,31 +184,19 @@ As you can see, we get different groups of data depending upon the sex of the in
 
 .left-code[
 
-Previously we found that it's difficult to see the pattern between height and mass due to an extreme outlier (Jabba the Hutt).
+It's difficult to see the pattern between height and mass due to an extreme outlier.
 
-We can exclude this individual either by:
-
-- Restricting limits on the axis of the plot using, e.g. `xlim()`.
+We can exclude this individual either by (a) Filtering observations first, (b) restricting limits on the axis of the plot using, e.g. `xlim()` in `coord_cartesian()`.
 
 
 ```r
 ggplot(
   data = starwars, 
-  mapping = aes(
-    x = mass, 
-    y = height,
-    colour = sex
-  )
+  mapping = aes(x = mass, y = height, colour = sex)
 ) +
   geom_point() +
   coord_cartesian(xlim = c(0, 180))
 ```
-
-```
-## Warning: Removed 28 rows containing missing values (geom_point).
-```
-
-One method to do this is using the Cartesian coordinate system. Here, we tell R to restrict the X-axis of this coordinate to be between 0 and 180 (kgs in mass).
 
 ]
 
@@ -248,11 +218,7 @@ We can exclude this individual either by:
 starwars %&gt;% 
   filter(mass &lt; 180) %&gt;% 
   ggplot(
-    mapping = aes(
-      x = mass, 
-      y = height,
-      colour = sex
-    )
+    mapping = aes(x = mass, y = height, colour = sex)
   ) +
   geom_point()
 ```
@@ -279,12 +245,7 @@ What if you want all points to be the same colour? Don't map it to a group. Set 
 ```r
 starwars %&gt;% 
   filter(mass &lt; 180) %&gt;% 
-  ggplot(
-    mapping = aes(
-      x = mass, 
-      y = height
-    )
-  ) +
+  ggplot(mapping = aes(x = mass, y = height)) +
   geom_point(colour = "purple")
 ```
 
@@ -359,7 +320,7 @@ starwars %&gt;%
 ]
 
 .right-plot[
-![](02_data-visualisation-in-r_files/figure-html/filter-data-contcol-1.png)
+![](02_data-visualisation-in-r_files/figure-html/filter-data-smooth-1.png)
 
 ]
 
