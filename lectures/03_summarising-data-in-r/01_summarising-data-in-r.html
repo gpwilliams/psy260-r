@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 ## Summarising Data
 ### Glenn Williams
 ### University of Sunderland
-### 2020-09-29 (updated: 2020-10-14)
+### 2020-09-29 (updated: 2020-10-16)
 
 ---
 
@@ -144,12 +144,13 @@ starwars # print it
 
 ```
 ## # A tibble: 87 x 14
-##   name    height  mass hair_color skin_color  eye_color birth_year sex   gender  homeworld species films vehicles starships
-##   &lt;chr&gt;    &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   &lt;lis&gt; &lt;list&gt;   &lt;list&gt;   
-## 1 Luke S…    172    77 blond      fair        blue              19 male  mascul… Tatooine  Human   &lt;chr… &lt;chr [2… &lt;chr [2]&gt;
-## 2 C-3PO      167    75 &lt;NA&gt;       gold        yellow           112 none  mascul… Tatooine  Droid   &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
-## 3 R2-D2       96    32 &lt;NA&gt;       white, blue red               33 none  mascul… Naboo     Droid   &lt;chr… &lt;chr [0… &lt;chr [0]&gt;
-## # … with 84 more rows
+##   name  height  mass hair_color skin_color eye_color birth_year sex   gender
+##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+## 1 Luke…    172    77 blond      fair       blue              19 male  mascu…
+## 2 C-3PO    167    75 &lt;NA&gt;       gold       yellow           112 none  mascu…
+## 3 R2-D2     96    32 &lt;NA&gt;       white, bl… red               33 none  mascu…
+## # … with 84 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
+## #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
 ```
 There's a lot of data here! How might we summarise this?
 
@@ -199,15 +200,17 @@ We set the argument na.rm in `mean()` to TRUE, meaning "Should R remove NAs? TRU
 ---
 # Many Summaries
 
-What if we want to summarise a few different factors? Imagine we want the count, mean, and standard deviation of height?
+What if we want to get different types of summaries? Imagine we want the count, mean, and standard deviation of height?
+
+We can tell R to generate these summaries on the data by first dropping any observations with missing values (NA) in height.
 
 
 ```r
 summarise(
-  starwars, 
+  drop_na(starwars, height), 
   n = n(),
-  sd = sd(height, na.rm = TRUE),
-  mean_height = mean(height, na.rm = TRUE)
+  sd = sd(height),
+  mean_height = mean(height)
 )
 ```
 
@@ -215,12 +218,11 @@ summarise(
 ## # A tibble: 1 x 3
 ##       n    sd mean_height
 ##   &lt;int&gt; &lt;dbl&gt;       &lt;dbl&gt;
-## 1    87  34.8        174.
+## 1    81  34.8        174.
 ```
+How might we interpret this? We have 81 measured heights of characters. The mean height is 174.36cm, while the standard deviation is 34.77. 
 
-There you have it! How might we interpret this? We have 87 measured heights of characters. The mean height is 174.36cm, while the standard deviation is 34.77. 
-
-**What's the SD mean again**? Remember, with normally distributed data 95% of values fall within `\(\pm\)` 1.96 standard deviations of the mean, so most people are between 106.2 and 242cm tall!
+**What's the SD mean again**? With normally distributed data 95% of values fall within `\(\pm\)` 1.96 SD of the mean; most are between 106.2 and 242cm tall!
 
 ---
 # Grouping
@@ -237,10 +239,6 @@ summarise(
   group_by(starwars, species), 
   mean_height = mean(height, na.rm = TRUE)
 )
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -271,10 +269,6 @@ starwars %&gt;%
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 38 x 2
 ##   species  mean_height
 ##   &lt;chr&gt;          &lt;dbl&gt;
@@ -294,42 +288,42 @@ We can **add as many groups as we like** to group by, and as many summaries as w
 
 ```r
 starwars %&gt;% 
-  group_by(species, eye_color) %&gt;% 
+  drop_na(height) %&gt;% 
+  group_by(sex, gender) %&gt;% 
   summarise( 
     n = n(),
-    sd = sd(height, na.rm = TRUE),
-    mean_height = mean(height, na.rm = TRUE)
+    sd = sd(height),
+    mean_height = mean(height)
   )
 ```
 
 ```
-## `summarise()` regrouping output by 'species' (override with `.groups` argument)
-```
-
-```
-## # A tibble: 51 x 5
-## # Groups:   species [38]
-##   species  eye_color     n    sd mean_height
-##   &lt;chr&gt;    &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt;       &lt;dbl&gt;
-## 1 Aleena   unknown       1    NA          79
-## 2 Besalisk yellow        1    NA         198
-## 3 Cerean   yellow        1    NA         198
-## # … with 48 more rows
+## # A tibble: 6 x 5
+## # Groups:   sex [5]
+##   sex            gender        n    sd mean_height
+##   &lt;chr&gt;          &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt;       &lt;dbl&gt;
+## 1 female         feminine     15 15.3         169.
+## 2 hermaphroditic masculine     1 NA           175 
+## 3 male           masculine    57 36.0         179.
+## 4 none           feminine      1 NA            96 
+## 5 none           masculine     4 52.0         140 
+## 6 &lt;NA&gt;           &lt;NA&gt;          3  2.89        181.
 ```
 
 ---
-# All Tidyverse Functions Wwork with the Pipe!
+# All Tidyverse Functions Work with the Pipe!
 
 Let's keep only humans over 70kg in mass, and calculate their height and weight.
 
 
 ```r
 starwars %&gt;% 
-  filter(species == "Human" &amp; mass &gt; 70) %&gt;% 
+  filter(species == "Human" &amp; mass &gt; 70) %&gt;%
+  drop_na(height) %&gt;% 
   summarise(
     n = n(),
-    mean_height = mean(height, na.rm = TRUE),
-    sd_height = sd(height, na.rm = TRUE)
+    mean_height = mean(height),
+    sd_height = sd(height)
   )
 ```
 

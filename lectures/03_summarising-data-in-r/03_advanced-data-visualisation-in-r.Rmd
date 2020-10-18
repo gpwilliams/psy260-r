@@ -8,6 +8,7 @@ output:
   xaringan::moon_reader:
     lib_dir: libs
     nature:
+      ratio: 16:9
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
@@ -15,12 +16,12 @@ output:
 
 <style type="text/css">
 .left-code {
-  width: 49%;
+  width: 58%;
   height: 92%;
   float: left;
 }
 .right-plot {
-  width: 50%;
+  width: 40%;
   float: right;
   padding-left: 1%;
 }
@@ -37,7 +38,7 @@ library(tidyverse)
 library(here)
 
 options(tibble.print_min = 4)
-knitr::opts_chunk$set(dpi = 600, retina = 1)
+knitr::opts_chunk$set(dpi = 600, retina = 1, warning = FALSE, out.width="75%")
 ```
 
 ```{r functions, include = FALSE}
@@ -83,10 +84,7 @@ We then use `geom_bar()` to make the bar plot.
 This is what this looks like for counting up characters of different sexes.
 
 ```{r barplot, fig.show="hide"}
-ggplot(
-  data = starwars, 
-  aes(x = sex)
-) +
+ggplot(data = starwars, mapping = aes(x = sex)) +
   geom_bar()
 ```
 
@@ -108,10 +106,7 @@ Let's get heights of characters from each sex. Now, we just add height to the y-
 ```{r boxplot, fig.show="hide", message = FALSE, warning = FALSE}
 ggplot(
   data = starwars, 
-  aes(
-    x = sex,
-    y = height
-  )
+  mapping = aes(x = sex,y = height)
 ) +
   geom_boxplot()
 ```
@@ -137,10 +132,7 @@ We can keep all code the same in the `ggplot()` call, but change the geom to `ge
 ```{r violinplot, fig.show="hide", message = FALSE, warning = FALSE}
 ggplot(
   data = starwars, 
-  aes(
-    x = sex,
-    y = height
-  )
+  aes(x = sex, y = height)
 ) +
   geom_violin(
     trim = FALSE,
@@ -148,11 +140,11 @@ ggplot(
   )
 ```
 
+This takes some **optional arguments**. Here, I've told it to not trim the tails of scores, and to draw lines at the .25, .50, and .75 quantiles to be similar to a boxplot.
+
 ]
 
 .right-plot[
-
-This takes some **optional arguments**. Here, I've told it to not trim the tails of scores, and to draw lines at the .25, .50, and .75 quantiles to be similar to a boxplot.
 
 ![](`r knitr::fig_chunk("violinplot", "png")`)
 ]
@@ -190,10 +182,7 @@ I've also changed the alpha (opacity) in `geom_density()` so we can see overlapp
 ```{r densitycol, fig.show="hide", message = FALSE, warning = FALSE}
 ggplot(
   data = starwars, 
-  aes(
-    x = height,
-    fill = sex
-  )
+  aes(x = height,fill = sex)
 ) +
   geom_density(alpha = 0.5)
 ```
@@ -218,7 +207,7 @@ I've changed some the looks of the bars too using fill and colour arguments.
 ```{r histogram, fig.show="hide", message = FALSE, warning = FALSE}
 ggplot(
   data = starwars, 
-  aes(x = height)
+  mapping = aes(x = height)
 ) +
   geom_histogram(
     binwidth = 20,
@@ -226,11 +215,11 @@ ggplot(
     colour = "black"
   )
 ```
+We have to set the binwidth here, which is how we group continuous scores into bars. **Large bins = big bars**. We'll remove sex from the fill aesthetic too.
 
 ]
 
 .right-plot[
-We have to set the binwidth here, which is how we group continuous scores into bars. **Large bins = big bars**. We'll remove sex from the fill aesthetic too.
 
 ![](`r knitr::fig_chunk("histogram", "png")`)
 ]
@@ -264,10 +253,7 @@ Facet wrap wraps plots next to each other only for cases where we have the data 
 ```{r facetwrap, fig.show="hide", message = FALSE, warning = FALSE}
 ggplot(
   data = starwars, 
-  aes(
-    x = mass,
-    y = height
-  )
+  mapping = aes(x = mass,y = height)
 ) +
   geom_point() +
   facet_wrap(.~sex)
@@ -289,19 +275,16 @@ Facet grid **completes cases** in your panel. So even missing combinations of da
 ```{r facetgrid, fig.show="hide", message = FALSE, warning = FALSE}
 ggplot(
   data = starwars, 
-  aes(
-    x = mass,
-    y = height
-  )
+  mapping = aes(x = mass,y = height)
 ) +
   geom_point() +
   facet_grid(.~sex)
 ```
+Data is only presented in dimensions that you ask it to be presented in (e.g. columns here).
 
 ]
 
 .right-plot[
-Data is only presented in dimensions that you ask it to be presented in (e.g. columns here).
 
 ![](`r knitr::fig_chunk("facetgrid", "png")`)
 ]
@@ -361,7 +344,10 @@ descriptives
 ...and use this summary in plotting, or pipe it directly into `ggplot2`.
 
 ```{r starwars-desc-plot, fig.show = "hide"}
-ggplot(descriptives, aes(x = species, y = mean_height)) +
+ggplot(
+  data = descriptives, 
+  mapping = aes(x = species, y = mean_height)
+) +
   geom_bar(stat = "identity") +
   geom_errorbar(
     aes(
