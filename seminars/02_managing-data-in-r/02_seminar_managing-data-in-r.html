@@ -1653,10 +1653,26 @@ RStudio Interface
 <p>This data is made up, but we can assume it looks at how quickly people can respond to a target on screen by pressing a button after having had caffeine or not, and when responding with their <strong>dominant or non-dominant hands</strong>. The dependent variable is thus reaction time in milliseconds and the independent variables are caffeine and response hand. We also have ages for our participants.</p>
 <p>Now you’ve opened up RStudio project and notebook, we can get started.</p>
 <p>Load the data called “seminar_two_data.csv” into this R session as follows. To do this, create an R code chunk and copy and paste the following code into it.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(here)</span>
-<span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a>raw_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="kw">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;seminar_two_data.csv&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<pre><code>## ── Attaching packages ──────────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ dplyr   1.0.2
+## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ─────────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">library</span>(here)</span></code></pre></div>
+<pre><code>## here() starts at /Users/glennwilliams/Dropbox/GitHub/psy260-r</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>raw_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="kw">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;seminar_two_data.csv&quot;</span>))</span></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   subject = col_double(),
+##   age = col_double(),
+##   CAFFEINE = col_character(),
+##   response = col_character(),
+##   DV = col_double()
+## )</code></pre>
 <p>Here, we’ll get used to performing some basic data manipulation exercises in R.</p>
 <div id="exercise-1" class="section level2">
 <h2>Exercise 1</h2>
@@ -1666,10 +1682,9 @@ RStudio Interface
 <h2>Exercise 2</h2>
 <p>Make a code chunk. Check the unique values for each variable in your data set. Are there any issues with the data set? If so, make a note of them.</p>
 </div>
-<div id="exercise-5" class="section level2">
-<h2>Exercise 5</h2>
+<div id="exercise-3" class="section level2">
+<h2>Exercise 3</h2>
 <p>Make a code chunk. Remove the age data from the data set. Save this new data set as “anonymised_data” within R.</p>
-<p><strong>Remember to assign this new data to an object in R. Name this anon_data</strong></p>
 </div>
 <div id="exercise-4" class="section level2">
 <h2>Exercise 4</h2>
@@ -1678,7 +1693,7 @@ RStudio Interface
 <p>If you’re unsure how these functions work, type <code>?mutate</code> and then <code>?case_when</code> in the console. The Help pane outlines how these functions work, and gives examples of working code.</p>
 <p>If you’re still stuck, refer back to Lecture 2 part 3.</p>
 </div>
-<div id="exercise-5-1" class="section level2">
+<div id="exercise-5" class="section level2">
 <h2>Exercise 5</h2>
 <p>Make a code chunk. Using your data from Exercise 4, clean up any issues you might have with the response variable using the same methods outlined in Exercise 3.</p>
 <p><strong>Assign this to a new object called cleaned_data_two</strong></p>

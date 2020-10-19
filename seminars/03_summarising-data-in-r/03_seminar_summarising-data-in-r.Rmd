@@ -40,11 +40,11 @@ Now you've opened up RStudio project and notebook, we can get started.
 
 Load the data called "seminar_three_data.csv" into this R session as follows. To do this, create an R code chunk and copy and paste the following code into it.
 
-```{r getting-started, eval = FALSE}
+```{r getting-started, message = FALSE}
 library(tidyverse)
 library(here)
 
-raw_data <- read_csv(here("seminar_three_data.csv"))
+raw_data <- read_csv(here("data", "seminar_three_data.csv"))
 ```
 
 Here, we'll get used to performing some basic data manipulation exercises in R.
@@ -53,9 +53,11 @@ Here, we'll get used to performing some basic data manipulation exercises in R.
 
 How many participants do we have in the experiment? How many items? Write some R code to check this.
 
+*Hint*: `length()` and `unique()` are useful here.
+
 ## Exercise 2
 
-The label for the manipulation of the experiment and the two conditions is not very informative. Please give these suitable names in the data set.
+The labels for the conditions in column A are not very informative. Please give these suitable names in the data set.
 
 There are (at least) two methods to achieve this. Create a column (or overwrite the existing one) using:
 
@@ -69,7 +71,9 @@ There are (at least) two methods to achieve this. Create a column (or overwrite 
 
 ### Part A
 
-Create a summary of the reaction times per condition for each participant. This will represent the participant averages in the experiment. Typically we use this data for inferential tests and plots.
+Create a summary of the reaction times per condition for each participant. Choose a way to summarise this based on central tendency (e.g. mean, median, mode).
+
+Typically we use this data for inferential tests and plots.
 
 Assign this data to the object `data_summary`.
 
@@ -85,11 +89,11 @@ Assign this plot to a variable called `my_plot`.
 
 ## Exercise 5
 
-Update the plot saved in `data_summary` to have different fills for each condition and to have proper labels on the X and Y axis titles.
+Update your code used to plot `my_plot` in Exercise 4 to have different fills for each condition and to have proper labels on the X and Y axis titles.
 
 ## Exercise 6
 
-In this experiment we only want to exclude participants with average scores one standard deviation above or below the mean.
+In this experiment we want to exclude participants with average scores one standard deviation above or below the mean.
 
 ### Part A
 

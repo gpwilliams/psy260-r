@@ -78,7 +78,7 @@ Now you've opened up RStudio project and notebook, we can get started.
 
 Load the data called "seminar_two_data.csv" into this R session as follows. To do this, create an R code chunk and copy and paste the following code into it.
 
-```{r getting-started, eval = FALSE}
+```{r getting-started}
 library(tidyverse)
 library(here)
 
@@ -95,11 +95,9 @@ Make a code chunk. Print out the beginning of the data set either by just typing
 
 Make a code chunk. Check the unique values for each variable in your data set. Are there any issues with the data set? If so, make a note of them.
 
-## Exercise 5
+## Exercise 3
 
 Make a code chunk. Remove the age data from the data set. Save this new data set as "anonymised_data" within R. 
-
-**Remember to assign this new data to an object in R. Name this anon_data**
 
 ## Exercise 4
 
