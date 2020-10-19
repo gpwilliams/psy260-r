@@ -1595,7 +1595,7 @@ div.tocify {
 <h1 class="title toc-ignore">PSY260 - Research Methods and Analysis</h1>
 <h3 class="subtitle">R Workshop 2 - Managing Data in R</h3>
 <h4 class="author">Dr Glenn Williams</h4>
-<h4 class="date">2020-10-13 (Updated 2020-10-13)</h4>
+<h4 class="date">2020-10-13 (Updated 2020-10-19)</h4>
 
 </div>
 
@@ -1649,14 +1649,14 @@ RStudio Interface
 </div>
 <div id="exercises" class="section level1">
 <h1>Exercises</h1>
-<p>Copy and paste the data called <strong>seminar_two_data.csv</strong> from the “psy260-r” folder to your folder called “my-r-work”.</p>
-<p>This data is made up, but we can assume it looks at how quickly people can respond to a target on screen by pressing a button after having had caffeine or not, and when responding with their <strong>dominant or non-dominant hands</strong>. The dependent variable is thus reaction time in milliseconds and the indipendent variables are caffeine and response hand. We also have ages for our participants.</p>
+<p>Create a folder called data in your folder called “my-r-work”. Copy and paste the data called <strong>seminar_two_data.csv</strong> from the “psy260-r” folder to your new “data” folder.</p>
+<p>This data is made up, but we can assume it looks at how quickly people can respond to a target on screen by pressing a button after having had caffeine or not, and when responding with their <strong>dominant or non-dominant hands</strong>. The dependent variable is thus reaction time in milliseconds and the independent variables are caffeine and response hand. We also have ages for our participants.</p>
 <p>Now you’ve opened up RStudio project and notebook, we can get started.</p>
-<p>Load the data called “seminar-two-data.csv” into this R session as follows. To do this, create an R code chunk and copy and paste the following code into it.</p>
+<p>Load the data called “seminar_two_data.csv” into this R session as follows. To do this, create an R code chunk and copy and paste the following code into it.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(here)</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a>raw_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="kw">here</span>(<span class="st">&quot;seminar_two_data.csv&quot;</span>))</span></code></pre></div>
+<span id="cb1-4"><a href="#cb1-4"></a>raw_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="kw">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;seminar_two_data.csv&quot;</span>))</span></code></pre></div>
 <p>Here, we’ll get used to performing some basic data manipulation exercises in R.</p>
 <div id="exercise-1" class="section level2">
 <h2>Exercise 1</h2>

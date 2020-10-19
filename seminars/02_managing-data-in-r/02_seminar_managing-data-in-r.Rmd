@@ -70,19 +70,19 @@ Save this notebook as "seminar-two.Rmd" in the "my-r-work" folder.
 
 # Exercises
 
-Copy and paste the data called **seminar_two_data.csv** from the "psy260-r" folder to your folder called "my-r-work".
+Create a folder called data in your folder called "my-r-work". Copy and paste the data called **seminar_two_data.csv** from the "psy260-r" folder to your new "data" folder.
 
-This data is made up, but we can assume it looks at how quickly people can respond to a target on screen by pressing a button after having had caffeine or not, and when responding with their **dominant or non-dominant hands**. The dependent variable is thus reaction time in milliseconds and the indipendent variables are caffeine and response hand. We also have ages for our participants.
+This data is made up, but we can assume it looks at how quickly people can respond to a target on screen by pressing a button after having had caffeine or not, and when responding with their **dominant or non-dominant hands**. The dependent variable is thus reaction time in milliseconds and the independent variables are caffeine and response hand. We also have ages for our participants.
 
 Now you've opened up RStudio project and notebook, we can get started.
 
-Load the data called "seminar-two-data.csv" into this R session as follows. To do this, create an R code chunk and copy and paste the following code into it.
+Load the data called "seminar_two_data.csv" into this R session as follows. To do this, create an R code chunk and copy and paste the following code into it.
 
 ```{r getting-started, eval = FALSE}
 library(tidyverse)
 library(here)
 
-raw_data <- read_csv(here("seminar_two_data.csv"))
+raw_data <- read_csv(here("data", "seminar_two_data.csv"))
 ```
 
 Here, we'll get used to performing some basic data manipulation exercises in R.

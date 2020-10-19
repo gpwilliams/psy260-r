@@ -1,0 +1,110 @@
+---
+title: "PSY260 - Research Methods and Analysis"
+subtitle: "R Workshop 3 - Summarising and Plotting Data in R"
+output: 
+  html_document:
+    css: "../../style.css"
+    toc: true
+    toc_float: true
+    theme: united
+    highlight: tango
+author: "Dr Glenn Williams"
+date: "2020-10-19 (Updated `r Sys.Date()`)"
+---
+
+# Getting Started
+
+Make a new folder for your work for this seminar and create an RStudio Project within it. Create a new notebook within your newly created folder. Create a folder called "data" in this newly created folder and copy and paste the data called **seminar_three_data.csv** from the "psy260-r" folder to your newly created "data" folder.
+
+Please follow the instructions from the seminars in Weeks 1 and 2 if you need help with this.
+
+# Exercises
+
+This data in semianr_three_data.csv is made up, but we can assume this comes from a Stroop task. Here, words are presented either with congruent colour and text (e.g. <span style="color: purple;">purple</span>), or incongruent colour and text (e.g. <span style="color: purple;">green</span>). The participants had to name the colour of the ink (rather than read the word). It is hypothesised that items presented in the incongruent condition would be more difficult to process than those presented in the congruent condition, leading to slower reaction times in this case.
+
+We have columns as follows:
+
+- subj_id: numerical label for each participant.
+
+- list_id: numerical label for the randomisation of words within participants.
+
+- item_id: numerical label for the number corresponding to each word.
+
+- A: Whether or not words were presented in a congruent or incongruent colour. A1 = congruent, A2 = incongruent. 
+
+- Y: reaction time in milliseconds (the dependent variable).
+
+Each participant completes 40 trials during the experiment. This data set is already cleaned and ready for processing (unless you'd like to rename anything).
+
+Now you've opened up RStudio project and notebook, we can get started.
+
+Load the data called "seminar_three_data.csv" into this R session as follows. To do this, create an R code chunk and copy and paste the following code into it.
+
+```{r getting-started, eval = FALSE}
+library(tidyverse)
+library(here)
+
+raw_data <- read_csv(here("seminar_three_data.csv"))
+```
+
+Here, we'll get used to performing some basic data manipulation exercises in R.
+
+## Exercise 1
+
+How many participants do we have in the experiment? How many items? Write some R code to check this.
+
+## Exercise 2
+
+The label for the manipulation of the experiment and the two conditions is not very informative. Please give these suitable names in the data set.
+
+There are (at least) two methods to achieve this. Create a column (or overwrite the existing one) using:
+
+1. `case_when()` as in previous lectures/seminars.
+
+2. `factor()` within `mutate()`.
+
+*Please see the lecture on manipulating data if you get stuck.*
+
+## Exercise 3
+
+### Part A
+
+Create a summary of the reaction times per condition for each participant. This will represent the participant averages in the experiment. Typically we use this data for inferential tests and plots.
+
+Assign this data to the object `data_summary`.
+
+### Part B
+
+Write a sentence to justify your choice of measure for central tendency and dispersion in your summary statistics.
+
+## Exercise 4
+
+Create a plot to display the average reaction time per condition in the experiment using the data from `data_summary` in Exercise 3. Justify your choice of plot.
+
+Assign this plot to a variable called `my_plot`.
+
+## Exercise 5
+
+Update the plot saved in `data_summary` to have different fills for each condition and to have proper labels on the X and Y axis titles.
+
+## Exercise 6
+
+In this experiment we only want to exclude participants with average scores one standard deviation above or below the mean.
+
+### Part A
+
+Find out the overall mean and standard deviation from the reaction times saved in `data_summary`. Assign this summary to the variable `data_cutoffs`.
+
+*Hint*: If you use `summarise()` (which you may not need to), be sure to use ungroup in your chain of functions first, e.g.: `data_summary %>% ungroup() %>% **your code goes here**`.
+
+### Part B
+
+Keep only participants with scores greater than 1 standard deviation below the mean **and** less than 1 standard deviation above the mean.
+
+Assign this data to the object `data_summary_filtered`.
+
+*Hint*: You will need to use your answer from Part A to achieve this.
+
+### Part C
+
+Create a final plot as in Exercise 5, now with your data from `data_summary_filtered`.
