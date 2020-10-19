@@ -1622,15 +1622,16 @@ div.tocify {
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(here)</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a>raw_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="kw">here</span>(<span class="st">&quot;seminar_three_data.csv&quot;</span>))</span></code></pre></div>
+<span id="cb1-4"><a href="#cb1-4"></a>raw_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="kw">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;seminar_three_data.csv&quot;</span>))</span></code></pre></div>
 <p>Here, we’ll get used to performing some basic data manipulation exercises in R.</p>
 <div id="exercise-1" class="section level2">
 <h2>Exercise 1</h2>
 <p>How many participants do we have in the experiment? How many items? Write some R code to check this.</p>
+<p><em>Hint</em>: <code>length()</code> and <code>unique()</code> are useful here.</p>
 </div>
 <div id="exercise-2" class="section level2">
 <h2>Exercise 2</h2>
-<p>The label for the manipulation of the experiment and the two conditions is not very informative. Please give these suitable names in the data set.</p>
+<p>The labels for the conditions in column A are not very informative. Please give these suitable names in the data set.</p>
 <p>There are (at least) two methods to achieve this. Create a column (or overwrite the existing one) using:</p>
 <ol style="list-style-type: decimal">
 <li><p><code>case_when()</code> as in previous lectures/seminars.</p></li>
@@ -1642,7 +1643,8 @@ div.tocify {
 <h2>Exercise 3</h2>
 <div id="part-a" class="section level3">
 <h3>Part A</h3>
-<p>Create a summary of the reaction times per condition for each participant. This will represent the participant averages in the experiment. Typically we use this data for inferential tests and plots.</p>
+<p>Create a summary of the reaction times per condition for each participant. Choose a way to summarise this based on central tendency (e.g. mean, median, mode).</p>
+<p>Typically we use this data for inferential tests and plots.</p>
 <p>Assign this data to the object <code>data_summary</code>.</p>
 </div>
 <div id="part-b" class="section level3">
@@ -1657,11 +1659,11 @@ div.tocify {
 </div>
 <div id="exercise-5" class="section level2">
 <h2>Exercise 5</h2>
-<p>Update the plot saved in <code>data_summary</code> to have different fills for each condition and to have proper labels on the X and Y axis titles.</p>
+<p>Update your code used to plot <code>my_plot</code> in Exercise 4 to have different fills for each condition and to have proper labels on the X and Y axis titles.</p>
 </div>
 <div id="exercise-6" class="section level2">
 <h2>Exercise 6</h2>
-<p>In this experiment we only want to exclude participants with average scores one standard deviation above or below the mean.</p>
+<p>In this experiment we want to exclude participants with average scores one standard deviation above or below the mean.</p>
 <div id="part-a-1" class="section level3">
 <h3>Part A</h3>
 <p>Find out the overall mean and standard deviation from the reaction times saved in <code>data_summary</code>. Assign this summary to the variable <code>data_cutoffs</code>.</p>
