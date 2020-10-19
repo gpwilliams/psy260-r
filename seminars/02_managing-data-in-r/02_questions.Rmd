@@ -12,9 +12,12 @@ author: "Dr Glenn Williams"
 date: "2020-10-13 (Updated `r Sys.Date()`)"
 ---
 
-Make sure this file is in the same folder as your RProject. Open it up and attempt the questions below.
+Make sure this file, **02_questions.Rmd**, is in the same folder as your RProject. 
+Create a folder here called "data" (if you haven't already done so) and copy the data file "seminar_two_question_data.csv" from the data folder in the "PSY260-r" folder to this location.
 
-This set of questions introduces some more advances functions for working with data. These questions are intended to be more difficult to help test your knowledge.
+Open up **02_questions.Rmd** in your folder up and attempt the questions below. 
+
+This set of questions introduces some more advanced functions for working with data. These questions are intended to be more difficult to help test your knowledge.
 
 ```{r setup, message = FALSE}
 # load packages
