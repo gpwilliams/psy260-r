@@ -76,9 +76,20 @@ This data is made up, but we can assume it looks at how quickly people can respo
 
 Now you've opened up RStudio project and notebook, we can get started.
 
-Load the data called "seminar_two_data.csv" into this R session as follows. To do this, create an R code chunk and copy and paste the following code into it.
+If you haven't installed the `tidyverse` and `here` packages, do so only once per computer (or per project in RStudio Cloud) as follows.
 
-```{r getting-started}
+To do this, create an R code chunk and copy and paste the following code into it.
+
+```{r install, eval = FALSE}
+install.packages("tidyverse")
+install.packages("here")
+```
+
+Each time we start R, we have to load the installed packages to use the functions from them. We also have to load the data called "seminar_two_data.csv" into this R session as follows. 
+
+To do this, create an R code chunk and copy and paste the following code into it.
+
+```{r getting-started, message = FALSE}
 library(tidyverse)
 library(here)
 
