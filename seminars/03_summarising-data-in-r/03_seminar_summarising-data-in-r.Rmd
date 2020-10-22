@@ -38,7 +38,9 @@ Each participant completes 40 trials during the experiment. This data set is alr
 
 Now you've opened up RStudio project and notebook, we can get started.
 
-Load the data called "seminar_three_data.csv" into this R session as follows. To do this, create an R code chunk and copy and paste the following code into it.
+Each time we start R, we have to load the installed packages to use the functions from them. We also have to load the data called "seminar_three_data.csv" into this R session as follows. 
+
+To do this, create an R code chunk and copy and paste the following code into it.
 
 ```{r getting-started, message = FALSE}
 library(tidyverse)
@@ -48,6 +50,8 @@ raw_data <- read_csv(here("data", "seminar_three_data.csv"))
 ```
 
 Here, we'll get used to performing some basic data manipulation exercises in R.
+
+**Note**: If you get an error with this code, try installing the packages first using e.g. `install.packages("tidyverse)` and `install.packages("here")`. Remember, you only need to do this once per computer or RStudio Cloud project.
 
 ## Exercise 1
 

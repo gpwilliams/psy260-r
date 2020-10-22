@@ -1595,7 +1595,7 @@ div.tocify {
 <h1 class="title toc-ignore">PSY260 - Research Methods and Analysis</h1>
 <h3 class="subtitle">R Workshop 3 - Summarising and Plotting Data in R</h3>
 <h4 class="author">Dr Glenn Williams</h4>
-<h4 class="date">2020-10-19 (Updated 2020-10-19)</h4>
+<h4 class="date">2020-10-19 (Updated 2020-10-22)</h4>
 
 </div>
 
@@ -1618,12 +1618,14 @@ div.tocify {
 </ul>
 <p>Each participant completes 40 trials during the experiment. This data set is already cleaned and ready for processing (unless you’d like to rename anything).</p>
 <p>Now you’ve opened up RStudio project and notebook, we can get started.</p>
-<p>Load the data called “seminar_three_data.csv” into this R session as follows. To do this, create an R code chunk and copy and paste the following code into it.</p>
+<p>Each time we start R, we have to load the installed packages to use the functions from them. We also have to load the data called “seminar_three_data.csv” into this R session as follows.</p>
+<p>To do this, create an R code chunk and copy and paste the following code into it.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(here)</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
 <span id="cb1-4"><a href="#cb1-4"></a>raw_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="kw">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;seminar_three_data.csv&quot;</span>))</span></code></pre></div>
 <p>Here, we’ll get used to performing some basic data manipulation exercises in R.</p>
+<p><strong>Note</strong>: If you get an error with this code, try installing the packages first using e.g. <code>install.packages(&quot;tidyverse)</code> and <code>install.packages(&quot;here&quot;)</code>. Remember, you only need to do this once per computer or RStudio Cloud project.</p>
 <div id="exercise-1" class="section level2">
 <h2>Exercise 1</h2>
 <p>How many participants do we have in the experiment? How many items? Write some R code to check this.</p>
