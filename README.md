@@ -42,8 +42,6 @@ In the /seminars/ folder there are subdirectories for each session. Please compl
 
 Take the opportunity in this session to get to grips with R, catch up on any missed lecture videos, and complete the work below.
 
-## Tasks
-
 The content for all seminars is in the seminars folder.
 
 For the first session, go into 01_intro-to-r. The content for this session is in the `01_seminar_intro-to-r.Rmd` and `01_seminar_intro-to-r.html` files.
@@ -82,6 +80,6 @@ If you haven't done this yet, please make a folder somewhere on your computer wh
 
 1. As in the previous session, please see the instructions in `psy260-r/seminars/03_summarising-data-in-r/03_seminar_summarising-data-in-r.html`.
 
-You will have to copy and paste data from the `psy260-r/data/seminar_three_data.csv` `psy260-r/data/cleanish_data.csv` files into your own folder where your RStudio project and R markdown files are located.
+You will have to copy and paste data from the `psy260-r/data/seminar_three_data.csv` and `psy260-r/data/cleanish_data.csv` files into your own folder where your RStudio project and R markdown files are located.
 
 2. After this, if you have time work through the `03_questions.Rmd` file. This has some empty R code chunks for you to add your own answers to.
