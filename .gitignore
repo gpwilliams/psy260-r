@@ -40,5 +40,5 @@ vignettes/*.pdf
 R/99_exploratory/
 
 # answers files
-*_answers*
+# *_answers*
 

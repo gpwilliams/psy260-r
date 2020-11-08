@@ -50,7 +50,7 @@ This data set is that from lecture 2b - Data Checking in R. The columns have the
 Remove any unnecessary columns from this data set.
 
 ```{r question-1}
-
+qdata <- qdata %>% select(-X1)
 ```
 
 # Question 2
@@ -58,7 +58,17 @@ Remove any unnecessary columns from this data set.
 Give proper levels names to the levels A1 and A2 in column A and to B1 and B2 in column B.
 
 ```{r question-2}
-
+qdata <- qdata %>% 
+  mutate(
+    A = case_when(
+      A == "a1" ~ "up",
+      A == "a2" ~ "down"
+    ),
+    B = case_when(
+      B == "b1" ~ "up",
+      B == "b2" ~ "down"
+    )
+  )
 ```
 
 # Question 3
@@ -66,15 +76,22 @@ Give proper levels names to the levels A1 and A2 in column A and to B1 and B2 in
 Give proper (column) names to the variables A, B, and Y.
 
 ```{r answer-3}
-
+qdata <- qdata %>% 
+  rename(
+    sentence_location = A,
+    target_location = B,
+    reaction_time = Y
+  )
 ```
 
 # Question 4
 
-Make a summary of the data creating averages of the reaction times for each level of each condition for every participant. Assign this to the object `summary_data`.
+Make a summary of the data creating averages of the reaction times for each level of each condition for every participant. Assign this to the object `summary_data`. Be sure to remove any missing data from the reaction times when creating your summary.
 
 ```{r answer-4}
-
+summary_data <- qdata %>% 
+  group_by(subj_id, sentence_location, target_location) %>% 
+  summarise(mean_rt = mean(reaction_time, na.rm = TRUE))
 ```
 
 # Question 5
@@ -82,7 +99,8 @@ Make a summary of the data creating averages of the reaction times for each leve
 Remove participants 1 through to 10 from `summary_data`.
 
 ```{r answer-5}
-
+summary_data <- summary_data %>% 
+  filter(subj_id > 10)
 ```
 
 # Question 6
@@ -90,7 +108,15 @@ Remove participants 1 through to 10 from `summary_data`.
 Make a boxplot of the data. Does there appear to be any reliable differences between conditions? Explain your logic.
 
 ```{r answer-6}
-
+ggplot(
+  data = summary_data, 
+  mapping = aes(
+    x = sentence_location, 
+    y = mean_rt, 
+    fill = target_location
+  )
+) +
+  geom_boxplot()
 ```
 
 # Question 7 (Advanced, Bonus Material)
@@ -130,9 +156,15 @@ Here, any terms added to the right of the `~` are evaluated as main effects if w
 
 Perform an ANOVA for your data. To get your typical ANOVA table output, you must use `summary(aov(...))` or assign your ANOVA model to an object and call `summary()` on that object.
 
-```{r answer-7-1}
-
+```{r answer-7}
+aov_summary <- aov(
+  mean_rt ~ sentence_location * target_location, 
+  data = summary_data
+)
+summary(aov_summary)
 ```
+
+**There are no main effects of interactions present (all *p*s > .186).**
 
 This answer may appear correct, but with repeated measures we need to tell R to adjust the errors (i.e. to conduct a within- rather than a between-subjects ANOVA) for any terms we want to estimate within each participant. Do this as follows:
 
@@ -144,8 +176,15 @@ aov(
 )
 ```
 
-Adjust your code to incorporate this. Do your effects change? Can you explain why?
+Adjust your code to incorporate this. Do your estimates change? Can you explain why?
 
 ```{r answer-7-2}
-
+aov_summary <- aov(
+  mean_rt ~ sentence_location * target_location + 
+    Error(subj_id/(sentence_location * target_location)), 
+  data = summary_data
+)
+summary(aov_summary)
 ```
+
+The results are still non-significant. The F-values are now smaller, likely due to partialling-out any random variance that is more attributable to participant level variance rather than consistent effects.

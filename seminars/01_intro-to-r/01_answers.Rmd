@@ -1,0 +1,145 @@
+---
+title: "PSY260 - Research Methods and Analysis"
+subtitle: "R Workshop 1 - Using R for Data Processing Questions"
+output: 
+  html_document:
+    css: "../../style.css"
+    toc: true
+    toc_float: true
+    theme: united
+    highlight: tango
+author: "Dr Glenn Williams"
+date: "2020-09-19 (Updated `r Sys.Date()`)"
+---
+
+Make sure this file is in the same folder as your RProject. Open it up and attempt the questions below.
+
+# Question 1
+
+What's wrong with the following code? Fix it in the second block below.
+
+```{r question_1, eval = FALSE}
+sequence < - c(1, 2, 3, 4, 5)
+```
+
+Can you explain why the code above does not work?
+
+**A: It has a space between < and - so assignment won't work (it will read this as less than then minus, but fail because sequence doesn't exist)**
+
+```{r answer-1}
+sequence <- c(1, 2, 3, 4, 5)
+```
+
+# Question 2
+
+Why doesn't this return anything? Change the code to make it run.
+
+```{r question-2-a}
+# draw 10 times from a uniform distribution between 0 and 1
+my_object <- runif(n = 10, min = 0, max = 1)
+```
+
+```{r question-2-b, eval = FALSE}
+my_obejct
+```
+
+Can you explain why the code above does not work?
+
+**A: The name of the object has a typo**
+
+```{r answer-2}
+my_object
+```
+
+# Question 3
+
+Create an object with names of 5 of your closest friends, family members, or favourite musicians. Name this object "people". *Hint* you will need to concatenate 5 strings with the `c()` function.
+
+```{r answer-3}
+people <- c("Rachel", "Ross", "Joey", "Chandler", "Monica")
+```
+
+# Question 4
+
+Create an object called `scores` that will store the scores of your 5 people on some test. Give them some random numbers. You can do this by hand, or learn how to use the `rnorm()` function by typing `?rnorm()` into the console.
+
+```{r answer-4}
+scores <- rnorm(n = 5, mean = 100, sd = 15)
+```
+
+# Question 5
+
+Finally, create some ages for your people and store them in the object `ages`. Feel free to make up their ages. If you want to learn a new function, look into how `sample()` works. This is a function that draws numbers randomly from a set of numbers. Again, type `?sample()` to figure this out.
+
+```{r answer-5}
+ages <- sample(20:30, size = 5, replace = TRUE)
+```
+
+# Question 6
+
+Create a data frame called `my_data` consisting of your people, their ages, and test scores. Remember to use the `data.frame()` function here. Again, if you'd like some help on how this works, type `?data.frame()` into the console.
+
+```{r answer-6}
+my_data <- data.frame(
+  people = people,
+  ages = ages,
+  scores = scores
+)
+
+my_data
+```
+
+# Question 7
+
+Change the name of the first person in `my_data` to someone else. Don't worry about changing their other values. *Hint*: You will need to index that particular value in your data.frame and assign it a new value.
+
+```{r answer-7}
+my_data[1, 1] <- "Phoebe"
+my_data
+```
+
+# Question 8
+
+Access the 3rd row and 2nd column of `my_data`.
+
+```{r answer-8}
+my_data[3, 2]
+```
+
+# Question 9
+
+Access the 2nd column all rows of `my_data`.
+
+```{r answer-9}
+my_data[, 2]
+```
+
+# Question 10
+
+Calculate the mean age of the people in your sample. To do this, use the function `mean()`.
+
+```{r answer_10}
+mean(my_data$ages)
+```
+
+# Question 11
+
+Calculate the standard deviation for the age of the people in your sample. To do this, use the function `sd()`.
+
+```{r answer_11}
+sd(my_data$ages)
+```
+
+# Question 12
+
+You can chain together functions in R. 
+
+One function we can use is `unique()`, which returns a vector or data frame based on what we give it, only with duplicates removed. Another function is 'length()` which tells us how many things there are in a vector.
+
+Combine these two functions to get the number of unique names in your `people` column in `my_data`. *Hint*: pass your column to your functions. One function will be around the other one, e.g. `x(y(...))`.
+
+```{r answer_12}
+length(unique(my_data$people))
+```
+
+That's it for the introductory section. Well done on completing your first class in R!

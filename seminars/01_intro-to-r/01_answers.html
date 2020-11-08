@@ -1285,55 +1285,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
-<style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
-ul > li > .anchor-section {display: none;}
-</style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
-document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
-
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
-
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
-
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '' || x.matches(':empty')) {
-      return null;
-    }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
-});
-</script>
-
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -1642,111 +1593,110 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">PSY260 - Research Methods and Analysis</h1>
-<h3 class="subtitle">R Workshop 3 - Summarising and Plotting Data in R</h3>
+<h3 class="subtitle">R Workshop 1 - Using R for Data Processing Questions</h3>
 <h4 class="author">Dr Glenn Williams</h4>
-<h4 class="date">2020-10-19 (Updated 2020-11-05)</h4>
+<h4 class="date">2020-09-19 (Updated 2020-09-22)</h4>
 
 </div>
 
 
-<p>Make sure this file, <strong>03_questions.Rmd</strong>, is in the same folder as your RProject. Create a folder here called “data” (if you haven’t already done so) and copy the data file “factorial_data.csv” from the data folder in the “psy260-r” folder to this location.</p>
-<p>Open up <strong>03_questions.Rmd</strong> in your folder up and attempt the questions below.</p>
-<p>This set of questions will prompt you to summarise a messy data set from beginning to end.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># load packages</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(here)</span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># load data</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a>qdata &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="kw">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;cleanish_data.csv&quot;</span>))</span></code></pre></div>
-<pre><code>## Warning: Missing column names filled in: &#39;X1&#39; [1]</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># inspect data</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>qdata</span></code></pre></div>
-<pre><code>## # A tibble: 2,400 x 7
-##       X1 subj_id list_id item_id A     B         Y
-##    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
-##  1     1       1       4       1 a2    b2     234.
-##  2     2       1       4       2 a2    b2     295.
-##  3     3       1       4       3 a2    b2     285.
-##  4     4       1       4       4 a2    b2     258.
-##  5     5       1       4       5 a2    b2     268.
-##  6     6       1       4       6 a2    b2     282.
-##  7     7       1       4       7 a2    b2     281.
-##  8     8       1       4       8 a2    b2     291.
-##  9     9       1       4       9 a2    b2     292.
-## 10    10       1       4      10 a2    b2     243.
-## # … with 2,390 more rows</code></pre>
-<p>This data set is that from lecture 2b - Data Checking in R. The columns have the following interpretation:</p>
-<ul>
-<li><p><strong>X1</strong> = Row number for the data.</p></li>
-<li><p><strong>subj_id</strong> = Subject/participant ID for the person who gave the data to us.</p></li>
-<li><p><strong>list_id</strong> = list ID for how items were randomised.</p></li>
-<li><p><strong>item_id</strong> = Item ID.</p></li>
-<li><p><strong>variable A</strong> = Implied sentence location (upwards or downwards); e.g. “the bird flew in the sky.” a1 is up, a2 is down.</p></li>
-<li><p><strong>variable B</strong> = Location of target (up or down on the screen). b1 is up, b2 is down.</p></li>
-</ul>
+<p>Make sure this file is in the same folder as your RProject. Open it up and attempt the questions below.</p>
 <div id="question-1" class="section level1">
 <h1>Question 1</h1>
-<p>Remove any unnecessary columns from this data set.</p>
+<p>What’s wrong with the following code? Fix it in the second block below.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>sequence <span class="op">&lt;</span><span class="st"> </span><span class="op">-</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</span></code></pre></div>
+<p>Can you explain why the code above does not work?</p>
+<p><strong>A: It has a space between &lt; and - so assignment won’t work (it will read this as less than then minus, but fail because sequence doesn’t exist)</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>sequence &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</span></code></pre></div>
 </div>
 <div id="question-2" class="section level1">
 <h1>Question 2</h1>
-<p>Give proper levels names to the levels A1 and A2 in column A and to B1 and B2 in column B.</p>
+<p>Why doesn’t this return anything? Change the code to make it run.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># draw 10 times from a uniform distribution between 0 and 1</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>my_object &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">0</span>, <span class="dt">max =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>my_obejct</span></code></pre></div>
+<p>Can you explain why the code above does not work?</p>
+<p><strong>A: The name of the object has a typo</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>my_object</span></code></pre></div>
+<pre><code>##  [1] 0.9988394 0.2667531 0.2145787 0.5408367 0.1045506 0.7709737 0.2921384
+##  [8] 0.3092182 0.8125455 0.3956306</code></pre>
 </div>
 <div id="question-3" class="section level1">
 <h1>Question 3</h1>
-<p>Give proper (column) names to the variables A, B, and Y.</p>
+<p>Create an object with names of 5 of your closest friends, family members, or favourite musicians. Name this object “people”. <em>Hint</em> you will need to concatenate 5 strings with the <code>c()</code> function.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>people &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Rachel&quot;</span>, <span class="st">&quot;Ross&quot;</span>, <span class="st">&quot;Joey&quot;</span>, <span class="st">&quot;Chandler&quot;</span>, <span class="st">&quot;Monica&quot;</span>)</span></code></pre></div>
 </div>
 <div id="question-4" class="section level1">
 <h1>Question 4</h1>
-<p>Make a summary of the data creating averages of the reaction times for each level of each condition for every participant. Assign this to the object <code>summary_data</code>.</p>
+<p>Create an object called <code>scores</code> that will store the scores of your 5 people on some test. Give them some random numbers. You can do this by hand, or learn how to use the <code>rnorm()</code> function by typing <code>?rnorm()</code> into the console.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>scores &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">5</span>, <span class="dt">mean =</span> <span class="dv">100</span>, <span class="dt">sd =</span> <span class="dv">15</span>)</span></code></pre></div>
 </div>
 <div id="question-5" class="section level1">
 <h1>Question 5</h1>
-<p>Remove participants 1 through to 10 from <code>summary_data</code>.</p>
+<p>Finally, create some ages for your people and store them in the object <code>ages</code>. Feel free to make up their ages. If you want to learn a new function, look into how <code>sample()</code> works. This is a function that draws numbers randomly from a set of numbers. Again, type <code>?sample()</code> to figure this out.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>ages &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">20</span><span class="op">:</span><span class="dv">30</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="question-6" class="section level1">
 <h1>Question 6</h1>
-<p>Make a boxplot of the data. Does there appear to be any reliable differences between conditions? Explain your logic.</p>
+<p>Create a data frame called <code>my_data</code> consisting of your people, their ages, and test scores. Remember to use the <code>data.frame()</code> function here. Again, if you’d like some help on how this works, type <code>?data.frame()</code> into the console.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>my_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="dt">people =</span> people,</span>
+<span id="cb10-3"><a href="#cb10-3"></a>  <span class="dt">ages =</span> ages,</span>
+<span id="cb10-4"><a href="#cb10-4"></a>  <span class="dt">scores =</span> scores</span>
+<span id="cb10-5"><a href="#cb10-5"></a>)</span>
+<span id="cb10-6"><a href="#cb10-6"></a></span>
+<span id="cb10-7"><a href="#cb10-7"></a>my_data</span></code></pre></div>
+<pre><code>##     people ages    scores
+## 1   Rachel   29  79.65996
+## 2     Ross   30 105.48994
+## 3     Joey   23  89.50443
+## 4 Chandler   29  98.33467
+## 5   Monica   20  94.11645</code></pre>
 </div>
-<div id="question-7-advanced-bonus-material" class="section level1">
-<h1>Question 7 (Advanced, Bonus Material)</h1>
-<p>We can perform inferential statistics in R.</p>
-<p>I have simulated some data below for a 2 group experiment. The two groups are “control” and “treatment” which are assigned to the column “condition” while the outcome is in the column “outcome”. (It doesn’t matter what this column or study represents, data only have meaning we assign to it.)</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>n &lt;-<span class="st"> </span><span class="dv">40</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a></span>
-<span id="cb5-3"><a href="#cb5-3"></a>q8dat &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
-<span id="cb5-4"><a href="#cb5-4"></a>  <span class="dt">condition =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;treatment&quot;</span>), <span class="dt">times =</span> n),</span>
-<span id="cb5-5"><a href="#cb5-5"></a>  <span class="dt">outcome =</span> <span class="kw">c</span>(</span>
-<span id="cb5-6"><a href="#cb5-6"></a>    <span class="kw">rnorm</span>(n, <span class="dt">mean =</span> <span class="dv">400</span>, <span class="dt">sd =</span> <span class="dv">100</span>),</span>
-<span id="cb5-7"><a href="#cb5-7"></a>    <span class="kw">rnorm</span>(n, <span class="dt">mean =</span> <span class="dv">500</span>, <span class="dt">sd =</span> <span class="dv">150</span>)</span>
-<span id="cb5-8"><a href="#cb5-8"></a>  )</span>
-<span id="cb5-9"><a href="#cb5-9"></a>)</span></code></pre></div>
-<p>We can analyse this data using a t-test as follows:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">t.test</span>(outcome <span class="op">~</span><span class="st"> </span>condition, <span class="dt">data =</span> q8dat)</span></code></pre></div>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  outcome by condition
-## t = -0.91903, df = 76.051, p-value = 0.361
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  -102.24520   37.67846
-## sample estimates:
-##   mean in group control mean in group treatment 
-##                430.7245                463.0078</code></pre>
-<p>We get the above summary of the t-test. (Your exact values may vary due to simulating this data.)</p>
-<p>We can see above that we can analyse data using a formula interface <code>outcome ~ treatment</code>. This means scores to the left of the <code>~</code> are predicted by the values assigned to the right side of the <code>~</code>; i.e. your condition dictates your score.</p>
-<p>We can similarly perform an ANOVA using this method. This means we perform an ANOVA with two main effects (e.g. a two-way ANOVA) as follows:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">aov</span>(outcome <span class="op">~</span><span class="st"> </span>FACTOR_A <span class="op">+</span><span class="st"> </span>FACTOR_B, <span class="dt">data =</span> YOUR_DATA)</span></code></pre></div>
-<p>Here, any terms added to the right of the <code>~</code> are evaluated as main effects if we make their effects additive. If instead we use a multiplication symbol, we get both main effects <strong>and interactions</strong>.</p>
-<p>Perform an ANOVA for your data. To get your typical ANOVA table output, you must use <code>summary(aov(...))</code> or assign your ANOVA model to an object and call <code>summary()</code> on that object.</p>
-<p>This answer may appear correct, but with repeated measures we need to tell R to adjust the errors (i.e. to conduct a within- rather than a between-subjects ANOVA) for any terms we want to estimate within each participant. Do this as follows:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">aov</span>(</span>
-<span id="cb9-2"><a href="#cb9-2"></a>  outcome <span class="op">~</span><span class="st"> </span>FACTOR_A <span class="op">*</span><span class="st"> </span>FACTOR_B <span class="op">+</span><span class="st"> </span></span>
-<span id="cb9-3"><a href="#cb9-3"></a><span class="st">    </span><span class="kw">Error</span>(SUBJECT_ID_COLUMN<span class="op">/</span>(FACTOR_A <span class="op">*</span><span class="st"> </span>FACTOR_B)), </span>
-<span id="cb9-4"><a href="#cb9-4"></a>  <span class="dt">data =</span> YOUR_DATA</span>
-<span id="cb9-5"><a href="#cb9-5"></a>)</span></code></pre></div>
-<p>Adjust your code to incorporate this. Do your effects change? Can you explain why?</p>
+<div id="question-7" class="section level1">
+<h1>Question 7</h1>
+<p>Change the name of the first person in <code>my_data</code> to someone else. Don’t worry about changing their other values. <em>Hint</em>: You will need to index that particular value in your data.frame and assign it a new value.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>my_data[<span class="dv">1</span>, <span class="dv">1</span>] &lt;-<span class="st"> &quot;Phoebe&quot;</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>my_data</span></code></pre></div>
+<pre><code>##     people ages    scores
+## 1   Phoebe   29  79.65996
+## 2     Ross   30 105.48994
+## 3     Joey   23  89.50443
+## 4 Chandler   29  98.33467
+## 5   Monica   20  94.11645</code></pre>
+</div>
+<div id="question-8" class="section level1">
+<h1>Question 8</h1>
+<p>Access the 3rd row and 2nd column of <code>my_data</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>my_data[<span class="dv">3</span>, <span class="dv">2</span>]</span></code></pre></div>
+<pre><code>## [1] 23</code></pre>
+</div>
+<div id="question-9" class="section level1">
+<h1>Question 9</h1>
+<p>Access the 2nd column all rows of <code>my_data</code>.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>my_data[, <span class="dv">2</span>]</span></code></pre></div>
+<pre><code>## [1] 29 30 23 29 20</code></pre>
+</div>
+<div id="question-10" class="section level1">
+<h1>Question 10</h1>
+<p>Calculate the mean age of the people in your sample. To do this, use the function <code>mean()</code>.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">mean</span>(my_data<span class="op">$</span>ages)</span></code></pre></div>
+<pre><code>## [1] 26.2</code></pre>
+</div>
+<div id="question-11" class="section level1">
+<h1>Question 11</h1>
+<p>Calculate the standard deviation for the age of the people in your sample. To do this, use the function <code>sd()</code>.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">sd</span>(my_data<span class="op">$</span>ages)</span></code></pre></div>
+<pre><code>## [1] 4.438468</code></pre>
+</div>
+<div id="question-12" class="section level1">
+<h1>Question 12</h1>
+<p>You can chain together functions in R.</p>
+<p>One function we can use is <code>unique()</code>, which returns a vector or data frame based on what we give it, only with duplicates removed. Another function is ’length()` which tells us how many things there are in a vector.</p>
+<p>Combine these two functions to get the number of unique names in your <code>people</code> column in <code>my_data</code>. <em>Hint</em>: pass your column to your functions. One function will be around the other one, e.g. <code>x(y(...))</code>.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">length</span>(<span class="kw">unique</span>(my_data<span class="op">$</span>people))</span></code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<p>That’s it for the introductory section. Well done on completing your first class in R!</p>
 </div>
 
 
@@ -1760,7 +1710,7 @@ div.tocify {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
