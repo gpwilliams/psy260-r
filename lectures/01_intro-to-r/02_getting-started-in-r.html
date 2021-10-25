@@ -4,6 +4,7 @@
     <title>Using R for Data Processing</title>
     <meta charset="utf-8" />
     <meta name="author" content="Glenn Williams" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
   </head>
@@ -15,7 +16,7 @@ class: center, middle, inverse, title-slide
 ## Getting Started in R
 ### Glenn Williams
 ### University of Sunderland
-### 2020-09-14 (updated: 2020-10-19)
+### 2021-10-25 (updated: 2021-10-25)
 
 ---
 
@@ -32,7 +33,7 @@ class: center, middle, inverse, title-slide
 
 - Choose a mirror from which to download R. Any will do.
 
-- Select the correct distribution for your operating system and then click through to **install R for the first time** if on Windows, or just click the most recent install version for Mac/Linux.
+- Select the distribution for your operating system. On Windows, click **install R for the first time**. On Mac/Linux click the most recent install version.
 
 - You'll see a new page; For Windows, click on **"Download R [version number] for Windows."**.
 ]
@@ -74,7 +75,7 @@ class: center, middle, inverse, title-slide
 ---
 # Getting Started in the Cloud
 
-Alternatively, we can use [RStudio Cloud](https://rstudio.cloud) to do everything online. For consistency.
+Alternatively, we can use [RStudio Cloud](https://rstudio.cloud) to do everything online.
 
 .pull-left[
 - This may be the **easiest** route, especially if your system is locked down (e.g. on University controlled computers).
@@ -91,7 +92,7 @@ Alternatively, we can use [RStudio Cloud](https://rstudio.cloud) to do everythin
 
 - **Works with Chromebooks** etc. that do not allow local installs of R.
 
-- Please note that [rstudio.cloud](https://rstudio.cloud/) **has usage limits**. You can only do 15 hours per month in it. If you can, get a local install.
+- Please note that [rstudio.cloud](https://rstudio.cloud/) **has usage limits**. You can only work for 15 hours per month in it at the free tier. If you can, get a local install.
 
 Sign up for an account by clicking sign up on the [homepage](https://rstudio.cloud/). 
 
@@ -127,7 +128,7 @@ Click File `\(\rightarrow\)` New File `\(\rightarrow\)` R Notebook. This will op
 &lt;/div&gt;
 
 ---
-# Understanding the Editor?
+# Understanding the Editor
 
 .pull-left[
 &lt;div class="figure"&gt;
@@ -148,9 +149,9 @@ Click File `\(\rightarrow\)` New File `\(\rightarrow\)` R Notebook. This will op
 **Files/Plots/Help/Viewer** (bottom-right): See any plots in your **working dirctory (i.e. in your project)**, view any recently created plots or help on how to use R functions.
 
 ---
-# Making a Notebook
+# Working with Notebooks
 
-Now, we can make a notebook to get started in R. Go to **File `\(\rightarrow\)` New File `\(\rightarrow\)` R Notebook**. Give your file a title by changing `title:` at the top. Then save it with a sensible name in your folder.
+After making a notebook (by clicking **File `\(\rightarrow\)` New File `\(\rightarrow\)` R Notebook**). Give your notebook a title by changing the text following `title:` at the top.
 
 Notebooks are made up of:
 
@@ -172,7 +173,7 @@ When you save your notebook, you can **preview it**. It will create an HTML file
 ---
 # Preview Your Notebook
 
-Make sure you press play on your code chunks. When done, save your work (Command/Ctrl + S) and **click Preview**. You should see this:
+Make sure you press play on your code chunks. This will run your code and show you the output. When done, save your work (Command/Ctrl + S) and **click Preview**. You should see this:
 
 &lt;img src="../../img/r-notebook-output.png" width="350" style="display: block; margin: auto;" /&gt;
 
@@ -244,13 +245,13 @@ add_one(3)
 ---
 # Making Life Easy with Pre-built Functions
 
-Some users know that functions they write can be useful to others, so they put them together in a **package**. 
+Some developers make functions available to others as a **package**. 
 
-- The two packages (or pacakge of packages) we'll use are `tidyverse` and `here`. 
+- The two packages (or package of packages) we'll use are `tidyverse` and `here`. 
 
     - **Tidyverse**: has several functions for making working with data and creating plots easier.
 
-    - **Here**: makes your R-scripts read and write files relative to where the project is. This means you can write scripts that work on any PC, and not just your own.
+    - **Here**: makes your R-scripts read and write files relative to where the project is. This means you can write scripts that work on any PC (not just your own).
     
 This will be made clear once we start using these packages.
 
@@ -277,9 +278,10 @@ library("here")
 ---
 # What Next?
 
-Now we know the basics, we'll perform some calculations in R.
+Now we know the basics of R and RStudio, we'll learn how to code in R.
 
 &lt;img src="https://media.giphy.com/media/kaBU6pgv0OsPHz2yxy/giphy.gif" width="450" style="display: block; margin: auto;" /&gt;
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
