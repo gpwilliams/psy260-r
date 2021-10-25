@@ -9,16 +9,22 @@ output:
     theme: united
     highlight: tango
 author: "Dr Glenn Williams"
-date: "2020-09-17 (Updated `r Sys.Date()`)"
+date: "2021-10-25 (Updated `r Sys.Date()`)"
 ---
+
+# Instructions for this Week's Workshop
+
+Each week you will learn about R from lectures before doing further learning in each workshop. In the workshops you will read about each lesson on R in more detail before completing some additional exercises and questions that rely on you using R. Each week, the exercises and questions can be found within the seminars folder for a given lesson under the file name **questions.Rmd**.
+
+Please read the background this week on getting started in R, using RStudio Projects, and literate programming using R notebooks. After that, you will actively use R to complete exercises and answer questions. This week, you will complete the exercises and questions in **seminars/01_intro-to-r/questions.Rmd**.
 
 # Getting Started in R
 
-Please make sure that you have watched the three [introductory videos on Using R for Data Processing](https://canvas.sunderland.ac.uk/courses/40018/pages/lecture-4-using-r-for-data-processing). These cover why you might use R, how to install and create notebooks in R for data processing, and how to do basic data manipulation in R.
+Please make sure that you have watched the three [introductory videos on Using R for Data Processing](https://canvas.sunderland.ac.uk/courses/47533/pages/lecture-week-6-2?module_item_id=826590). These cover why you might use R, how to install and create notebooks in R for data processing, and how to do basic data manipulation in R.
 
 # Installing R
 
-Please watch videos 1b for details on installing R. Some details are provided below. Please note that Option 1 is preferable.
+Please watch video 1b for details on installing R. Some details are provided below. Option 1 is preferable.
 
 ## Option 1: Local Install
 
@@ -43,8 +49,8 @@ knitr::include_graphics(c(
 You'll see a new page. Here you need to download R for your specific operating system:
 
 - For Linux, click on **Download R for Linux.**
-- For Mac, click on **"Download R for (Mac) OS X."**
-- For Windows, click on **"Download R for Windows."**
+- For Mac, click on **Download R for (Mac) OS X.**
+- For Windows, click on **Download R for Windows.**
 
 ```{r r-download-3, echo = FALSE, out.width = 750, fig.align = "center", fig.cap=" "}
 knitr::include_graphics(c(
@@ -79,7 +85,7 @@ Please note that you are limited to 15 hours per month at the free tier of this 
 
 ## Option 3: R at the University
 
-We will have local installations of R/RStudio for use on the computers in Psychology. These are controlled so that you do not have admin rights, so cannot install any additional packages. However, we will have the core packages (e.g. here, tidyverse) installed for you so you do not need to install any packages.
+We have local installations of R/RStudio for use on the computers in Psychology. These are controlled so that you don't have admin rights, meaning you can't install any additional packages. However, we will have the core packages (e.g. here, tidyverse) installed for you.
 
 ## Some Housekeeping
 
@@ -93,11 +99,13 @@ knitr::include_graphics(c(
 ))
 ```
 
-Make sur ethat the checkbox in **Workspace** saying "Restore .RData into workspace at startup" is unchecked like in the above image. Then make sure the line saying "Save workspae to R.Data on exit:" it set to **Never**. Click OK, and you're ready to get started.
-
-You'll only have to do this once in RStudio and it'll remember these options.
+Make sure that the checkbox in **Workspace** saying "Restore .RData into workspace at startup" is unchecked like in the above image. Then make sure the line saying "Save workspace to R.Data on exit:" it set to **Never**. Click OK, and you're ready to get started. You'll only have to do this once in RStudio.
 
 # Getting Started
+
+Normally, whenever you want to start a new project using R, it's good practice to set up an RStudio project. This is a file that sits in the folder of your project which makes this location your **working directory**. That means that whenever we read or write files with R it'll automatically look in this location when doing so if you use a relative file path system. (Details of this are covered in the first lecture.) 
+
+**I've already done this for this folder containing all of the R materials so there's no need to do that in this case**. But knowing how to do this is still useful. Below is a guide on how to get started with this using different methods.
 
 ## Assuming you're using a local installation of R/RStudio (including on University computers)
 
@@ -111,15 +119,11 @@ knitr::include_graphics(c(
 ))
 ```
 
-Click **New Project** and then set a **Directory Name** for your folder (e.g. "my-r-work"). 
-
-Be sure to save this folder somewhere where you can have access to it after class, e.g. on your Desktop or on a USB.
+Click **New Project** and then set a **Directory Name** for your folder (e.g. "my-r-work"). Save this folder somewhere where you'll have access to it. 
 
 This will create a folder wherever you have it set to in **Create project as a subdirectory of:**. 
 
 Below, this is just on my Desktop, so this will make a folder called "my-r-work" on my Desktop. Inside this folder, there will be a file with the folder name ending in **.Rproj**.
-
-**IMPORTANT: We will work out of this folder each week in seminars, so save all your work here and make sure you don't lose it.**
 
 ```{r project-project, echo = FALSE, out.width = 750, fig.align = "center", fig.cap="creating a new project"}
 knitr::include_graphics(c(
@@ -157,6 +161,8 @@ Notebooks are a great way for us to get started with using R, so in these sessio
 
 ## Creating your First Notebook
 
+Again, **I've already done this for you so there's no need to do this here.** But for future reference, if you want to create a notebook, follow these instructions.
+
 Click File $\rightarrow$ New File $\rightarrow$ R Notebook. This will open an R notebook in the Editor. It should look like this below (but maybe not in the darkmode I use):
 
 ```{r rstudio-interface, echo = FALSE, out.width = 500, fig.align = "center", fig.cap="RStudio Interface"}
@@ -165,56 +171,16 @@ knitr::include_graphics(c(
 ))
 ```
 
-**Once created, save this in your folder titled "my-r-work" as "seminar-one.Rmd".**
+The notebook contains some example rmarkdown text and a code chunk. Click the **Preview button** (towards the top of the editor) to render your notebook. Every time you make a change in this notebook and save your work, the editor will update itself. 
 
-The notebook you've just created contains some example rmarkdown text and a code chunk. Click the **Preview button** (towards the top of the editor) to render your notebook. Every time you make a change in this notebook and save your work, the editor will update itself. 
+If you check your folder, you'll notice you now have two files with similar names: one is the .Rmd file you work in, the other is the output of it (i.e. an html file you can open in any browser). Notice how the text, written in R markdown is formatted. For example, words surrounded by * are presented in italics. Click the link for more information on [R Markdown](http://rmarkdown.rstudio.com) and how to render text in different formats.
 
-If you check your folder, you'll notice you now have two files with similar names: one is the .Rmd file you work in, the other is the output of if (an html file you can open in any browser). Notice how the text, written in R markdown is formatted. For example, words surrounded by * are presented in italics. Click the link more information on [R Markdown](http://rmarkdown.rstudio.com).
-
-Back in RStudio, you'll also notice the code chunk that has code reading `plot(cars)` (cars is an inbuilt data set). When you execute code contained within the chunks (in grey) within the notebook, the results appear beneath the code. This way, you can easily see how your r code works on first glance.
+Back in RStudio, you'll also notice the code chunk that has code reading `plot(cars)` (cars is an inbuilt data set). When you execute code contained within the chunks (in grey) within the notebook, the results appear beneath the code. This way, you can easily see how your R code works on first glance.
 
 To run the code within a chunk, click the *Run* button within the chunk in RStudio or place your cursor inside it and press *Ctrl+Shift+Enter*. 
 
 If you'd like to add a new code chunk, do so by clicking the *Insert Chunk* button on the toolbar in RStudio or by pressing *Ctrl/Cmd+Alt+I*.
 
-# Exercises
+# Tasks for this Workshop
 
-Now you've opened up your first project and notebook, we can get started on running some R code.
-
-Here, we'll get used to performing some basic operations on data in R.
-
-## Exercise 1
-
-Make a code chunk. In this, add together the numbers 1, 5, 999, and 67819.
-
-## Exercise 2
-
-Make a code chunk. In this, divide 1825031 by 534.
-
-## Exercise 3
-
-Make a code chunk. Perform a boolean operation to check whether "Dog" is equal to "Cat".
-
-## Exercise 4
-
-Make a code chunk. Concatenate the string "I'm using R" with the number 7. What output do you get? Can you explain why it is presented in this way?
-
-## Exercise 5
-
-Make a code chunk. In this, calculate the mean of the numbers 1 through to 10 (using `mean()`). Also in this chunk, calculate the median of the numbers 1 through to 10 (using `median()`). Also in this chunk, calculate the standard deviation of the numbers 1 through to 10 (using `sd()`). 
-
-Can you simplify your code to cut down on repetition? 
-
-*Note*: If you don't get the numbers you'd expect from e.g. `mean()`, make sure you're concatenating your values with `c()`. If you don't, it will just return the mean of the first value.
-
-## Exercise 6
-
-Make a code chunk. Create an object called "numbers" that has the numbers 1, 5, 10, and 267 in it. Access the final number. After this, replace the final number with 3.
-
-## Exercise 7
-
-Replace the text in your R markdown file to explain what you did with your data. It's usually best to explain what you did at each step before each code chunk.
-
-# Questions
-
-Download the questions file from Canvas and place this file in your folder. This file is an R markdown file already populated with some R code chunks. Follow the instructions to test your knowledge of R.
+Double click the file **01_questions.Rmd** in the folder **seminars/01_intro-to-r**. Within this file is a series of exercises and additional questions for you covering the core content from this week. The exercises are essential work this week, while the questions push your knowledge beyond the formally taught content. Attempt these questions individually or in groups and seek the guidance of your workshop tutor when needed.
