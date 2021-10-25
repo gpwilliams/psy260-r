@@ -9,15 +9,14 @@ output:
     theme: united
     highlight: tango
 author: "Dr Glenn Williams"
-date: "2020-10-19 (Updated `r Sys.Date()`)"
+date: "2020-10-25 (Updated `r Sys.Date()`)"
 ---
 
-Make sure this file, **03_questions.Rmd**, is in the same folder as your RProject. 
-Create a folder here called "data" (if you haven't already done so) and copy the data file "factorial_data.csv" from the data folder in the "psy260-r" folder to this location.
+Here, we'll get used to performing analyses and summarising data in R. This set of questions introduces some more advanced functions for analysing data. These exercises are more introductory while the questions are intended to be more difficult to help test your knowledge.
 
-Open up **03_questions.Rmd** in your folder up and attempt the questions below. 
+# Exercises
 
-This set of questions will prompt you to summarise a messy data set from beginning to end.
+Please run the following code chunk before getting started. This will load the 2 crucial packages for this workshop and the raw data we will use to entrench the concepts taught in the lecture.
 
 ```{r setup, message = FALSE}
 # load packages
@@ -25,10 +24,82 @@ library(tidyverse)
 library(here)
 
 # load data
-qdata <- read_csv(here("data", "cleanish_data.csv"))
+raw_data <- read_csv(here("data", "seminar_three_data.csv"))
+```
 
-# inspect data
-qdata
+## Exercise 1
+
+How many participants do we have in the experiment? How many items? Write some R code to check this.
+
+*Hint*: `length()` and `unique()` are useful here.
+
+## Exercise 2
+
+The labels for the conditions in column A are not very informative. Please give these suitable names in the data set.
+
+There are (at least) two methods to achieve this. Create a column (or overwrite the existing one) using:
+
+1. `case_when()` as in previous lectures/seminars.
+
+2. `factor()` within `mutate()`.
+
+*Please see the lecture on manipulating data if you get stuck.*
+
+## Exercise 3
+
+### Part A
+
+Create a summary of the reaction times per condition for each participant. Choose a way to summarise this based on central tendency (e.g. mean, median, mode).
+
+Typically we use this data for inferential tests and plots.
+
+Assign this data to the object `data_summary`.
+
+### Part B
+
+Write a sentence to justify your choice of measure for central tendency and dispersion in your summary statistics.
+
+## Exercise 4
+
+Create a plot to display the average reaction time per condition in the experiment using the data from `data_summary` in Exercise 3. Justify your choice of plot.
+
+Assign this plot to a variable called `my_plot`.
+
+## Exercise 5
+
+Update your code used to plot `my_plot` in Exercise 4 to have different fills for each condition and to have proper labels on the X and Y axis titles.
+
+## Exercise 6
+
+In this experiment we want to exclude participants with average scores one standard deviation above or below the mean.
+
+### Part A
+
+Find out the overall mean and standard deviation from the reaction times saved in `data_summary`. Assign this summary to the variable `data_cutoffs`.
+
+*Hint*: If you use `summarise()` (which you may not need to), be sure to use ungroup in your chain of functions first, e.g.: `data_summary %>% ungroup() %>% **your code goes here**`.
+
+### Part B
+
+Keep only participants with scores greater than 1 standard deviation below the mean **and** less than 1 standard deviation above the mean.
+
+Assign this data to the object `data_summary_filtered`.
+
+*Hint*: You will need to use your answer from Part A to achieve this.
+
+### Part C
+
+Create a final plot as in Exercise 5, now with your data from `data_summary_filtered`.
+
+# Questions
+
+These remaining questions are designed to push you a little further to improve your knowledge. Please complete these in your own time.
+
+Please run the following R code chunk by pressing the green play button. This will load the data up from the "data" folder and print it out in your console.
+
+```{r question-data, message = FALSE, warning = FALSE}
+qdata <- read_csv(here("data", "cleanish_data.csv"))
+qdata # inspect it
 ```
 
 This data set is that from lecture 2b - Data Checking in R. The columns have the following interpretation:
@@ -45,7 +116,7 @@ This data set is that from lecture 2b - Data Checking in R. The columns have the
 
 - **variable B** = Location of target (up or down on the screen). b1 is up, b2 is down.
 
-# Question 1
+## Question 1
 
 Remove any unnecessary columns from this data set.
 
@@ -53,7 +124,7 @@ Remove any unnecessary columns from this data set.
 
 ```
 
-# Question 2
+## Question 2
 
 Give proper levels names to the levels A1 and A2 in column A and to B1 and B2 in column B.
 
@@ -61,7 +132,7 @@ Give proper levels names to the levels A1 and A2 in column A and to B1 and B2 in
 
 ```
 
-# Question 3
+## Question 3
 
 Give proper (column) names to the variables A, B, and Y.
 
@@ -69,7 +140,7 @@ Give proper (column) names to the variables A, B, and Y.
 
 ```
 
-# Question 4
+## Question 4
 
 Make a summary of the data creating averages of the reaction times for each level of each condition for every participant. Assign this to the object `summary_data`.
 
@@ -77,7 +148,7 @@ Make a summary of the data creating averages of the reaction times for each leve
 
 ```
 
-# Question 5
+## Question 5
 
 Remove participants 1 through to 10 from `summary_data`.
 
@@ -85,7 +156,7 @@ Remove participants 1 through to 10 from `summary_data`.
 
 ```
 
-# Question 6
+## Question 6
 
 Make a boxplot of the data. Does there appear to be any reliable differences between conditions? Explain your logic.
 
@@ -93,7 +164,7 @@ Make a boxplot of the data. Does there appear to be any reliable differences bet
 
 ```
 
-# Question 7 (Advanced, Bonus Material)
+## Question 7 (Advanced, Bonus Material)
 
 We can perform inferential statistics in R. 
 

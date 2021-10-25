@@ -9,18 +9,20 @@ output:
     theme: united
     highlight: tango
 author: "Dr Glenn Williams"
-date: "2020-10-19 (Updated `r Sys.Date()`)"
+date: "2020-10-25 (Updated `r Sys.Date()`)"
 ---
 
-# Getting Started
+# Instructions for this Week's Workshop
 
-Make a new folder for your work for this seminar and create an RStudio Project within it. Create a new notebook within your newly created folder. Create a folder called "data" in this newly created folder and copy and paste the data called **seminar_three_data.csv** from the "psy260-r" folder to your newly created "data" folder.
+Each week you will learn about R from lectures before doing further learning in each workshop. In the workshops you will read about each lesson on R in more detail before completing some additional exercises and questions that rely on you using R. Each week, the exercises and questions can be found within the seminars folder for a given lesson under the file name **questions.Rmd**.
 
-Please follow the instructions from the seminars in Weeks 1 and 2 if you need help with this.
+## Installing Packages and Loading Data
 
-# Exercises
+This week we will look at analysing and summarising our data in R. After reading the background on the content in this file, move on to completing the exercises and questions in **seminars/03_analysing-data-in-r/questions.Rmd**.
 
-This data in semianr_three_data.csv is made up, but we can assume this comes from a Stroop task. Here, words are presented either with congruent colour and text (e.g. <span style="color: purple;">purple</span>), or incongruent colour and text (e.g. <span style="color: purple;">green</span>). The participants had to name the colour of the ink (rather than read the word). It is hypothesised that items presented in the incongruent condition would be more difficult to process than those presented in the congruent condition, leading to slower reaction times in this case.
+We will work with the **seminar_three_data.csv** data set in the "data" sub-folder within the PSY260-r directory.
+
+This data in **seminar_three_data.csv** is made up, but we can assume this comes from a Stroop task. Here, words are presented either with congruent colour and text (e.g. <span style="color: purple;">purple</span>), or incongruent colour and text (e.g. <span style="color: purple;">green</span>). The participants had to name the colour of the ink (rather than read the word). It is hypothesised that items presented in the incongruent condition (i.e. where ink colour and colour name don't match) would be more difficult to process than those presented in the congruent condition (i.e. where the ink colour and colour name match), leading to slower reaction times in this case.
 
 We have columns as follows:
 
@@ -36,83 +38,19 @@ We have columns as follows:
 
 Each participant completes 40 trials during the experiment. This data set is already cleaned and ready for processing (unless you'd like to rename anything).
 
-Now you've opened up RStudio project and notebook, we can get started.
+Open up the questions file. This has one code chunk in it that you have to run if you aren't on a University computer. If you haven't installed the `tidyverse` and `here` packages, **do so only once per computer (or per project in RStudio Cloud)**. For instructions on how to do this, please see the materials from the previous workshop.
 
-Each time we start R, we have to load the installed packages to use the functions from them. We also have to load the data called "seminar_three_data.csv" into this R session as follows. 
+Each time we start R, we have to load the installed packages to use the functions from them. To do this, we use the `library()` function in R. We want to load up our newly installed tidyverse and here packages. Do this by adding a code chunk and simply pressing play on that chunk. **This has been done for you in the questions file**.
 
-To do this, create an R code chunk and copy and paste the following code into it.
-
-```{r getting-started, message = FALSE}
+```{r loading-packages, message = FALSE}
 library(tidyverse)
 library(here)
+```
 
+Next, we will load in our data in the same way that we did in the previous workshop.
+
+```{r read-data}
 raw_data <- read_csv(here("data", "seminar_three_data.csv"))
 ```
 
-Here, we'll get used to performing some basic data manipulation exercises in R.
-
 **Note**: If you get an error with this code, try installing the packages first using e.g. `install.packages("tidyverse)` and `install.packages("here")`. Remember, you only need to do this once per computer or RStudio Cloud project.
-
-## Exercise 1
-
-How many participants do we have in the experiment? How many items? Write some R code to check this.
-
-*Hint*: `length()` and `unique()` are useful here.
-
-## Exercise 2
-
-The labels for the conditions in column A are not very informative. Please give these suitable names in the data set.
-
-There are (at least) two methods to achieve this. Create a column (or overwrite the existing one) using:
-
-1. `case_when()` as in previous lectures/seminars.
-
-2. `factor()` within `mutate()`.
-
-*Please see the lecture on manipulating data if you get stuck.*
-
-## Exercise 3
-
-### Part A
-
-Create a summary of the reaction times per condition for each participant. Choose a way to summarise this based on central tendency (e.g. mean, median, mode).
-
-Typically we use this data for inferential tests and plots.
-
-Assign this data to the object `data_summary`.
-
-### Part B
-
-Write a sentence to justify your choice of measure for central tendency and dispersion in your summary statistics.
-
-## Exercise 4
-
-Create a plot to display the average reaction time per condition in the experiment using the data from `data_summary` in Exercise 3. Justify your choice of plot.
-
-Assign this plot to a variable called `my_plot`.
-
-## Exercise 5
-
-Update your code used to plot `my_plot` in Exercise 4 to have different fills for each condition and to have proper labels on the X and Y axis titles.
-
-## Exercise 6
-
-In this experiment we want to exclude participants with average scores one standard deviation above or below the mean.
-
-### Part A
-
-Find out the overall mean and standard deviation from the reaction times saved in `data_summary`. Assign this summary to the variable `data_cutoffs`.
-
-*Hint*: If you use `summarise()` (which you may not need to), be sure to use ungroup in your chain of functions first, e.g.: `data_summary %>% ungroup() %>% **your code goes here**`.
-
-### Part B
-
-Keep only participants with scores greater than 1 standard deviation below the mean **and** less than 1 standard deviation above the mean.
-
-Assign this data to the object `data_summary_filtered`.
-
-*Hint*: You will need to use your answer from Part A to achieve this.
-
-### Part C
-
-Create a final plot as in Exercise 5, now with your data from `data_summary_filtered`.
