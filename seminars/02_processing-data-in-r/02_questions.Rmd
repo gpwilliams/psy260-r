@@ -1,6 +1,6 @@
 ---
 title: "PSY260 - Research Methods and Analysis"
-subtitle: "R Workshop 2 - Managing and cleaning data in R Answers"
+subtitle: "R Workshop 2 - Processing Data in R Questions"
 output: 
   html_document:
     css: "../../style.css"
@@ -31,71 +31,19 @@ raw_data <- read_csv(here("data", "seminar_two_data.csv"))
 
 Make a code chunk. Print out the beginning of the data set either by just typing its name or using `glimpse(raw_data)`. Which columns can you identify as being initially problematic? Are there any?
 
-```{r exercise-1-answer}
-glimpse(raw_data)
-```
-*Response seems problematic in that it has multiple codes for the same variable. The same happens with CAFFEINE for the case of no/No, and potentially other values.*
-
 ## Exercise 2
 
 Make a code chunk. Check the unique values for each variable in your data set. Are there any issues with the data set? If so, make a note of them.
 
-```{r exercise-2-answer}
-unique(raw_data$subject)
-unique(raw_data$age)
-unique(raw_data$CAFFEINE)
-unique(raw_data$response)
-unique(raw_data$DV)
-```
-
-```{r exercise-2-advanced-answer}
-map(raw_data, unique)
-```
-
 ## Exercise 3
 
 Make a code chunk. Remove the age data from the data set. Save this new data set as "anonymised_data" within R. 
-
-```{r exercise-3-answer}
-anonymised_data <- select(raw_data, -age)
-anonymised_data
-```
 
 ## Exercise 4
 
 Make a code chunk. Using your data from Exercise 3, clean up any issues you might have with the caffeine variable. Remember, you can use `mutate()` and `case_when()` together to solve this.
 
 **Assign this to a new object called cleaned_data_one**
-
-```{r exercise-4-v1-answer}
-cleaned_data_one <- anonymised_data %>% 
-  mutate(
-    CAFFEINE = case_when(
-      CAFFEINE %in% c("no", "No") ~ "no",
-      CAFFEINE %in% c("yes", "Yes", "Y") ~ "yes",
-      TRUE ~ CAFFEINE
-    )
-  )
-
-cleaned_data_one
-# Note: Students may forget the %in% operator from the very beginning.
-# They also haven't seen it used in case_when yet.
-# Again, it's fine to have multiple cases for the dominant bit, but verbose.
-```
-
-```{r exercise-4-v2-answer, eval = FALSE}
-cleaned_data_one <- anonymised_data %>% 
-  mutate(
-    CAFFEINE = case_when(
-      CAFFEINE == "Y" ~ "yes",
-      TRUE ~ CAFFEINE
-    ),
-    CAFFEINE = tolower(CAFFEINE)
-  )
-# Note: Students may not be aware of being able to do
-# multiple assignments to values within the same mutate call
-# making multiple mutates is fine, if a little verbose.
-```
 
 If you're unsure how these functions work, type `?mutate` and then `?case_when` in the console. The Help pane outlines how these functions work, and gives examples of working code.
 
@@ -107,45 +55,13 @@ Make a code chunk. Using your data from Exercise 4, clean up any issues you migh
 
 **Assign this to a new object called cleaned_data_two**
 
-```{r exercise-5-answer}
-cleaned_data_two <- cleaned_data_one %>% 
-  mutate(
-    response = case_when(
-      response %in% c("ND", "non-dominant") ~ "non_dominant",
-      response %in% c("D", "Dominant", "DOM") ~ "dominant",
-      TRUE ~ response
-    )
-  )
-
-cleaned_data_two
-```
-
 ## Exercise 6
 
 Make a code chunk. Add the age data from your initial data (raw_data) back in to the cleaned data (cleaned_data_two).
 
-```{r exercise-6-answer}
-cleaned_data_two$age <- raw_data$age
-cleaned_data_two
-```
-
 ## Exercise 7
 
-Make a code chunk. Filter out any observations on the dependent variable which are NAs. Remember to use `is.na()`. Assign this new data to a object called "cleaned_data_three".
-
-```{r exercise-7-v1-answer}
-cleaned_data_three <- cleaned_data_two %>% 
-  drop_na(DV)
-
-cleaned_data_three
-```
-
-```{r exercise-7-v2-answer, eval = FALSE}
-cleaned_data_three <- cleaned_data_two %>% 
-  filter(!is.na(DV))
-
-cleaned_data_three
-```
+Make a code chunk. Filter out any observations on the dependent variable which are NAs. Remember, to use `is.na()`. Assign this new data to a object called "cleaned_data_three".
 
 # Questions
 
@@ -184,12 +100,8 @@ We will work on this data to advance our knowledge of managing data in R.
 
 The ID column should be numeric. They do not need to be in any particular order or pattern. Can you make the IDs all numeric?
 
-```{r question-1}
-unique_ids <- unique(qdata$ID)
-qdata$ID <- match(qdata$ID, unique_ids)
+```{r answer-1}
 
-# inspect data
-qdata$ID
 ```
 
 ## Question 2
@@ -197,10 +109,7 @@ qdata$ID
 The language column should have only two values (excluding NAs): English and Other. Can you change these to be a consistent code? Remember codes are case sensitive.
 
 ```{r question-2}
-qdata$LANGUAGE <- tolower(qdata$LANGUAGE)
 
-# inspect data
-unique(qdata$LANGUAGE)
 ```
 
 ## Question 3
@@ -208,9 +117,7 @@ unique(qdata$LANGUAGE)
 Are there any problems with the gender, age, and tester columns? Explain your thinking. You can use code to demonstrate your work.
 
 ```{r answer-3}
-unique(qdata$gender)
-unique(qdata$age)
-unique(qdata$tester)
+
 ```
 
 There are no obvious problems with these variables.
@@ -230,14 +137,7 @@ Learn about the function, `separate()` from tidyr in the tidyverse. This will he
 Separate the data in funRec into two columns, fun and recommend.
 
 ```{r question-4a}
-qdata <- separate(
-  qdata,
-  col = funRec,
-  into = c("fun", "recommend")
-)
 
-# inspect data
-qdata
 ```
 
 ### Question 4b
@@ -245,15 +145,7 @@ qdata
 Separate the data from completion_time into two columns, start and end. *Hint*: For this one, you'll need to be specific about what separates the two forms of data in the column.
 
 ```{r question-4b}
-qdata <- separate(
-  qdata,
-  col = completion_time,
-  into = c("start", "end"),
-  sep = "_"
-)
 
-# inspect data
-qdata
 ```
 
 ## Question 5
@@ -265,10 +157,7 @@ We will create a new variable, making a median split of ages (i.e. above or belo
 Create a variable called `age_median` based simply on the median of the ages in `qdata`.
 
 ```{r answer-5a}
-age_median <- median(qdata$age)
 
-# inspect data
-age_median
 ```
 
 ### Question 5b
@@ -278,13 +167,7 @@ Create a column in qdata called age_median, which divides each person in the dat
 This will require some logic.
 
 ```{r answer-5b}
-qdata$age_median <- case_when(
-  qdata$age >= age_median ~ "old",
-  qdata$age < age_median ~ "young"
-)
 
-# inspect data
-qdata$age_median
 ```
 
 ## Question 6
@@ -292,10 +175,7 @@ qdata$age_median
 We don't care about the testers for now. Remove this column from the data set.
 
 ```{r answer-6}
-qdata <- select(qdata, -tester)
 
-# inspect data
-qdata
 ```
 
 ## Question 7
@@ -303,10 +183,7 @@ qdata
 Filter out anyone from the data set who knows the computer language FORTRAN (nerds). You might need to return to the logical operations in lecture 1 to do this properly.
 
 ```{r answer-7}
-qdata <- filter(qdata, computer_language != "FORTRAN")
 
-# inspect data
-qdata
 ```
 
 ## Question 8
@@ -328,7 +205,7 @@ final_row <- tibble(
 ```
 
 ```{r answer-8-error, eval = FALSE}
-qdata <- bind_rows(qdata, final_row)
+
 ```
 
 If you get an error, it's likely because your data types are incompatible. 
@@ -336,14 +213,7 @@ If you get an error, it's likely because your data types are incompatible.
 Look at the column names in the error code. What's going on? Ensure that the data in both data sets for this column matches, using the mutate function.
 
 ```{r answer-8-fixed}
-# fix the coding for the fun data column in qdata
-qdata$fun <- as.numeric(qdata$fun)
 
-# bind rows together
-qdata <- bind_rows(qdata, final_row)
-
-# inspect data
-qdata
 ```
 
 ## Question 9
@@ -351,18 +221,15 @@ qdata
 Add a column of random numbers to `qdata` just because you can. Use the `rnorm()` function to create a column called "nonsense_scores" with a mean of 100, standard deviation of 15, and n of the same number as the observations we have in `qdata`.
 
 ```{r answer-9}
-qdata$nonsense_scores <- rnorm(n = nrow(qdata), mean = 100, sd = 15)
 
-# inspect data
-qdata
 ```
 
-**Bonus points**: Are there any psychometric scores that people put too much weight into that you can think of with a mean of 100 and a standard deviation of 15? IQ!
+**Bonus points**: Are there any psychometric scores that people put too much weight into that you can think of with a mean of 100 and a standard deviation of 15? 
 
 ## Question 10
 
 Create a folder called "outputs" at the same level of your R Project directory. Save qdata there as "my_tidied_data.csv".
 
-```{r answer-10, eval = FALSE}
-write_csv(qdata, here("outputs", "my_tidied_data.csv"))
+```{r answer-10}
+
 ```

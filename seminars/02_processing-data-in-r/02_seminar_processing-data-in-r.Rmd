@@ -1,6 +1,6 @@
 ---
 title: "PSY260 - Research Methods and Analysis"
-subtitle: "R Workshop 2 - Managing Data in R"
+subtitle: "R Workshop 2 - Processing Data in R"
 output: 
   html_document:
     css: "../../style.css"
@@ -16,7 +16,7 @@ date: "2021-10-25 (Updated `r Sys.Date()`)"
 
 Each week you will learn about R from lectures before doing further learning in each workshop. In the workshops you will read about each lesson on R in more detail before completing some additional exercises and questions that rely on you using R. Each week, the exercises and questions can be found within the seminars folder for a given lesson under the file name **questions.Rmd**.
 
-This week we will look at working with functions and using R to work with data saved to an external .csv file. This is a very common use case for R. After reading the background on the content in this file, move on to completing the exercises and questions in **seminars/02_managing-data-in-r/questions.Rmd**.
+This week we will look at working with functions and using R to work with data saved to an external .csv file. This is a very common use case for R. After reading the background on the content in this file, move on to completing the exercises and questions in **seminars/02_processing-data-in-r/questions.Rmd**.
 
 ## Installing Packages and Loading Data
 

@@ -324,45 +324,175 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">PSY260 - Research Methods and Analysis</h1>
-<h3 class="subtitle">R Workshop 3 - Summarising and Plotting Data in R</h3>
+<h3 class="subtitle">R Workshop 2 - Processing Data in R Questions</h3>
 <h4 class="author">Dr Glenn Williams</h4>
-<h4 class="date">2020-10-25 (Updated 2021-10-25)</h4>
+<h4 class="date">2021-10-25 (Updated 2021-10-25)</h4>
 
 </div>
 
 
-<div id="instructions-for-this-weeks-workshop" class="section level1">
-<h1>Instructions for this Week’s Workshop</h1>
-<p>Each week you will learn about R from lectures before doing further learning in each workshop. In the workshops you will read about each lesson on R in more detail before completing some additional exercises and questions that rely on you using R. Each week, the exercises and questions can be found within the seminars folder for a given lesson under the file name <strong>questions.Rmd</strong>.</p>
-<div id="installing-packages-and-loading-data" class="section level2">
-<h2>Installing Packages and Loading Data</h2>
-<p>This week we will look at analysing and summarising our data in R. After reading the background on the content in this file, move on to completing the exercises and questions in <strong>seminars/03_analysing-data-in-r/questions.Rmd</strong>.</p>
-<p>We will work with the <strong>seminar_three_data.csv</strong> data set in the “data” sub-folder within the PSY260-r directory.</p>
-<p>This data in <strong>seminar_three_data.csv</strong> is made up, but we can assume this comes from a Stroop task. Here, words are presented either with congruent colour and text (e.g. <span style="color: purple;">purple</span>), or incongruent colour and text (e.g. <span style="color: purple;">green</span>). The participants had to name the colour of the ink (rather than read the word). It is hypothesised that items presented in the incongruent condition (i.e. where ink colour and colour name don’t match) would be more difficult to process than those presented in the congruent condition (i.e. where the ink colour and colour name match), leading to slower reaction times in this case.</p>
-<p>We have columns as follows:</p>
-<ul>
-<li><p>subj_id: numerical label for each participant.</p></li>
-<li><p>list_id: numerical label for the randomisation of words within participants.</p></li>
-<li><p>item_id: numerical label for the number corresponding to each word.</p></li>
-<li><p>A: Whether or not words were presented in a congruent or incongruent colour. A1 = congruent, A2 = incongruent.</p></li>
-<li><p>Y: reaction time in milliseconds (the dependent variable).</p></li>
-</ul>
-<p>Each participant completes 40 trials during the experiment. This data set is already cleaned and ready for processing (unless you’d like to rename anything).</p>
-<p>Open up the questions file. This has one code chunk in it that you have to run if you aren’t on a University computer. If you haven’t installed the <code>tidyverse</code> and <code>here</code> packages, <strong>do so only once per computer (or per project in RStudio Cloud)</strong>. For instructions on how to do this, please see the materials from the previous workshop.</p>
-<p>Each time we start R, we have to load the installed packages to use the functions from them. To do this, we use the <code>library()</code> function in R. We want to load up our newly installed tidyverse and here packages. Do this by adding a code chunk and simply pressing play on that chunk. <strong>This has been done for you in the questions file</strong>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span></code></pre></div>
-<p>Next, we will load in our data in the same way that we did in the previous workshop.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;seminar_three_data.csv&quot;</span>))</span></code></pre></div>
+<p>Here, we’ll get used to performing some basic data manipulation exercises in R. This set of questions introduces some more advanced functions for working with data. These exercises are more introductory while the questions are intended to be more difficult to help test your knowledge.</p>
+<div id="exercises" class="section level1">
+<h1>Exercises</h1>
+<p>Please run the following code chunk before getting started. This will load the 2 crucial packages for this workshop and the raw data we will use to entrench the concepts taught in the lecture.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># load data</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;seminar_two_data.csv&quot;</span>))</span></code></pre></div>
+<div id="exercise-1" class="section level2">
+<h2>Exercise 1</h2>
+<p>Make a code chunk. Print out the beginning of the data set either by just typing its name or using <code>glimpse(raw_data)</code>. Which columns can you identify as being initially problematic? Are there any?</p>
+</div>
+<div id="exercise-2" class="section level2">
+<h2>Exercise 2</h2>
+<p>Make a code chunk. Check the unique values for each variable in your data set. Are there any issues with the data set? If so, make a note of them.</p>
+</div>
+<div id="exercise-3" class="section level2">
+<h2>Exercise 3</h2>
+<p>Make a code chunk. Remove the age data from the data set. Save this new data set as “anonymised_data” within R.</p>
+</div>
+<div id="exercise-4" class="section level2">
+<h2>Exercise 4</h2>
+<p>Make a code chunk. Using your data from Exercise 3, clean up any issues you might have with the caffeine variable. Remember, you can use <code>mutate()</code> and <code>case_when()</code> together to solve this.</p>
+<p><strong>Assign this to a new object called cleaned_data_one</strong></p>
+<p>If you’re unsure how these functions work, type <code>?mutate</code> and then <code>?case_when</code> in the console. The Help pane outlines how these functions work, and gives examples of working code.</p>
+<p>If you’re still stuck, refer back to Lecture 2 part 3.</p>
+</div>
+<div id="exercise-5" class="section level2">
+<h2>Exercise 5</h2>
+<p>Make a code chunk. Using your data from Exercise 4, clean up any issues you might have with the response variable using the same methods outlined in Exercise 3.</p>
+<p><strong>Assign this to a new object called cleaned_data_two</strong></p>
+</div>
+<div id="exercise-6" class="section level2">
+<h2>Exercise 6</h2>
+<p>Make a code chunk. Add the age data from your initial data (raw_data) back in to the cleaned data (cleaned_data_two).</p>
+</div>
+<div id="exercise-7" class="section level2">
+<h2>Exercise 7</h2>
+<p>Make a code chunk. Filter out any observations on the dependent variable which are NAs. Remember, to use <code>is.na()</code>. Assign this new data to a object called “cleaned_data_three”.</p>
+</div>
+</div>
+<div id="questions" class="section level1">
+<h1>Questions</h1>
+<p>These remaining questions are designed to push you a little further to improve your knowledge. Please complete these in your own time.</p>
+<p>Please run the following R code chunk by pressing the green play button. This will load the data up from the “data” folder and print it out in your console.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>qdata <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;seminar_two_question_data.csv&quot;</span>))</span></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   subj_id = col_double(),
-##   list_id = col_double(),
-##   item_id = col_double(),
-##   A = col_character(),
-##   Y = col_double()
+##   ID = col_character(),
+##   LANGUAGE = col_character(),
+##   progress = col_character(),
+##   gender = col_character(),
+##   age = col_double(),
+##   tester = col_character(),
+##   funRec = col_character(),
+##   completion_time = col_character(),
+##   computer_language = col_character()
 ## )</code></pre>
-<p><strong>Note</strong>: If you get an error with this code, try installing the packages first using e.g. <code>install.packages(&quot;tidyverse)</code> and <code>install.packages(&quot;here&quot;)</code>. Remember, you only need to do this once per computer or RStudio Cloud project.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>qdata <span class="co"># inspect it</span></span></code></pre></div>
+<pre><code>## # A tibble: 54 x 9
+##    ID    LANGUAGE progress gender   age tester funRec completion_time           
+##    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;                     
+##  1 22    OTHER    FINISH   female    30 GW     7-no   2018-03-22 23:06:11_2018-…
+##  2 22    OTHER    FINISH   female    30 GW     7-no   2018-03-22 23:06:11_2018-…
+##  3 22    OTHER    FINISH   female    30 GW     7-no   2018-03-22 23:06:11_2018-…
+##  4 23    &lt;NA&gt;     no       male      30 GW     6-yes  2018-03-26 00:30:20_2018-…
+##  5 24    ENGLISH  END      female    30 GW     4-yes  2018-03-21 11:09:38_2018-…
+##  6 25    &lt;NA&gt;     ethics   male      18 GW     0-no   2018-03-25 13:03:58_2018-…
+##  7 25    &lt;NA&gt;     ethics   male      18 GW     0-no   2018-03-25 13:03:58_2018-…
+##  8 26    english  ethics   male      31 GW     4-no   2018-03-24 06:46:30_2018-…
+##  9 26    english  ethics   male      31 GW     4-no   2018-03-24 06:46:30_2018-…
+## 10 27    ENGLISH  END      female    44 GW     5-no   2018-03-21 03:23:57_2018-…
+## # … with 44 more rows, and 1 more variable: computer_language &lt;chr&gt;</code></pre>
+<p>You have just loaded in some data to the object <code>qdata</code>. This contains questionnaire data in a <strong>long format</strong> with the following variables:</p>
+<ul>
+<li><p>ID: the participant ID number.</p></li>
+<li><p>LANGUAGE: the natural language spoken by the participant classified, hopefully, into English and Other.</p></li>
+<li><p>progress: Whether or not participants completed the questionnaire.</p></li>
+<li><p>gender: the self-identified gender of the participant.</p></li>
+<li><p>age: the age of the participant (in years).</p></li>
+<li><p>tester: initials of the person who obtained the data.</p></li>
+<li><p>funRec: whether participants found the questionnaire fun, and if they’d recommend it to others.</p></li>
+<li><p>completition_time: the times that participants started and finished the questionnaire.</p></li>
+<li><p>computer_language: which computer languages the participants are proficient in (e.g. C++, JavaScript, R).</p></li>
+</ul>
+<p>We will work on this data to advance our knowledge of managing data in R.</p>
+<div id="question-1" class="section level2">
+<h2>Question 1</h2>
+<p>The ID column should be numeric. They do not need to be in any particular order or pattern. Can you make the IDs all numeric?</p>
+</div>
+<div id="question-2" class="section level2">
+<h2>Question 2</h2>
+<p>The language column should have only two values (excluding NAs): English and Other. Can you change these to be a consistent code? Remember codes are case sensitive.</p>
+</div>
+<div id="question-3" class="section level2">
+<h2>Question 3</h2>
+<p>Are there any problems with the gender, age, and tester columns? Explain your thinking. You can use code to demonstrate your work.</p>
+<p>There are no obvious problems with these variables.</p>
+</div>
+<div id="question-4" class="section level2">
+<h2>Question 4</h2>
+<p>We have two columkns, funRec and completion_time, which actually store two variables each within a cell.</p>
+<p>funRec stores a number from 1-7 for how fun people found the task and whether or not they would recommend the study to a friend (yes/no). These are separated by a minus (-) sign.</p>
+<p>completion_time stores date times in the format of YYYY-MM-DD HH:MM:SS for when participants started and finished the study, separated by an underscore (_) sign.</p>
+<p>Learn about the function, <code>separate()</code> from tidyr in the tidyverse. This will help to create two columns for each of these columns to keep our data separate.</p>
+<div id="question-4a" class="section level3">
+<h3>Question 4a</h3>
+<p>Separate the data in funRec into two columns, fun and recommend.</p>
+</div>
+<div id="question-4b" class="section level3">
+<h3>Question 4b</h3>
+<p>Separate the data from completion_time into two columns, start and end. <em>Hint</em>: For this one, you’ll need to be specific about what separates the two forms of data in the column.</p>
+</div>
+</div>
+<div id="question-5" class="section level2">
+<h2>Question 5</h2>
+<p>We will create a new variable, making a median split of ages (i.e. above or below the sample median).</p>
+<div id="question-5a" class="section level3">
+<h3>Question 5a</h3>
+<p>Create a variable called <code>age_median</code> based simply on the median of the ages in <code>qdata</code>.</p>
+</div>
+<div id="question-5b" class="section level3">
+<h3>Question 5b</h3>
+<p>Create a column in qdata called age_median, which divides each person in the data set as being in the “old” or “young” groups based on whether or not their age is greater than or equal to the median, or below the median respectively.</p>
+<p>This will require some logic.</p>
+</div>
+</div>
+<div id="question-6" class="section level2">
+<h2>Question 6</h2>
+<p>We don’t care about the testers for now. Remove this column from the data set.</p>
+</div>
+<div id="question-7" class="section level2">
+<h2>Question 7</h2>
+<p>Filter out anyone from the data set who knows the computer language FORTRAN (nerds). You might need to return to the logical operations in lecture 1 to do this properly.</p>
+</div>
+<div id="question-8" class="section level2">
+<h2>Question 8</h2>
+<p>Add the below data to your data set. You may will need to execute this code chunk before you can do this.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>final_row <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">ID =</span> <span class="dv">100</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">progress =</span> <span class="st">&quot;finish&quot;</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">gender =</span> <span class="st">&quot;female&quot;</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">age =</span> <span class="dv">30</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">fun =</span> <span class="dv">7</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">recommend =</span> <span class="st">&quot;yes&quot;</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">start =</span> <span class="st">&quot;2018-03-22 23:05:11&quot;</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">end =</span> <span class="st">&quot;2018-03-22 23:25:01&quot;</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">age_median =</span> <span class="cn">NA</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>If you get an error, it’s likely because your data types are incompatible.</p>
+<p>Look at the column names in the error code. What’s going on? Ensure that the data in both data sets for this column matches, using the mutate function.</p>
+</div>
+<div id="question-9" class="section level2">
+<h2>Question 9</h2>
+<p>Add a column of random numbers to <code>qdata</code> just because you can. Use the <code>rnorm()</code> function to create a column called “nonsense_scores” with a mean of 100, standard deviation of 15, and n of the same number as the observations we have in <code>qdata</code>.</p>
+<p><strong>Bonus points</strong>: Are there any psychometric scores that people put too much weight into that you can think of with a mean of 100 and a standard deviation of 15?</p>
+</div>
+<div id="question-10" class="section level2">
+<h2>Question 10</h2>
+<p>Create a folder called “outputs” at the same level of your R Project directory. Save qdata there as “my_tidied_data.csv”.</p>
 </div>
 </div>
 

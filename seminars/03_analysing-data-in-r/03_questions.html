@@ -324,7 +324,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">PSY260 - Research Methods and Analysis</h1>
-<h3 class="subtitle">R Workshop 3 - Summarising and Plotting Data in R</h3>
+<h3 class="subtitle">R Workshop 3 - Analysing Data in R</h3>
 <h4 class="author">Dr Glenn Williams</h4>
 <h4 class="date">2020-10-25 (Updated 2021-10-25)</h4>
 
@@ -470,13 +470,13 @@ div.tocify {
 ##  Welch Two Sample t-test
 ## 
 ## data:  outcome by condition
-## t = 1.5558, df = 76.129, p-value = 0.1239
+## t = 0.29569, df = 77.889, p-value = 0.7683
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  -15.22231 123.91053
+##  -54.03888  72.89044
 ## sample estimates:
 ##   mean in group control mean in group treatment 
-##                477.2697                422.9256</code></pre>
+##                441.6571                432.2313</code></pre>
 <p>We get the above summary of the t-test. (Your exact values may vary due to simulating this data.)</p>
 <p>We can see above that we can analyse data using a formula interface <code>outcome ~ treatment</code>. This means scores to the left of the <code>~</code> are predicted by the values assigned to the right side of the <code>~</code>; i.e. your condition dictates your score.</p>
 <p>We can similarly perform an ANOVA using this method. This means we perform an ANOVA with two main effects (e.g. a two-way ANOVA) as follows:</p>

@@ -1,6 +1,6 @@
 ---
 title: "PSY260 - Research Methods and Analysis"
-subtitle: "R Workshop 3 - Summarising and Plotting Data in R"
+subtitle: "R Workshop 3 - Analysing Data in R"
 output: 
   html_document:
     css: "../../style.css"
