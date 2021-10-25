@@ -67,7 +67,7 @@ Make a code chunk. Using your data from Exercise 3, clean up any issues you migh
 
 **Assign this to a new object called cleaned_data_one**
 
-```{r exercise-4-answer}
+```{r exercise-4-v1-answer}
 cleaned_data_one <- anonymised_data %>% 
   mutate(
     CAFFEINE = case_when(
@@ -78,6 +78,23 @@ cleaned_data_one <- anonymised_data %>%
   )
 
 cleaned_data_one
+# Note: Students may forget the %in% operator from the very beginning.
+# They also haven't seen it used in case_when yet.
+# Again, it's fine to have multiple cases for the dominant bit, but verbose.
+```
+
+```{r exercise-4-v2-answer, eval = FALSE}
+cleaned_data_one <- anonymised_data %>% 
+  mutate(
+    CAFFEINE = case_when(
+      CAFFEINE == "Y" ~ "yes",
+      TRUE ~ CAFFEINE
+    ),
+    CAFFEINE = tolower(CAFFEINE)
+  )
+# Note: Students may not be aware of being able to do
+# multiple assignments to values within the same mutate call
+# making multiple mutates is fine, if a little verbose.
 ```
 
 If you're unsure how these functions work, type `?mutate` and then `?case_when` in the console. The Help pane outlines how these functions work, and gives examples of working code.
@@ -116,7 +133,14 @@ cleaned_data_two
 
 Make a code chunk. Filter out any observations on the dependent variable which are NAs. Remember to use `is.na()`. Assign this new data to a object called "cleaned_data_three".
 
-```{r exercise-7-answer}
+```{r exercise-7-v1-answer}
+cleaned_data_three <- cleaned_data_two %>% 
+  drop_na(DV)
+
+cleaned_data_three
+```
+
+```{r exercise-7-v2-answer, eval = FALSE}
 cleaned_data_three <- cleaned_data_two %>% 
   filter(!is.na(DV))
 
