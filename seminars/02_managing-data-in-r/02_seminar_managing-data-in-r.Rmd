@@ -9,131 +9,55 @@ output:
     theme: united
     highlight: tango
 author: "Dr Glenn Williams"
-date: "2020-10-13 (Updated `r Sys.Date()`)"
+date: "2021-10-25 (Updated `r Sys.Date()`)"
 ---
 
-# Getting Started in R
+# Instructions for this Week's Workshop
 
-Please make sure that you have watched the three [introductory videos on Using R for Data Processing](https://canvas.sunderland.ac.uk/courses/40018/pages/lecture-4-using-r-for-data-processing). These cover why you might use R, how to install and create notebooks in R for data processing, and how to do basic data manipulation in R.
+Each week you will learn about R from lectures before doing further learning in each workshop. In the workshops you will read about each lesson on R in more detail before completing some additional exercises and questions that rely on you using R. Each week, the exercises and questions can be found within the seminars folder for a given lesson under the file name **questions.Rmd**.
 
-Seminar 1 covers this content in detail, so please also refer to that lecture if you haven't gotten started in R yet.
+This week we will look at working with functions and using R to work with data saved to an external .csv file. This is a very common use case for R. After reading the background on the content in this file, move on to completing the exercises and questions in **seminars/02_managing-data-in-r/questions.Rmd**.
 
-# Getting Started
+## Installing Packages and Loading Data
 
-## Assuming you haven't got an RProject in a folder called "my-r-work"
+In the main, PSY260-r folder, you'll notice that theres a subfolder called "data". This contains a number of made-up data files that we'll use in the lectures and workshops. 
 
-**PLEASE SEE SEMINAR ONE FOR DETAILS.**
+The data we need this week is called **seminar_two_data.csv**. This data is made up, but we can assume it looks at how quickly people can respond to a target on screen by pressing a button after having had caffeine or not, and when responding with their **dominant or non-dominant hands**. (We might assume people will be faster to respond when on caffeine and when using their dominant hand.) The dependent variable is thus reaction time in milliseconds and the independent variables are caffeine and response hand. We also have ages for our participants.
 
-Open RStudio. In RStudio, click **File $\rightarrow$ New Project...**. You should see a window like this with some other options. Click on the **New Directory** button:
+Open up the questions file. This has one code chunk in it that you have to run if you aren't on a University computer. If you haven't installed the `tidyverse` and `here` packages, do so only once per computer (or per project in RStudio Cloud) as follows.
 
-```{r project-directory, echo = FALSE, out.width = 750, fig.align = "center", fig.cap="creating a new project"}
-knitr::include_graphics(c(
-   "../../img/project-directory.png"
-))
-```
+To do this, **copy the code from this code chunk and paste it in the console, then press enter**. This should install the packages we need for this workshop.
 
-Click **New Project** and then set a **Directory Name** for your folder (e.g. "my-r-work"). 
+**Please do not try to run this chunk as the 'eval = FALSE' chunk option means it won't be evaluated, and the code won't run**. I've kept this here to ensure that we don't keep re-installing packages every time you try to run this file.
 
-Be sure to save this folder somewhere where you can have access to it after class, e.g. on your Desktop or on a USB.
-
-This will create a folder wherever you have it set to in **Create project as a subdirectory of:**. 
-
-Below, this is just on my Desktop, so this will make a folder called "my-r-work" on my Desktop. Inside this folder, there will be a file with the folder name ending in **.Rproj**.
-
-**IMPORTANT: We will work out of this folder each week in seminars, so save all your work here and make sure you don't lose it.**
-
-```{r project-project, echo = FALSE, out.width = 750, fig.align = "center", fig.cap="creating a new project"}
-knitr::include_graphics(c(
-   "../../img/r-project.png"
-))
-```
-
-## Assuming you already have an RProject set up in the folder named "my-r-work"
-
-Double click your project called **my-r-work.RProj** in the folder called "my-r-work".
-
-You have now opened RStudio up from your project. Confirm whether this is the case by looking in the very top right of RStudio. Does it have a Project logo with the name "my-r-work"?
-
-if so, we can be sure all the file paths will work now. If not, be sure you're working from your RProject by following the steps above.
-
-## Creating a Notebook
-
-Click File $\rightarrow$ New File $\rightarrow$ R Notebook. This will open an R notebook in the Editor. It should look like this below (but maybe not in the darkmode I use):
-
-```{r rstudio-interface, echo = FALSE, out.width = 500, fig.align = "center", fig.cap="RStudio Interface"}
-knitr::include_graphics(c(
-   "../../img/rstudio-interface.png"
-))
-```
-
-Save this notebook as "seminar-two.Rmd" in the "my-r-work" folder.
-
-# Exercises
-
-Create a folder called data in your folder called "my-r-work". Copy and paste the data called **seminar_two_data.csv** from the "psy260-r" folder to your new "data" folder.
-
-This data is made up, but we can assume it looks at how quickly people can respond to a target on screen by pressing a button after having had caffeine or not, and when responding with their **dominant or non-dominant hands**. The dependent variable is thus reaction time in milliseconds and the independent variables are caffeine and response hand. We also have ages for our participants.
-
-Now you've opened up RStudio project and notebook, we can get started.
-
-If you haven't installed the `tidyverse` and `here` packages, do so only once per computer (or per project in RStudio Cloud) as follows.
-
-To do this, create an R code chunk and copy and paste the following code into it.
-
-```{r install, eval = FALSE}
+```{r install-packages, eval = FALSE}
 install.packages("tidyverse")
 install.packages("here")
 ```
 
-Each time we start R, we have to load the installed packages to use the functions from them. We also have to load the data called "seminar_two_data.csv" into this R session as follows. 
+Each time we start R, we have to load the installed packages to use the functions from them. To do this, we use the `library()` function in R. We want to load up our newly installed tidyverse and here packages. Do this by adding a code chunk and simply pressing play on that chunk. **This has been done for you in the questions file**.
 
-To do this, create an R code chunk and copy and paste the following code into it.
+```{r load-packages, message = FALSE}
+library("tidyverse")
+library("here")
+```
 
-```{r getting-started, message = FALSE}
-library(tidyverse)
-library(here)
+Finally, any time we want to load data into R, we need to know a few things: Where is the data relative to our working directory, and in what format is the data stored in? 
 
+Knowing the file format is important because R expects us to tell it the file name we want to read, including it's file extension (e.g. .txt, .csv, .RData). Additionally, the functions for reading in data files in R tend to be specialised for that specific file format. For consistency, we'll mainly use .csv files in this course. Now, we know that we'll need the function `read_csv()` from the `tidyverse` package, and we need to add ".csv" to the end of our file name.
+
+Next, knowing where the file is located relative to our working directory is important because R is strict in asking us to state exactly where on our computer the file is located. When we use RStudio Projects R automatically makes our working directory the folder where the project lives. We can then specify the location of our data file **relative to the working directory**. The `here` package makes working with these **relative file paths** easier in R. With this, we know we can pass the sub-folder where the data lives relative to our working directory, along with the data name to the `here()` function as follows: `here("data", "seminar_two_data.csv")`. This function call transforms this into a more complete, computer-readable path for R. Try pasting this function call directly in the console to see how it works.
+
+Combining this knowledge together, we can read our data from this location and assign it to a variable for use in R as follows:
+
+```{r load-data, message = FALSE}
 raw_data <- read_csv(here("data", "seminar_two_data.csv"))
 ```
 
-Here, we'll get used to performing some basic data manipulation exercises in R.
+**This has been done for you in the questions file**.
 
-## Exercise 1
+# Tasks for this Workshop
 
-Make a code chunk. Print out the beginning of the data set either by just typing its name or using `glimpse(raw_data)`. Which columns can you identify as being initially problematic? Are there any?
+Make sure you have the `tidyverse` and `here` packages installed on your computer using the steps above.
 
-## Exercise 2
-
-Make a code chunk. Check the unique values for each variable in your data set. Are there any issues with the data set? If so, make a note of them.
-
-## Exercise 3
-
-Make a code chunk. Remove the age data from the data set. Save this new data set as "anonymised_data" within R. 
-
-## Exercise 4
-
-Make a code chunk. Using your data from Exercise 3, clean up any issues you might have with the caffeine variable. Remember, you can use `mutate()` and `case_when()` together to solve this.
-
-**Assign this to a new object called cleaned_data_one**
-
-If you're unsure how these functions work, type `?mutate` and then `?case_when` in the console. The Help pane outlines how these functions work, and gives examples of working code.
-
-If you're still stuck, refer back to Lecture 2 part 3.
-
-## Exercise 5
-
-Make a code chunk. Using your data from Exercise 4, clean up any issues you might have with the response variable using the same methods outlined in Exercise 3.
-
-**Assign this to a new object called cleaned_data_two**
-
-## Exercise 6
-
-Make a code chunk. Add the age data from your initial data (raw_data) back in to the cleaned data (cleaned_data_two).
-
-## Exercise 7
-
-Make a code chunk. Filter out any observations on the dependent variable which are NAs. Remember, to use `is.na()`. Assign this new data to a object called "cleaned_data_three".
-
-# Questions
-
-Download the questions file from Canvas and place this file in your folder. This file is an R markdown file already populated with some R code chunks. Follow the instructions to test your knowledge of R.
+Then move on to the questions file. Run the two chunks which load packages and load the data and attempt the exercises before the additional questions.

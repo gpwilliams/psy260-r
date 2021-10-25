@@ -9,15 +9,14 @@ output:
     theme: united
     highlight: tango
 author: "Dr Glenn Williams"
-date: "2020-10-13 (Updated `r Sys.Date()`)"
+date: "2021-10-25 (Updated `r Sys.Date()`)"
 ---
 
-Make sure this file, **02_questions.Rmd**, is in the same folder as your RProject. 
-Create a folder here called "data" (if you haven't already done so) and copy the data file "seminar_two_question_data.csv" from the data folder in the "PSY260-r" folder to this location.
+Here, we'll get used to performing some basic data manipulation exercises in R. This set of questions introduces some more advanced functions for working with data. These exercises are more introductory while the questions are intended to be more difficult to help test your knowledge.
 
-Open up **02_questions.Rmd** in your folder up and attempt the questions below. 
+# Exercises
 
-This set of questions introduces some more advanced functions for working with data. These questions are intended to be more difficult to help test your knowledge.
+Please run the following code chunk before getting started. This will load the 2 crucial packages for this workshop and the raw data we will use to entrench the concepts taught in the lecture.
 
 ```{r setup, message = FALSE}
 # load packages
@@ -25,10 +24,54 @@ library(tidyverse)
 library(here)
 
 # load data
-qdata <- read_csv(here("data", "seminar_two_question_data.csv"))
+raw_data <- read_csv(here("data", "seminar_two_data.csv"))
+```
 
-# inspect data
-qdata
+## Exercise 1
+
+Make a code chunk. Print out the beginning of the data set either by just typing its name or using `glimpse(raw_data)`. Which columns can you identify as being initially problematic? Are there any?
+
+## Exercise 2
+
+Make a code chunk. Check the unique values for each variable in your data set. Are there any issues with the data set? If so, make a note of them.
+
+## Exercise 3
+
+Make a code chunk. Remove the age data from the data set. Save this new data set as "anonymised_data" within R. 
+
+## Exercise 4
+
+Make a code chunk. Using your data from Exercise 3, clean up any issues you might have with the caffeine variable. Remember, you can use `mutate()` and `case_when()` together to solve this.
+
+**Assign this to a new object called cleaned_data_one**
+
+If you're unsure how these functions work, type `?mutate` and then `?case_when` in the console. The Help pane outlines how these functions work, and gives examples of working code.
+
+If you're still stuck, refer back to Lecture 2 part 3.
+
+## Exercise 5
+
+Make a code chunk. Using your data from Exercise 4, clean up any issues you might have with the response variable using the same methods outlined in Exercise 3.
+
+**Assign this to a new object called cleaned_data_two**
+
+## Exercise 6
+
+Make a code chunk. Add the age data from your initial data (raw_data) back in to the cleaned data (cleaned_data_two).
+
+## Exercise 7
+
+Make a code chunk. Filter out any observations on the dependent variable which are NAs. Remember, to use `is.na()`. Assign this new data to a object called "cleaned_data_three".
+
+# Questions
+
+These remaining questions are designed to push you a little further to improve your knowledge. Please complete these in your own time.
+
+Please run the following R code chunk by pressing the green play button. This will load the data up from the "data" folder and print it out in your console.
+
+```{r load-q-data}
+qdata <- read_csv(here("data", "seminar_two_question_data.csv"))
+qdata # inspect it
 ```
 
 You have just loaded in some data to the object `qdata`. This contains questionnaire data in a **long format** with the following variables:
@@ -51,7 +94,9 @@ You have just loaded in some data to the object `qdata`. This contains questionn
 
 - computer_language: which computer languages the participants are proficient in (e.g. C++, JavaScript, R).
 
-# Question 1
+We will work on this data to advance our knowledge of managing data in R.
+
+## Question 1
 
 The ID column should be numeric. They do not need to be in any particular order or pattern. Can you make the IDs all numeric?
 
@@ -59,7 +104,7 @@ The ID column should be numeric. They do not need to be in any particular order 
 
 ```
 
-# Question 2
+## Question 2
 
 The language column should have only two values (excluding NAs): English and Other. Can you change these to be a consistent code? Remember codes are case sensitive.
 
@@ -67,7 +112,7 @@ The language column should have only two values (excluding NAs): English and Oth
 
 ```
 
-# Question 3
+## Question 3
 
 Are there any problems with the gender, age, and tester columns? Explain your thinking. You can use code to demonstrate your work.
 
@@ -77,7 +122,7 @@ Are there any problems with the gender, age, and tester columns? Explain your th
 
 There are no obvious problems with these variables.
 
-# Question 4
+## Question 4
 
 We have two columkns, funRec and completion_time, which actually store two variables each within a cell. 
 
@@ -87,7 +132,7 @@ completion_time stores date times in the format of YYYY-MM-DD HH:MM:SS for when 
 
 Learn about the function, `separate()` from tidyr in the tidyverse. This will help to create two columns for each of these columns to keep our data separate.
 
-## Question 4a
+### Question 4a
 
 Separate the data in funRec into two columns, fun and recommend.
 
@@ -95,7 +140,7 @@ Separate the data in funRec into two columns, fun and recommend.
 
 ```
 
-## Question 4b
+### Question 4b
 
 Separate the data from completion_time into two columns, start and end. *Hint*: For this one, you'll need to be specific about what separates the two forms of data in the column.
 
@@ -103,11 +148,11 @@ Separate the data from completion_time into two columns, start and end. *Hint*: 
 
 ```
 
-# Question 5
+## Question 5
 
 We will create a new variable, making a median split of ages (i.e. above or below the sample median).
 
-## Question 5a
+### Question 5a
 
 Create a variable called `age_median` based simply on the median of the ages in `qdata`.
 
@@ -115,7 +160,7 @@ Create a variable called `age_median` based simply on the median of the ages in 
 
 ```
 
-## Question 5b
+### Question 5b
 
 Create a column in qdata called age_median, which divides each person in the data set as being in the "old" or "young" groups based on whether or not their age is greater than or equal to the median, or below the median respectively.
 
@@ -125,7 +170,7 @@ This will require some logic.
 
 ```
 
-# Question 6
+## Question 6
 
 We don't care about the testers for now. Remove this column from the data set.
 
@@ -133,7 +178,7 @@ We don't care about the testers for now. Remove this column from the data set.
 
 ```
 
-# Question 7
+## Question 7
 
 Filter out anyone from the data set who knows the computer language FORTRAN (nerds). You might need to return to the logical operations in lecture 1 to do this properly.
 
@@ -141,7 +186,7 @@ Filter out anyone from the data set who knows the computer language FORTRAN (ner
 
 ```
 
-# Question 8
+## Question 8
 
 Add the below data to your data set. You may will need to execute this code chunk before you can do this.
 
@@ -171,7 +216,7 @@ Look at the column names in the error code. What's going on? Ensure that the dat
 
 ```
 
-# Question 9
+## Question 9
 
 Add a column of random numbers to `qdata` just because you can. Use the `rnorm()` function to create a column called "nonsense_scores" with a mean of 100, standard deviation of 15, and n of the same number as the observations we have in `qdata`.
 
@@ -181,7 +226,7 @@ Add a column of random numbers to `qdata` just because you can. Use the `rnorm()
 
 **Bonus points**: Are there any psychometric scores that people put too much weight into that you can think of with a mean of 100 and a standard deviation of 15? 
 
-# Question 10
+## Question 10
 
 Create a folder called "outputs" at the same level of your R Project directory. Save qdata there as "my_tidied_data.csv".
 
