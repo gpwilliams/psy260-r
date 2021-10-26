@@ -3,7 +3,7 @@ title: "Managing Data in R"
 subtitle: "Importing Data into R"
 author: "Glenn Williams"
 institute: "University of Sunderland"
-date: "2020-09-29 (updated: `r Sys.Date()`)"
+date: "2021-10-26 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -33,50 +33,17 @@ colorise <- function(x, color) {
 }
 ```
 
-# Starting a New Project
-
-Assuming you're using a local installation of R/RStudio:
-
-- Make a folder somewhere on your computer.
-- Open RStudio.
-- **Click File $\rightarrow$ New Project $\rightarrow$ New Directory $\rightarrow$ New Project**.
-- Give this a name (e.g. "managing-data") and save it somewhere you can access on your computer (e.g. Desktop)
-
-Assuming you're using rstudio.cloud:
-
-- Make a new Space and give it a name, then **click New Project**.
-
-You now have a **folder and an rstudio project** for your work. You can put data and code in here, and all outputs will be saved in this place.
-
-```{r project-directory, echo = FALSE, out.width = 350, fig.align = "center", fig.cap="creating a new project"}
-knitr::include_graphics(
-   "../../img/project-directory.png"
-)
-```
-
----
-# Create a New R Markdown File
-
-Create a new R Markdown file. If you want your html file to update in real time, make it an **html notebook**. If you want it to only update when compiled, make it an **html document**.
-
-e.g. Click File $\rightarrow$ New File $\rightarrow$ R Notebook. This will open an R notebook in the Editor.
-
-```{r rstudio-interface, echo = FALSE, out.width = 500, fig.align = "center", fig.cap="RStudio Interface"}
-knitr::include_graphics(c(
-   "../../img/rstudio-interface.png"
-))
-```
-
----
 # Understanding File Systems
 
-Before we read in any data, it probably makes sense to understand file paths on your computer.
+Before we read in any data, we need to understand file paths on your computer.
 
 - Computers are often split up into different **drives** where you can store data: e.g. a C drive on a PC, a Macintosh HD drive on newer Macs. 
 
 - The more drives you have, the more places data can live.
 
-- Files are stored at unique **paths** (places) on these drives.
+- Usually we organise files into folders on these drives.
+
+- Any file is saved at a unique **paths** (places) on these drives.
 
 ---
 # Understanding File Systems
@@ -89,7 +56,7 @@ How does the computer know where it is though?
 
 - Another file, "document2.txt" on the Desktop, would live at `C:\Users\glenn\desktop\document2.txt`.
 
-You need to be able to **uniquely identify** files within file paths. That's why these files need unique names when in the same location, but could have the same name if in different paths (e.g. folders on the Desktop).
+You need to be able to **uniquely identify** files within file paths. They either need unique names in a given location, or can have the same name in a different location.
 
 ---
 # How R Reads Files
@@ -100,14 +67,14 @@ By default, R will either ask you to:
 
 - Specify a file path **relative** to the **working directory**.
 
-The second method is generally best if you want your code to work on someone else's computer. Why? I can guarantee that I won't share my code with another `User` called `glenn`.
+Using a relative file path is best if you want your code to work on any computer besides the one you wrote your code in. That's because other computers aren't likely to have a `C:\Users\glenn\desktop` path.
 
 Where's the **working directory** though? This is where it gets awkward...
 
 ---
 # The Working Directory
 
-- The working directory in R by default is wherever you open up an R file, or wherever R is installed if you open it without first opening a file.
+- The working directory in R by default is wherever you open up an R file, or wherever R is installed if you open RStudio without first opening a file.
 
 - This is obviously awkard. **Depending on how you start R, it could be anywhere!**
 
@@ -117,47 +84,49 @@ Where's the **working directory** though? This is where it gets awkward...
 
 - If you read files in with `here`, no matter where your working directory is right now, it reads files **relative** to where the RStudio Project lives.
 
+Having your work associated with an **RStudio project ensures the working directory is always the same** in any session and on any computer.
+
 ---
 # Projects and Here: An Example
 
-What if we want to read a file called **raw_data.csv** from a folder on our **desktop** called **my_data**?
+Read a file called **raw_data.csv** from a folder on our **desktop** called **my_data**.
 
 .pull-left[
 
-## Without Project and Here
+### Method
 
-Method one will only work on my PC. Method two will only work if you know your working directory is on Desktop. (It probably isn't.)
+1. Using an **absolute file path** requires you to state exactly where the file is on your computer. This will only work on your computer.
 
-```{r read-no-here, eval=FALSE}
-# using absolute paths
-read_csv(
-  "C:/Users/glenn/Desktop
-  /my_data/raw_data.csv"
-)
+2. Using a **relative file path** is better, but only works if the working directory is the my_data folder.
 
-# using relative paths if
-# the directory is Dekstop
-read_csv("my_data/raw_data.csv")
-```
+3. Using an **RStudio Project** fixes the working directory to the my_data folder. You can then read files relative to that folder using the **here function**.
 
 ]
 
 .pull-right[
 
-## With Project and Here
+### Code
 
-Assuming you have a folder (called anything) containing your data and an RStudio project, **this will always work** if you open R from the project:
+```{r read-data-example, eval=FALSE}
+# using absolute paths
+read_csv(
+  "C:/Users/glenn/Desktop/
+  my_data/raw_data.csv"
+)
 
-```{r read-here, eval=FALSE}
+# using relative paths
+read_csv("my_data/raw_data.csv")
+
+# using the here function
 read_csv(here("raw_data.csv"))
 ```
 
-It will work for anyone who is sent your folder, on any computer, as long as they have R installed.
+*The last option is best for reproducibility.*
 
 ]
 
 ---
-# Reading Data into R
+# Reading and Writing Data in R
 
 There are a few inbuilt functions in R that allow us to read in data from a file and to write data to a file, but they sometimes take arguments in different orders and can behave unexpectedly.
 
@@ -171,19 +140,25 @@ There are a few inbuilt functions in R that allow us to read in data from a file
 # Reading Data into R
 ## An Example
 
-We already have some data stored in the /data/ folder. It's stored as a .csv file.
+- We already have some data stored in the /data/ folder. It's stored as a .csv file.
 
-Values in the file are separated by commas (hence, **comma-seperated values; csv**). 
+- Values in the file are separated by commas (hence, **comma-seperated values; csv**).
 
-It's a good idea to save data (e.g. in Excel) in this format for sharing; it's lightweight and can be read for free by most programs.
+- It's a good idea to save data (e.g. from Excel) in this format for sharing; it's lightweight and can be read for free by most programs.
 
 ---
 # Reading Data into R
 ## An Example
 
-We read the data in using `read_csv()`, and tell it where to find the data using `here()`. We then assign it to an object called **raw_data**. By default, read_csv() tells us how it parsed each column (i.e. what the data is stored as).
+- We read the data in using `read_csv()`
 
-```{r read-csv}
+- We tell R where to find the data using `here()`. 
+
+- We then assign the data to an object called **raw_data** so we can work with it in R. 
+
+- By default, `read_csv()` tells us how R parsed each column (i.e. what the data is stored as).
+
+```{r read-csv, warning = FALSE}
 raw_data <- read_csv(here("data", "factorial_data.csv"))
 ```
 
@@ -191,8 +166,6 @@ raw_data <- read_csv(here("data", "factorial_data.csv"))
 # Recap
 
 We know...
-
-- how to create our own **RStudio Projects** and **Notebooks**.
 
 - how **file paths** work and that these paths can be very different depending upon your computer set up.
 

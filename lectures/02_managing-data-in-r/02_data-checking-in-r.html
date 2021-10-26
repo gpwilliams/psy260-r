@@ -4,6 +4,7 @@
     <title>Managing Data in R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Glenn Williams" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
   </head>
@@ -15,7 +16,7 @@ class: center, middle, inverse, title-slide
 ## Data Checking in R
 ### Glenn Williams
 ### University of Sunderland
-### 2020-09-29 (updated: 2020-10-13)
+### 2021-10-26 (updated: 2021-10-26)
 
 ---
 
@@ -26,22 +27,24 @@ class: center, middle, inverse, title-slide
 
 # Understanding our Data
 
-To have a good understanding of how you should clean and analyse your data, you have to understand how your data was collected. Ask yourself:
+To have a good understanding of how you should clean and analyse your data, you have to understand how your data was made. Ask yourself:
 
 - How was the study performed?
 
 - What do the variables in the data set represent?
 
-- What levels can these variables take?
+- What levels can these variables have?
 
 - Was a consistent coding scheme used throughout?
 
 - How is missing data coded (if at all)?
 
+Answering these questions makes you understand your data better, so you'll make fewer mistakes and do a better job of analysing it.
+
 ---
 # Reading in Data
 
-Let's assume we performed an experiment. Let's read the data from this experiment into R assuming it is stored as a .csv file:
+In the data folder of this repository is a file called factorial_data.csv. If I'm working from this project folder I can read it in as follows:
 
 
 ```r
@@ -49,13 +52,8 @@ raw_data &lt;- read_csv(here("data", "factorial_data.csv"))
 ```
 
 ```
-## Warning: Missing column names filled in: 'X1' [1]
-```
-
-```
 ## Parsed with column specification:
 ## cols(
-##   X1 = col_double(),
 ##   subj_id = col_character(),
 ##   list_id = col_double(),
 ##   item_id = col_double(),
@@ -70,7 +68,7 @@ Let's take a look at this data so we can understand it...
 ---
 # Some Notes on the Data
 
-Let's take a look at our data. What does it look like? The `head()` function allows you to see the top of your data set. (`tail()` does the opposite.)
+What does the data look like? The `head()` function allows you to see the top of your data set.
 
 
 ```r
@@ -78,33 +76,29 @@ head(raw_data)
 ```
 
 ```
-## # A tibble: 6 x 7
-##      X1 subj_id list_id item_id A     B         Y
-##   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
-## 1     1 one           4       1 A2    B2     234.
-## 2     2 one           4       2 A2    B2     295.
-## 3     3 one           4       3 A2    B2     285.
-## 4     4 one           4       4 A2    B2     258.
-## 5     5 one           4       5 A2    B2     268.
-## 6     6 one           4       6 A2    B2     282.
+## # A tibble: 6 x 6
+##   subj_id list_id item_id A     B         Y
+##   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1 one           4       1 A2    B2     234.
+## 2 one           4       2 A2    B2     295.
+## 3 one           4       3 A2    B2     285.
+## 4 one           4       4 A2    B2     258.
+## 5 one           4       5 A2    B2     268.
+## 6 one           4       6 A2    B2     282.
 ```
 
-Let's assume the data is from an experiment. 
-
-Next, we'll explain what these mean.
+*The function `tail()` does the opposite to `head()`. Try it out!*
 
 ---
 # Understanding our Data
 
-Let's assume we gave people a task where they had to read sentences with an upwards or downwards motion (variable A) and then identify targets at the top or bottom of the screen (variable B) as quickly as they could. We captured their response times in the task (variable Y).
+Let's assume we gave people a task where they had to read **sentences that imply an upwards or downwards motion (variable A)** and then **identify targets at the top or bottom of the screen (variable B)** as quickly as they could. We captured their response times in the task (variable Y).
 
-It looks like we have the following columns:
-
-- **X1** = Row number for the data.
+We have the following columns:
 
 - **subj_id** = Subject/participant ID for the person who gave the data to us.
 
-- **list_id** = list ID for how items were randomised.
+- **list_id** = List ID for how items were randomised.
 
 - **item_id** = Item ID.
 
@@ -112,14 +106,14 @@ It looks like we have the following columns:
 
 - **variable B** = Location of target (up or down on the screen).
 
-We should check that all of our data are coded as expected.
+We should check that the data is coded as expected.
 
 ---
 # Inspecting Data
 
-Our first step to understanding out data should be to check that we have read it into R correctly, and that `read_csv()` has sensibly guessed at our data types.
+- Our first step to understanding our data should be to **check that we have read it into R correctly**, and that `read_csv()` has sensibly guessed at our data types.
 
-We can do this using the `glimpse()` function. This gives us a look at our data rotated, so we can see how our data are stored and how they are coded. There's a few problems here...
+- We can do this using the `glimpse()` function. This gives us a **look at our data on its side**, so we can see how our data are stored and how they are coded. There's a few problems here...
 
 
 ```r
@@ -128,54 +122,138 @@ glimpse(raw_data)
 
 ```
 ## Rows: 2,400
-## Columns: 7
-## $ X1      &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18…
-## $ subj_id &lt;chr&gt; "one", "one", "one", "one", "one", "one", "one", "one", "one"…
-## $ list_id &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4…
-## $ item_id &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18…
-## $ A       &lt;chr&gt; "A2", "A2", "A2", "A2", "A2", "A2", "A2", "A2", "A2", "A2", "…
-## $ B       &lt;chr&gt; "B2", "B2", "B2", "B2", "B2", "B2", "B2", "B2", "B2", "B2", "…
-## $ Y       &lt;dbl&gt; 233.5056, 294.6706, 284.6235, 257.9815, 267.9257, 282.1853, 2…
+## Columns: 6
+## $ subj_id &lt;chr&gt; "one", "one", "one", "one", "one", "one", "one", "one", "one",…
+## $ list_id &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,…
+## $ item_id &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,…
+## $ A       &lt;chr&gt; "A2", "A2", "A2", "A2", "A2", "A2", "A2", "A2", "A2", "A2", "A…
+## $ B       &lt;chr&gt; "B2", "B2", "B2", "B2", "B2", "B2", "B2", "B2", "B2", "B2", "B…
+## $ Y       &lt;dbl&gt; 233.5056, 294.6706, 284.6235, 257.9815, 267.9257, 282.1853, 28…
 ```
 
 ---
-# Identifying Problems
+# Fixing Problems
 
-First off, we don't need a count of row numbers (R does this for us), so we can remove the X1 column. Let's do that now.
+Our list IDs and Item IDs are properly coded, but we should check our variables A and B, which indicate the conditions of the study. 
 
-We'll use the `select()` function from dplyr in the tidyverse. 
+- We can ask for only values from one column using dollar indexing; e.g. `data$column`.
 
-This takes our data as an argument and any columns we want to select (keep) when named or given a column number. Nicely, we can also use the minus sign to say "keep everything except this".
+- The `unique()` function tells us what unique observations we have in a column.
+
+Which unique values do we have here?
 
 
 ```r
-# select out the X1 column from our data, assign this to our new data
-cleaned_data &lt;- select(raw_data, -X1)
-
-cleaned_data
+unique(raw_data$A)
 ```
 
 ```
-## # A tibble: 2,400 x 6
-##   subj_id list_id item_id A     B         Y
-##   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
-## 1 one           4       1 A2    B2     234.
-## 2 one           4       2 A2    B2     295.
-## 3 one           4       3 A2    B2     285.
-## 4 one           4       4 A2    B2     258.
-## # … with 2,396 more rows
+## [1] "A2" "A1" "a1" "a2"
 ```
+
+```r
+unique(raw_data$B)
+```
+
+```
+## [1] "B2"  "B1"  "b2"  "BB2" "BB1" "b1"
+```
+
+It looks like we have a mix of issues here. R is **case sensitive, meaning A is different to a**. We can make some initial fixes here by making everything the same case. Do this by using the `tolower()` function.
 
 ---
-# Identifying Problems
+# Fixing Remaining Problems
 
-We can also see that subject IDs are stored as characters. Why is that? Let's see what unique values we have here.
-
-The `unique()` function tells us what unique observations we have in a column.
+Set the values in A and B to lower case.
 
 
 ```r
-unique(cleaned_data$subj_id)
+# change values
+raw_data$A &lt;- tolower(raw_data$A)
+raw_data$B &lt;- tolower(raw_data$B)
+```
+
+How does it look?
+
+
+```r
+unique(raw_data$A)
+```
+
+```
+## [1] "a2" "a1"
+```
+
+```r
+unique(raw_data$B)
+```
+
+```
+## [1] "b2"  "b1"  "bb2" "bb1"
+```
+
+We've fixed the codes for variable A, but variable B still has some problems. Someone has mistakenly entered bb2 and bb1 as codes.
+
+Let's change these!
+
+---
+# Converting Values Conditionally
+
+- **Conditionals** are statements we give the computer where we want it to do something **only if a condition is met**.
+
+- Using the tidyverse, we have a nice way to set these up using the function `case_when()`. It looks like this:
+
+
+```r
+case_when(
+  data == value ~ replacement,
+  TRUE ~ data
+)
+```
+
+- We give this function an argument relating to what **case** we care about (e.g. when the data is equal to a value).
+
+- To the right of the `~` we tell R what the value should be in this case.
+
+- We finally set a default value (`TRUE`), i.e. all other cases. Here, we tell R to just use the original value in the data.
+
+---
+# Fixing Remaining Problems
+
+We'll use the `case_when()` function again here.
+
+If column B has the value "bb1" change it to "b1", otherwise if it has "bb2" change it to "b2", else just leave values as they are.
+
+
+```r
+raw_data$B &lt;- case_when(
+  raw_data$B == "bb1" ~ "b1",
+  raw_data$B == "bb2" ~ "b2",
+  TRUE ~ raw_data$B
+)
+```
+
+How do the values look now?
+
+
+```r
+unique(raw_data$B)
+```
+
+```
+## [1] "b2" "b1"
+```
+
+Nice and consistent!
+
+---
+# Identifying Remaining Problems
+
+- We can see that subject IDs are stored as characters. Why is that? Let's see what unique values we have here.
+
+
+```r
+unique(raw_data$subj_id)
 ```
 
 ```
@@ -187,156 +265,90 @@ unique(cleaned_data$subj_id)
 ## [51] "51"   "52"   "53"   "54"   "55"   "56"   "57"   "58"   "59"   "last"
 ```
 
-OK, we have a pretty terrible naming system here. Surely we should make these all numbers.
+We have a mix of integers, and the two values "one" and "last" as IDs. We need to make this consistent.
 
 ---
-# Converting Values
+# Converting Values Conditionally
 
-Let's make the unique values in our data set for the subject IDs all numbers instead of a mix of numbers and characters.
-
-This looks through the IDs in our data (e.g. "one", "one", ...2, 2,...). Then it checks where in the unique IDs (e.g. "one", 2, 3) it occurs, returning that number.
-
-So, "one" gets a 1, as it's the first unique ID, 2 gets a 2 as it's the second, etc.
-
-**Note: this is a complex function; don't worry if this doesn't make sense!**
+Let's change the "one" and "last" values to more sensible values. Notice we have to stick with characters for now so the column has the same data types in it.
 
 
 ```r
-cleaned_data$subj_id &lt;- match(
-  cleaned_data$subj_id, 
-  unique(cleaned_data$subj_id)
+raw_data$subj_id &lt;- case_when(
+  raw_data$subj_id == "one" ~ "1",
+  raw_data$subj_id == "last" ~ "60",
+  TRUE ~ raw_data$subj_id
 )
-# check new values
-unique(cleaned_data$subj_id)
+```
+
+How have the values changed?
+
+
+```r
+unique(raw_data$subj_id)
 ```
 
 ```
-##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
-## [26] 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50
-## [51] 51 52 53 54 55 56 57 58 59 60
+##  [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10" "11" "12" "13" "14" "15"
+## [16] "16" "17" "18" "19" "20" "21" "22" "23" "24" "25" "26" "27" "28" "29" "30"
+## [31] "31" "32" "33" "34" "35" "36" "37" "38" "39" "40" "41" "42" "43" "44" "45"
+## [46] "46" "47" "48" "49" "50" "51" "52" "53" "54" "55" "56" "57" "58" "59" "60"
 ```
 
-Nicely, the numbers now go from 1 to 60!
+Nicely, the numbers now go from 1 to 60! But they're still characters.
 
 ---
 # Fixing Remaining Problems
 
-Our list IDs and Item IDs are properly coded, but we should check our variables A and B, which indicate the conditions of the study. Which unique values do we have here?
+We can convert between data types using the `as.` functions. We have e.g. `as.character()`, `as.factor()`, and `as.numeric()`. We'll use `as.numeric()` to make these strings into numeric values now they're consistently coded.
 
 
 ```r
-unique(cleaned_data$A)
+raw_data$subj_id &lt;- as.numeric(raw_data$subj_id)
 ```
 
-```
-## [1] "A2"  "A1"  "a1"  "a2"  "Aa1"
-```
-
-```r
-unique(cleaned_data$B)
-```
-
-```
-## [1] "B2"  "B1"  "b2"  "BB2" "BB1" "b1"
-```
-
-It looks like we have a mix of issues here. R is case sensitive, meaning A is different to a. We can make some initial fixes here by making everything the same case. Do this by using the `tolower()` function.
-
----
-# Fixing Remaining Problems
+How do the values look? Check the data again.
 
 
 ```r
-# change values
-cleaned_data$A &lt;- tolower(cleaned_data$A)
-cleaned_data$B &lt;- tolower(cleaned_data$B)
-
-# check values
-unique(cleaned_data$A)
+glimpse(raw_data)
 ```
 
 ```
-## [1] "a2"  "a1"  "aa1"
+## Rows: 2,400
+## Columns: 6
+## $ subj_id &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+## $ list_id &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,…
+## $ item_id &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,…
+## $ A       &lt;chr&gt; "a2", "a2", "a2", "a2", "a2", "a2", "a2", "a2", "a2", "a2", "a…
+## $ B       &lt;chr&gt; "b2", "b2", "b2", "b2", "b2", "b2", "b2", "b2", "b2", "b2", "b…
+## $ Y       &lt;dbl&gt; 233.5056, 294.6706, 284.6235, 257.9815, 267.9257, 282.1853, 28…
 ```
 
-```r
-unique(cleaned_data$B)
-```
-
-```
-## [1] "b2"  "b1"  "bb2" "bb1"
-```
-
-That looks good, most of the codes are now consistent. But it looks like someone also mistakenly entered e.g. aa1 instead of just a1. The same happens with bb1 and bb2. Let's change these!
-
----
-# Fixing Remaining Problems
-
-We'll need to use some logic here. 
-
-We can set up an `ifelse()` statement where we tell R to do something if it finds a match to our request, but that can get repetitive. Instead, one option is to use `case_when()`. 
-
-We give this function an argument relating to what **case** we care about (e.g. when A is "aa1") then to the right of the ~ we tell it what value to take.
-
-We finally set a default value (TRUE) which in this case is just the original value.
-
-
-```r
-# if column A has a value called "aa1", change it to "a1", else leave it alone.
-cleaned_data$A &lt;- case_when(
-  cleaned_data$A == "aa1" ~ "a1",
-  TRUE ~ cleaned_data$A
-)
-
-# check the new values
-unique(cleaned_data$A)
-```
-
-```
-## [1] "a2" "a1"
-```
-
----
-# Fixing Remaining Problems
-
-We can put multiple cases in `case_when()`! This way, it can be **more flexible and less repetitive** than other methods.
-
-
-```r
-cleaned_data$B &lt;- case_when(
-  cleaned_data$B == "bb1" ~ "b1",
-  cleaned_data$B == "bb2" ~ "b2",
-  TRUE ~ cleaned_data$B
-)
-
-# check new values
-unique(cleaned_data$B)
-```
-
-```
-## [1] "b2" "b1"
-```
-
-Now we only have B1 and B2! It looks like our data is nicely tidied up now.
+All good!
 
 ---
 # Save our Cleaned Data
 
 Finally, we did all that work with our data. To save repeating all these steps again, we can save it to an external file. We do this using 'write_csv()`.
 
-Let's save our file in the data folder. This takes two arguments: (1) which R object will you save to file? (2) Where should you save it?
+Let's save our file in the data folder. This takes two arguments: 
+
+1. Which R object will you save to file?
+
+2. Where should you save it?
 
 
 ```r
 write_csv(
-  cleaned_data, 
+  raw_data, 
   here("data", "cleaned_data.csv")
 )
 ```
 
 The nice thing is, if you made a mistake in one of your steps, you can just change that step and rerun your code. 
 
-If you change things by hand, who knows if you'll even detect the mistake, never mind how difficult it t might be to fix it! 
+If you change things by hand, who knows if you'll even detect the mistake, never mind how difficult it might be to fix it! 
 
 ---
 # Recap
@@ -345,15 +357,13 @@ We know...
 
 - how to read data into R.
 
-- how to know how our data is coded.
-
-- how to inspect subsets of our data.
+- how to find out how our data are coded.
 
 - how to identify unique elements of our data.
 
 - how to convert and clean up data.
 
-- how to perform case-specific operations using logic.
+- how to perform case-specific operations using conditional logic.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

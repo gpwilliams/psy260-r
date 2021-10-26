@@ -3,7 +3,7 @@ title: "Managing Data in R"
 subtitle: "Manipulating Data in R"
 author: "Glenn Williams"
 institute: "University of Sunderland"
-date: "2020-09-29 (updated: `r Sys.Date()`)"
+date: "2021-10-26 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
     lib_dir: libs
