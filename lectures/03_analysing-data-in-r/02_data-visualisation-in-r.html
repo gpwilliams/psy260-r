@@ -4,6 +4,7 @@
     <title>Summarising and Plotting Data in R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Glenn Williams" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
   </head>
@@ -15,7 +16,7 @@ class: center, middle, inverse, title-slide
 ## Visualising Data
 ### Glenn Williams
 ### University of Sunderland
-### 2020-09-29 (updated: 2020-10-16)
+### 2021-10-27 (updated: 2021-10-27)
 
 ---
 
@@ -41,11 +42,9 @@ class: center, middle, inverse, title-slide
 
 What's a better way to summarise the relationship between height and mass in our star wars data set?
 
-Note below I excluded Jabba the Hutt who is **short and massive**.
-
 .pull-left[
 
-We could report a correlation and some averages, though that's going to be hard to picture.
+We could report a correlation and **some averages**, though that's going to be hard to picture.
 
 
 ```
@@ -63,11 +62,13 @@ We could report a correlation and some averages, though that's going to be hard 
 
 .pull-right[
 
-So plots do a lot of the work.
+So **plots** do a lot of the work.
 
 &lt;img src="02_data-visualisation-in-r_files/figure-html/plot-hw-1.png" width="75%" /&gt;
 
 ]
+
+*Note below I excluded Jabba the Hutt who is **short and massive***.
 
 ---
 # A Grammar of Graphics
@@ -291,7 +292,7 @@ Now the legend doesn't have categories, but a scale.
 ]
 
 ---
-# Bonus: Combining Geoms
+# Combining Geoms
 
 .left-code[
 
@@ -325,6 +326,92 @@ starwars %&gt;%
 ]
 
 ---
+# Some Other Geoms
+## Bar Plots for Count Data
+
+.left-code[
+
+For a **bar plot of count data**, we just need to pass a column of data to the aesthetics, and say it should appear on the x-axis.
+
+We then use `geom_bar()` to make the bar plot.
+
+This is what this looks like for counting up characters of different sexes.
+
+
+```r
+ggplot(data = starwars, mapping = aes(x = sex)) +
+  geom_bar()
+```
+
+]
+
+.right-plot[
+![](02_data-visualisation-in-r_files/figure-html/barplot-1.png)
+]
+
+---
+# Some Other Geoms
+## Box Plots
+
+.left-code[
+
+What if we want to display a **continuous variable** across groups? A **boxplot** is handy here.
+
+Let's get heights of characters from each sex. Now, we just add height to the y-axis, and change `geom_bar()` to `geom_boxplot()`
+
+
+```r
+ggplot(
+  data = starwars, 
+  mapping = aes(x = sex,y = height)
+) +
+  geom_boxplot()
+```
+
+Remember, the dark line is the median, the box the middle 50% of scores. 
+
+]
+
+.right-plot[
+![](02_data-visualisation-in-r_files/figure-html/boxplot-1.png)
+
+Lines represent the remainder, and dots represent outliers.
+
+]
+
+---
+# Saving Plots
+
+We can save graphics from R using a number of methods, but for plots produced in `ggplot2`, we can use `ggsave()`.
+
+We can either make our plot without assigning it to a variable, and then save it as follows:
+
+
+```r
+ggplot(data = starwars, aes(x = height)) + 
+  geom_density()
+
+ggsave(here("myplot.png"), last_plot())
+```
+
+Or we can make a plot and assign it to a variable, and save it as follows:
+
+
+```r
+my_plot &lt;- ggplot(data = starwars, aes(x = height)) + 
+  geom_density()
+
+ggsave(here("myplot.png"), my_plot)
+```
+
+I prefer the latter. Why? Once a plot is stored as a variable, you can change it by adding `ggplot` arguments! For example...
+
+
+```r
+my_plot + coord_cartesian(xlim = c(0, 180))
+```
+
+---
 # Recap
 
 We've learned...
@@ -340,6 +427,10 @@ We've learned...
 - How to use ggplot functions to **differentiate data**.
 
 - How to use ggplot functions to filter data, or how to **chain functions together** from other packages.
+
+- How to **use different geoms** to summarise your data in different ways.
+
+- How to **save your plots**.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

@@ -9,7 +9,7 @@ output:
     theme: united
     highlight: tango
 author: "Dr Glenn Williams"
-date: "2020-10-25 (Updated `r Sys.Date()`)"
+date: "2020-10-27 (Updated `r Sys.Date()`)"
 ---
 
 Here, we'll get used to performing analyses and summarising data in R. This set of questions introduces some more advanced functions for analysing data. These exercises are more introductory while the questions are intended to be more difficult to help test your knowledge.
@@ -71,13 +71,17 @@ Update your code used to plot `my_plot` in Exercise 4 to have different fills fo
 
 ## Exercise 6
 
-In this experiment we want to exclude participants with average scores one standard deviation above or below the mean.
+In this experiment we want to exclude participants with average scores two standard deviation above or below the mean.
 
 ### Part A
 
 Find out the overall mean and standard deviation from the reaction times saved in `data_summary`. Assign this summary to the variable `data_cutoffs`.
 
 *Hint*: If you use `summarise()` (which you may not need to), be sure to use ungroup in your chain of functions first, e.g.: `data_summary %>% ungroup() %>% **your code goes here**`.
+
+```{r exercise-6a-answer}
+
+```
 
 ### Part B
 
@@ -87,9 +91,39 @@ Assign this data to the object `data_summary_filtered`.
 
 *Hint*: You will need to use your answer from Part A to achieve this.
 
+First, assign the lower and upper bounds for outliers. Call these "outlier_low" and "outlier_high".
+
+```{r exercise-6b-answer-part1}
+
+```
+
+Then filter out low and high scoring values in the original data.
+
+*Hint: <, > and | operators are useful here when combined with filter().*
+
+```{r exercise-6b-answer-part2}
+
+```
+
+Finally, remove any participant IDs who have outliers from your original data. Assign this to the object **data_summary_filtered**.
+
+```{r exercise-6b-answer-part3}
+
+```
+
 ### Part C
 
 Create a final plot as in Exercise 5, now with your data from `data_summary_filtered`.
+
+```{r exercise-6c-answer}
+
+```
+
+## Exercise 7
+
+Taking your data from Exercise 6, conduct an appropriate statistical test to compare the mean scores for the congruent and incongruent conditions. Is there a significant difference between the groups?
+
+Remember to use the formula interface `outcome ~ predictor`. This means scores to the left of the `~` are predicted by the values assigned to the right side of the `~`; i.e. your condition dictates your score.
 
 # Questions
 
@@ -164,44 +198,57 @@ Make a boxplot of the data. Does there appear to be any reliable differences bet
 
 ```
 
-## Question 7 (Advanced, Bonus Material)
+## Question 7
 
 We can perform inferential statistics in R. 
 
-I have simulated some data below for a 2 group experiment. The two groups are "control" and "treatment" which are assigned to the column "condition" while the outcome is in the column "outcome". (It doesn't matter what this column or study represents, data only have meaning we assign to it.)
+I have simulated some data below for a one-variable, 3-group experiment. The three groups are "control", "treatment_low", and "treatment_high" which are assigned to the column "condition" while the outcome is in the column "outcome". (It doesn't matter what this column or study represents, data only have meaning we assign to it.)
 
 ```{r simulate-data-question-7}
-n <- 40
+set.seed(1892)
+n <- 60
 
-q8dat <- tibble(
-  condition = rep(c("control", "treatment"), times = n),
+simdat <- tibble(
+  condition = c(
+    rep("control", n), 
+    rep("treatment_low", n), 
+    rep("treatment_high", n)
+  ),
   outcome = c(
-    rnorm(n, mean = 400, sd = 100),
-    rnorm(n, mean = 500, sd = 150)
+    rnorm(n, mean = 100, sd = 15),
+    rnorm(n, mean = 105, sd = 16),
+    rnorm(n, mean = 124, sd = 12)
   )
 )
 ```
 
-We can analyse this data using a t-test as follows:
+Analyse this data using an appropraite ANOVA method. Report the results below.
 
-```{r t-test-question-7}
-t.test(outcome ~ condition, data = q8dat)
+```{r aov-question-7-answer}
+
 ```
-We get the above summary of the t-test. (Your exact values may vary due to simulating this data.)
 
-We can see above that we can analyse data using a formula interface `outcome ~ treatment`. This means scores to the left of the `~` are predicted by the values assigned to the right side of the `~`; i.e. your condition dictates your score.
+We can follow up with our analyses to determine where the effect lies. Do this by conducting a post-hoc tests using Tukey's Honest Significant Differences method using the `TukeyHSD()` function. If you're unsure how to do this type `?TukeyHSD` in the console. This will essentially give you a series of t-tests with your *p*-values adjusted for multiplicity.
 
-We can similarly perform an ANOVA using this method. This means we perform an ANOVA with two main effects (e.g. a two-way ANOVA) as follows:
+```{r tukey-hsd-question-7-answer}
+
+```
+
+Describe the results of this test.
+
+## Question 8
+
+When we want to analyse two main effects from variables in an ANOVA, we can do so like this:
 
 ```{r anova-example-1, eval = FALSE}
-aov(outcome ~ FACTOR_A + FACTOR_B, data = YOUR_DATA)
+aov(DV ~ IV1 + IV2, data = YOUR_DATA)
 ```
 
 Here, any terms added to the right of the `~` are evaluated as main effects if we make their effects additive. If instead we use a multiplication symbol, we get both main effects **and interactions**.
 
-Perform an ANOVA for your data. To get your typical ANOVA table output, you must use `summary(aov(...))` or assign your ANOVA model to an object and call `summary()` on that object.
+Perform an ANOVA on the **summary_data** we created earlier. To get your typical ANOVA table output, you must use `summary(aov(...))` or assign your ANOVA model to an object and call `summary()` on that object. We would like main effects and interaction for the **sentence_location and target_location variables**. Are there any main effects or interactions here?
 
-```{r answer-7-1}
+```{r anova-example-1-answer}
 
 ```
 
@@ -209,14 +256,14 @@ This answer may appear correct, but with repeated measures we need to tell R to 
 
 ```{r anova-example-2, eval = FALSE}
 aov(
-  outcome ~ FACTOR_A * FACTOR_B + 
-    Error(SUBJECT_ID_COLUMN/(FACTOR_A * FACTOR_B)), 
-  data = YOUR_DATA
+  DV ~ IV1 * IV2 + 
+    Error(SUVBJECT_ID/(IV1 * IV2)), 
+  data = DATA
 )
 ```
 
-Adjust your code to incorporate this. Do your effects change? Can you explain why?
+Adjust your code to incorporate this. Do your estimates change? Can you explain why?
 
-```{r answer-7-2}
+```{r anova-example-2-answer}
 
 ```

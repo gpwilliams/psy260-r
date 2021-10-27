@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 ## Data Checking in R
 ### Glenn Williams
 ### University of Sunderland
-### 2021-10-26 (updated: 2021-10-26)
+### 2021-10-27 (updated: 2021-10-27)
 
 ---
 
@@ -27,7 +27,7 @@ class: center, middle, inverse, title-slide
 
 # Understanding our Data
 
-To have a good understanding of how you should clean and analyse your data, you have to understand how your data was made. Ask yourself:
+To have a good understanding of how you should **clean and analyse your data**, you have to **understand how your data was made**. Ask yourself:
 
 - How was the study performed?
 
@@ -44,23 +44,30 @@ Answering these questions makes you understand your data better, so you'll make 
 ---
 # Reading in Data
 
-In the data folder of this repository is a file called factorial_data.csv. If I'm working from this project folder I can read it in as follows:
+In the data folder of this repository are files called **factorial_data_a.csv** and **factorial_data_b.csv**. If I'm working from this project folder I can read it in and combine the data as follows:
 
 
 ```r
-raw_data &lt;- read_csv(here("data", "factorial_data.csv"))
+# read the data
+data_a &lt;- read_csv(here("data", "factorial_data_a.csv"))
+data_b &lt;- read_csv(here("data", "factorial_data_b.csv"))
+
+# combine the data
+combined_data &lt;- bind_rows(data_a, data_b)
+
+# print it
+combined_data
 ```
 
 ```
-## Parsed with column specification:
-## cols(
-##   subj_id = col_character(),
-##   list_id = col_double(),
-##   item_id = col_double(),
-##   A = col_character(),
-##   B = col_character(),
-##   Y = col_double()
-## )
+## # A tibble: 2,400 x 7
+##     row subj_id list_id item_id A     B         Y
+##   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1     1 one           4       1 A2    B2     234.
+## 2     2 one           4       2 A2    B2     295.
+## 3     3 one           4       3 A2    B2     285.
+## 4     4 one           4       4 A2    B2     258.
+## # … with 2,396 more rows
 ```
 
 Let's take a look at this data so we can understand it...
@@ -72,19 +79,19 @@ What does the data look like? The `head()` function allows you to see the top of
 
 
 ```r
-head(raw_data)
+head(combined_data)
 ```
 
 ```
-## # A tibble: 6 x 6
-##   subj_id list_id item_id A     B         Y
-##   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
-## 1 one           4       1 A2    B2     234.
-## 2 one           4       2 A2    B2     295.
-## 3 one           4       3 A2    B2     285.
-## 4 one           4       4 A2    B2     258.
-## 5 one           4       5 A2    B2     268.
-## 6 one           4       6 A2    B2     282.
+## # A tibble: 6 x 7
+##     row subj_id list_id item_id A     B         Y
+##   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1     1 one           4       1 A2    B2     234.
+## 2     2 one           4       2 A2    B2     295.
+## 3     3 one           4       3 A2    B2     285.
+## 4     4 one           4       4 A2    B2     258.
+## 5     5 one           4       5 A2    B2     268.
+## 6     6 one           4       6 A2    B2     282.
 ```
 
 *The function `tail()` does the opposite to `head()`. Try it out!*
@@ -113,16 +120,17 @@ We should check that the data is coded as expected.
 
 - Our first step to understanding our data should be to **check that we have read it into R correctly**, and that `read_csv()` has sensibly guessed at our data types.
 
-- We can do this using the `glimpse()` function. This gives us a **look at our data on its side**, so we can see how our data are stored and how they are coded. There's a few problems here...
+- We can do this using the `glimpse()` function. This gives us a **look at our data on its side**, so we can see how our data are stored and how they are coded.
 
 
 ```r
-glimpse(raw_data)
+glimpse(combined_data)
 ```
 
 ```
 ## Rows: 2,400
-## Columns: 6
+## Columns: 7
+## $ row     &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,…
 ## $ subj_id &lt;chr&gt; "one", "one", "one", "one", "one", "one", "one", "one", "one",…
 ## $ list_id &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,…
 ## $ item_id &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,…
@@ -131,8 +139,35 @@ glimpse(raw_data)
 ## $ Y       &lt;dbl&gt; 233.5056, 294.6706, 284.6235, 257.9815, 267.9257, 282.1853, 28…
 ```
 
+There's a few problems with our coding system here. Subject ID should probably be numeric, and we need consistent codes for A and B.
+
 ---
-# Fixing Problems
+# Inspecting Data
+
+- We can get a summary of our data, albeit in a confusing printout, using `summary()`.
+
+- Here, we'll reduce the summary only to our numeric columns for easier presentation (selecting columns, only if they are numeric).
+
+
+```r
+summary(select_if(combined_data, is.numeric))
+```
+
+```
+##       row            list_id        item_id            Y         
+##  Min.   :   1.0   Min.   :1.00   Min.   : 1.00   Min.   :-200.0  
+##  1st Qu.: 600.8   1st Qu.:1.75   1st Qu.:10.75   1st Qu.: 231.7  
+##  Median :1200.5   Median :2.50   Median :20.50   Median : 251.6  
+##  Mean   :1200.5   Mean   :2.50   Mean   :20.50   Mean   : 255.4  
+##  3rd Qu.:1800.2   3rd Qu.:3.25   3rd Qu.:30.25   3rd Qu.: 270.6  
+##  Max.   :2400.0   Max.   :4.00   Max.   :40.00   Max.   :4000.0  
+##                                                  NA's   :45
+```
+
+Our Y outcome, reaction time, seems to have a minimum of a negative value. We need to get rid of this clear error.
+
+---
+# Inspecting Codes
 
 Our list IDs and Item IDs are properly coded, but we should check our variables A and B, which indicate the conditions of the study. 
 
@@ -144,7 +179,7 @@ Which unique values do we have here?
 
 
 ```r
-unique(raw_data$A)
+unique(combined_data$A)
 ```
 
 ```
@@ -152,7 +187,7 @@ unique(raw_data$A)
 ```
 
 ```r
-unique(raw_data$B)
+unique(combined_data$B)
 ```
 
 ```
@@ -162,22 +197,22 @@ unique(raw_data$B)
 It looks like we have a mix of issues here. R is **case sensitive, meaning A is different to a**. We can make some initial fixes here by making everything the same case. Do this by using the `tolower()` function.
 
 ---
-# Fixing Remaining Problems
+# Fixing Problems
 
 Set the values in A and B to lower case.
 
 
 ```r
 # change values
-raw_data$A &lt;- tolower(raw_data$A)
-raw_data$B &lt;- tolower(raw_data$B)
+combined_data$A &lt;- tolower(combined_data$A)
+combined_data$B &lt;- tolower(combined_data$B)
 ```
 
 How does it look?
 
 
 ```r
-unique(raw_data$A)
+unique(combined_data$A)
 ```
 
 ```
@@ -185,7 +220,7 @@ unique(raw_data$A)
 ```
 
 ```r
-unique(raw_data$B)
+unique(combined_data$B)
 ```
 
 ```
@@ -197,27 +232,6 @@ We've fixed the codes for variable A, but variable B still has some problems. So
 Let's change these!
 
 ---
-# Converting Values Conditionally
-
-- **Conditionals** are statements we give the computer where we want it to do something **only if a condition is met**.
-
-- Using the tidyverse, we have a nice way to set these up using the function `case_when()`. It looks like this:
-
-
-```r
-case_when(
-  data == value ~ replacement,
-  TRUE ~ data
-)
-```
-
-- We give this function an argument relating to what **case** we care about (e.g. when the data is equal to a value).
-
-- To the right of the `~` we tell R what the value should be in this case.
-
-- We finally set a default value (`TRUE`), i.e. all other cases. Here, we tell R to just use the original value in the data.
-
----
 # Fixing Remaining Problems
 
 We'll use the `case_when()` function again here.
@@ -226,18 +240,21 @@ If column B has the value "bb1" change it to "b1", otherwise if it has "bb2" cha
 
 
 ```r
-raw_data$B &lt;- case_when(
-  raw_data$B == "bb1" ~ "b1",
-  raw_data$B == "bb2" ~ "b2",
-  TRUE ~ raw_data$B
-)
+combined_data &lt;- mutate(
+  combined_data,
+  B = case_when(
+    B == "bb1" ~ "b1",
+    B == "bb2" ~ "b2",
+    TRUE ~ B
+  )
+) 
 ```
 
 How do the values look now?
 
 
 ```r
-unique(raw_data$B)
+unique(combined_data$B)
 ```
 
 ```
@@ -253,16 +270,22 @@ Nice and consistent!
 
 
 ```r
-unique(raw_data$subj_id)
+unique(combined_data$subj_id)
 ```
 
 ```
-##  [1] "one"  "2"    "3"    "4"    "5"    "6"    "7"    "8"    "9"    "10"  
-## [11] "11"   "12"   "13"   "14"   "15"   "16"   "17"   "18"   "19"   "20"  
-## [21] "21"   "22"   "23"   "24"   "25"   "26"   "27"   "28"   "29"   "30"  
-## [31] "31"   "32"   "33"   "34"   "35"   "36"   "37"   "38"   "39"   "40"  
-## [41] "41"   "42"   "43"   "44"   "45"   "46"   "47"   "48"   "49"   "50"  
-## [51] "51"   "52"   "53"   "54"   "55"   "56"   "57"   "58"   "59"   "last"
+##  [1] "one"          "2"            "3"            "4"            "5"           
+##  [6] "6"            "7"            "8"            "9"            "10"          
+## [11] "11"           "12"           "13"           "14"           "15"          
+## [16] "16"           "17"           "18"           "19"           "20"          
+## [21] "21"           "22"           "23"           "24"           "25"          
+## [26] "26"           "27"           "twenty-eight" "29"           "30"          
+## [31] "31"           "32"           "33"           "34"           "35"          
+## [36] "36"           "37"           "38"           "39"           "40"          
+## [41] "41"           "42"           "43"           "44"           "45"          
+## [46] "46"           "47"           "48"           "49"           "50"          
+## [51] "51"           "52"           "53"           "54"           "55"          
+## [56] "56"           "57"           "58"           "59"           "last"
 ```
 
 We have a mix of integers, and the two values "one" and "last" as IDs. We need to make this consistent.
@@ -274,10 +297,11 @@ Let's change the "one" and "last" values to more sensible values. Notice we have
 
 
 ```r
-raw_data$subj_id &lt;- case_when(
-  raw_data$subj_id == "one" ~ "1",
-  raw_data$subj_id == "last" ~ "60",
-  TRUE ~ raw_data$subj_id
+combined_data$subj_id &lt;- case_when(
+  combined_data$subj_id == "one" ~ "1",
+  combined_data$subj_id == "twenty-eight" ~ "28",
+  combined_data$subj_id == "last" ~ "60",
+  TRUE ~ combined_data$subj_id
 )
 ```
 
@@ -285,7 +309,7 @@ How have the values changed?
 
 
 ```r
-unique(raw_data$subj_id)
+unique(combined_data$subj_id)
 ```
 
 ```
@@ -304,19 +328,20 @@ We can convert between data types using the `as.` functions. We have e.g. `as.ch
 
 
 ```r
-raw_data$subj_id &lt;- as.numeric(raw_data$subj_id)
+combined_data$subj_id &lt;- as.numeric(combined_data$subj_id)
 ```
 
-How do the values look? Check the data again.
+How do the values look? Check the data again. All good!
 
 
 ```r
-glimpse(raw_data)
+glimpse(combined_data)
 ```
 
 ```
 ## Rows: 2,400
-## Columns: 6
+## Columns: 7
+## $ row     &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,…
 ## $ subj_id &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
 ## $ list_id &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,…
 ## $ item_id &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,…
@@ -325,9 +350,35 @@ glimpse(raw_data)
 ## $ Y       &lt;dbl&gt; 233.5056, 294.6706, 284.6235, 257.9815, 267.9257, 282.1853, 28…
 ```
 
-All good!
+---
+# Fixing Remaining Problems
+
+Finally, we can't have negative reaction times. Let's remove any reaction times below 100ms under the assumption they're far too quick for this task.
+
+
+```r
+# filter only to RTs above 100ms
+combined_data &lt;- filter(combined_data, Y &gt; 100)
+
+# inspect it
+combined_data
+```
+
+```
+## # A tibble: 2,349 x 7
+##     row subj_id list_id item_id A     B         Y
+##   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1     1       1       4       1 a2    b2     234.
+## 2     2       1       4       2 a2    b2     295.
+## 3     3       1       4       3 a2    b2     285.
+## 4     4       1       4       4 a2    b2     258.
+## # … with 2,345 more rows
+```
+
+All done!
 
 ---
+
 # Save our Cleaned Data
 
 Finally, we did all that work with our data. To save repeating all these steps again, we can save it to an external file. We do this using 'write_csv()`.
@@ -336,12 +387,12 @@ Let's save our file in the data folder. This takes two arguments:
 
 1. Which R object will you save to file?
 
-2. Where should you save it?
+2. Where should you save it? What will the data be called?
 
 
 ```r
 write_csv(
-  raw_data, 
+  combined_data, 
   here("data", "cleaned_data.csv")
 )
 ```
@@ -360,6 +411,8 @@ We know...
 - how to find out how our data are coded.
 
 - how to identify unique elements of our data.
+
+- how to get a summary of our data.
 
 - how to convert and clean up data.
 

@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 ## Importing Data into R
 ### Glenn Williams
 ### University of Sunderland
-### 2021-10-26 (updated: 2021-10-26)
+### 2021-10-26 (updated: 2021-10-27)
 
 ---
 
@@ -40,39 +40,68 @@ Before we read in any data, we need to understand file paths on your computer.
 ---
 # Understanding File Systems
 
-Let's say we have a file on our Desktop called "document.txt". This is a text file (.txt extension). 
+.pull-left[
 
-How does the computer know where it is though? 
+We have a file on our Desktop called "document.txt". This is a text file (.txt extension). 
 
-- On a PC, it might live at `C:\Users\glenn\desktop\document.txt`.
+How does the computer know where it is?
 
-- Another file, "document2.txt" on the Desktop, would live at `C:\Users\glenn\desktop\document2.txt`.
+- On a PC, it might live at `C:\Users\glenn\Desktop\document.txt`.
 
-You need to be able to **uniquely identify** files within file paths. They either need unique names in a given location, or can have the same name in a different location.
+- Another file, "document2.txt", could live at `C:\Users\glenn\Desktop\document2.txt`.
+
+You need to be able to **uniquely identify** files within file paths. 
+
+They either need unique names in a given location, or can have the same name in a different location.
+]
+
+.pull-right[
+
+&lt;div class="figure" style="text-align: right"&gt;
+&lt;img src="../../img/file_path.png" alt="A flow chart of these files on the system." width="250" /&gt;
+&lt;p class="caption"&gt;A flow chart of these files on the system.&lt;/p&gt;
+&lt;/div&gt;
+
+]
 
 ---
 # How R Reads Files
 
 By default, R will either ask you to:
 
-- Specify the exact file path to access a file (e.g. `C:\Users\glenn\desktop\document.txt`), or...
+- Specify the **exact (absolute) file path** to access a file (e.g. `C:\Users\glenn\desktop\document.txt`), or...
 
 - Specify a file path **relative** to the **working directory**.
 
 Using a relative file path is best if you want your code to work on any computer besides the one you wrote your code in. That's because other computers aren't likely to have a `C:\Users\glenn\desktop` path.
 
-Where's the **working directory** though? This is where it gets awkward...
+Where's the **working directory** though?
 
 ---
 # The Working Directory
 
+
+
+.pull-left[
+
 - The working directory in R by default is wherever you open up an R file, or wherever R is installed if you open RStudio without first opening a file.
 
-- This is obviously awkard. **Depending on how you start R, it could be anywhere!**
+- **Depending on how you start R, it could be anywhere!**
 
 - RStudio Projects and the `here` package to the rescue!
 
-- If you open an RStudio Project, your working directory is wherever the project is.
+]
+
+.pull-right[
+
+&lt;div class="figure" style="text-align: right"&gt;
+&lt;img src="../../img/r-project.png" alt="Making an RStudio Project." width="250" /&gt;
+&lt;p class="caption"&gt;Making an RStudio Project.&lt;/p&gt;
+&lt;/div&gt;
+
+]
+
+- If you open an **RStudio Project**, your working directory is wherever the project is.
 
 - If you read files in with `here`, no matter where your working directory is right now, it reads files **relative** to where the RStudio Project lives.
 
@@ -107,14 +136,17 @@ read_csv(
   my_data/raw_data.csv"
 )
 
+
 # using relative paths
 read_csv("my_data/raw_data.csv")
+
+
 
 # using the here function
 read_csv(here("raw_data.csv"))
 ```
 
-*The last option is best for reproducibility.*
+*(3) is best for reproducibility.*
 
 ]
 

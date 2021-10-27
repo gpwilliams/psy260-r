@@ -13,10 +13,10 @@
 class: center, middle, inverse, title-slide
 
 # Managing Data in R
-## Manipulating Data in R
+## Data Wrangling in R
 ### Glenn Williams
 ### University of Sunderland
-### 2021-10-26 (updated: 2021-10-26)
+### 2021-10-27 (updated: 2021-10-27)
 
 ---
 
@@ -27,19 +27,20 @@ class: center, middle, inverse, title-slide
 
 # Loading our Cleaned Data
 
-Let's load up our cleaned data from the prior mini-lecture.
+Let's load up a data set.
 
 Remember, `read_csv()` takes one argument: where is your data!
 
 
 ```r
-cleaned_data &lt;- read_csv(here("data", "cleaned_data.csv"))
+data_a &lt;- read_csv(here("data", "factorial_data_a.csv"))
 ```
 
 ```
 ## Parsed with column specification:
 ## cols(
-##   subj_id = col_double(),
+##   row = col_double(),
+##   subj_id = col_character(),
 ##   list_id = col_double(),
 ##   item_id = col_double(),
 ##   A = col_character(),
@@ -47,12 +48,18 @@ cleaned_data &lt;- read_csv(here("data", "cleaned_data.csv"))
 ##   Y = col_double()
 ## )
 ```
-Nicely, you can see the hard work we did! The ID columns are all numbers now, and only the A and B columns are characters.
+
+The rest of our data is in a second table. Let's load this in too.
+
+
+```r
+data_b &lt;- read_csv(here("data", "factorial_data_b.csv"))
+```
 
 ---
 # Tidy Data
 
-Our data is in a tidy format.
+Our data is in a tidy/long format.
 
 &lt;div class="figure" style="text-align: center"&gt;
 &lt;img src="../../img/allison-horst_illustrations/tidy-data/tidydata_1.jpg" alt="Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst" width="700" /&gt;
@@ -60,7 +67,7 @@ Our data is in a tidy format.
 &lt;/div&gt;
 
 ---
-# Why Ensure Tidy Data?
+# Why Use Tidy Data?
 
 This makes cleaning, summarising, plotting, and modelling easier!
 
@@ -72,7 +79,7 @@ This makes cleaning, summarising, plotting, and modelling easier!
 ---
 # Common Data Processing Tasks
 
-The most common data manipulation problems can be handled effectively by `dplyr` in the tidyverse:
+The most common data manipulation problems can be handled effectively by `dplyr`, a package within the tidyverse:
 
 **One Table**:
 
@@ -103,51 +110,49 @@ Let's say we want to keep only observations from our first participant. This mig
 
 
 ```r
-filter(cleaned_data, subj_id == 1)
+filter(data_a, subj_id == 4)
 ```
 
 ```
-## # A tibble: 40 x 6
-##   subj_id list_id item_id A     B         Y
-##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
-## 1       1       4       1 a2    b2     234.
-## 2       1       4       2 a2    b2     295.
-## 3       1       4       3 a2    b2     285.
-## 4       1       4       4 a2    b2     258.
+## # A tibble: 40 x 7
+##     row subj_id list_id item_id A     B         Y
+##   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1   121 4             4       1 A2    B2     222.
+## 2   122 4             4       2 A2    B2     242.
+## 3   123 4             4       3 A2    B2     251.
+## 4   124 4             4       4 A2    B2     200.
 ## # … with 36 more rows
 ```
-We have only 40 observations now, all from subject 1.
+
+We have only 40 observations now, all from subject 4.
 
 ---
 # Combining Filter Conditions
 
-Maybe we want to check if subject 1 has any missing data in the variable Y. How might we do this? 
+Maybe we want to check if subject 4 has any missing data in the variable Y. How might we do this? 
 
 We could apply two separate filters, or combine our filter conditions using logical operations.
 
 
 ```r
-filter(cleaned_data, subj_id == 1 &amp; is.na(Y))
+filter(data_a, subj_id == 4 &amp; is.na(Y))
 ```
 
 ```
-## # A tibble: 4 x 6
-##   subj_id list_id item_id A     B         Y
-##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
-## 1       1       4      17 a1    b1       NA
-## 2       1       4      24 a1    b2       NA
-## 3       1       4      32 a2    b1       NA
-## 4       1       4      33 a2    b1       NA
+## # A tibble: 1 x 7
+##     row subj_id list_id item_id A     B         Y
+##   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1   147 4             4      27 A1    B2       NA
 ```
 
-Note that NAs are special in R, so we have to use is.na() which checks for any NA values explicitly, rather than Y == NA. (Confusing, I know...)
+Note that **NAs are special in R**, so we have to use is.na() which checks for any NA values explicitly, rather than Y == NA.
 
-*It looks like subject 1 has four missing responses!*
+*It looks like subject 4 has 1 missing response!*
 
 ---
 # Select
 
-Select works by defining the names of columns you'd like to keep, and in what order!
+Select works by defining the names of **columns you'd like to keep**, and in what order!
 
 &lt;div class="figure" style="text-align: center"&gt;
 &lt;img src="../../img/allison-horst_illustrations/general/dplyr_select.png" alt="Artwork by @allison_horst" width="500" /&gt;
@@ -157,68 +162,70 @@ Select works by defining the names of columns you'd like to keep, and in what or
 ---
 # Select
 
-Imagine we only want to keep the subject_ids.
+Imagine we only want to **keep the subject_id** column.
 
 
 ```r
-select(cleaned_data, subj_id)
+select(data_a, subj_id)
 ```
 
 ```
-## # A tibble: 2,400 x 1
+## # A tibble: 1,040 x 1
 ##   subj_id
-##     &lt;dbl&gt;
-## 1       1
-## 2       1
-## 3       1
-## 4       1
-## # … with 2,396 more rows
+##   &lt;chr&gt;  
+## 1 one    
+## 2 one    
+## 3 one    
+## 4 one    
+## # … with 1,036 more rows
 ```
 
 ---
 # Select
 
-Imagine we decide that we no longer care about the list_id. We simply put a minus before the column name.
+Imagine we want to **remove the list_id column**. We simply put a minus before the column name.
 
 
 ```r
-select(cleaned_data, -list_id)
+select(data_a, -list_id)
 ```
 
 ```
-## # A tibble: 2,400 x 5
-##   subj_id item_id A     B         Y
-##     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
-## 1       1       1 a2    b2     234.
-## 2       1       2 a2    b2     295.
-## 3       1       3 a2    b2     285.
-## 4       1       4 a2    b2     258.
-## # … with 2,396 more rows
+## # A tibble: 1,040 x 6
+##     row subj_id item_id A     B         Y
+##   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1     1 one           1 A2    B2     234.
+## 2     2 one           2 A2    B2     295.
+## 3     3 one           3 A2    B2     285.
+## 4     4 one           4 A2    B2     258.
+## # … with 1,036 more rows
 ```
 
 ---
 # Select
 
-Maybe we'd like to reorganise our columns so condition comes first and everything else after. We have to tell select we want A and B, and then everything else using `everything()`; a dplyr helper function
+Maybe we'd like to **reorganise our columns so columns A and B come first and everything else after**. Select A and B, and then everything else using `everything()`; a dplyr helper function.
 
 
 ```r
-select(cleaned_data, A, B, everything())
+select(data_a, A, B, everything())
 ```
 
 ```
-## # A tibble: 2,400 x 6
-##   A     B     subj_id list_id item_id     Y
-##   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
-## 1 a2    b2          1       4       1  234.
-## 2 a2    b2          1       4       2  295.
-## 3 a2    b2          1       4       3  285.
-## 4 a2    b2          1       4       4  258.
-## # … with 2,396 more rows
+## # A tibble: 1,040 x 7
+##   A     B       row subj_id list_id item_id     Y
+##   &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+## 1 A2    B2        1 one           4       1  234.
+## 2 A2    B2        2 one           4       2  295.
+## 3 A2    B2        3 one           4       3  285.
+## 4 A2    B2        4 one           4       4  258.
+## # … with 1,036 more rows
 ```
 
 ---
 # Muatate
+
+What if we want to **change our data**? Use `mutate()`.
 
 &lt;div class="figure" style="text-align: center"&gt;
 &lt;img src="../../img/allison-horst_illustrations/general/dplyr_mutate.png" alt="Artwork by @allison_horst" width="500" /&gt;
@@ -228,55 +235,79 @@ select(cleaned_data, A, B, everything())
 ---
 # Mutate
 
-With mutate, we can change our data in place. This means we can change the data within columns, or create new columns of data entirely.
+With mutate we can **change the data within columns**, or **create new columns** of data entirely.
 
-Let's create a new column. We might want to make a column which combines the strings of columns A and B. We'll use the paste function to do this, telling R to paste together strings from cells in columns A and B, and include a + sign between them.
+Let's create a new column. This will combine the text in columns A and B. We will use `paste()` to do this. The argument `sep = "+"` will add a plus between the entries.
 
 
 ```r
-mutate(cleaned_data, AB = paste(A, B, sep = "+"))
+mutate(data_a, AB = paste(A, B, sep = "+"))
 ```
 
 ```
-## # A tibble: 2,400 x 7
-##   subj_id list_id item_id A     B         Y AB   
-##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;
-## 1       1       4       1 a2    b2     234. a2+b2
-## 2       1       4       2 a2    b2     295. a2+b2
-## 3       1       4       3 a2    b2     285. a2+b2
-## 4       1       4       4 a2    b2     258. a2+b2
-## # … with 2,396 more rows
+## # A tibble: 1,040 x 8
+##     row subj_id list_id item_id A     B         Y AB   
+##   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;
+## 1     1 one           4       1 A2    B2     234. A2+B2
+## 2     2 one           4       2 A2    B2     295. A2+B2
+## 3     3 one           4       3 A2    B2     285. A2+B2
+## 4     4 one           4       4 A2    B2     258. A2+B2
+## # … with 1,036 more rows
 ```
 
 ---
 # Mutate
 
-Perhaps instead we want to change the data in a column in place? Let's multiply the scores for Y by 100.
+Perhaps instead we want to **change the data in a column in place**? Let's get the natural logarithm on the scores in Y.
 
 
 ```r
-mutate(cleaned_data, Y = Y*100)
+mutate(data_a, Y = log(Y))
 ```
 
 ```
-## # A tibble: 2,400 x 6
-##   subj_id list_id item_id A     B          Y
-##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
-## 1       1       4       1 a2    b2    23351.
-## 2       1       4       2 a2    b2    29467.
-## 3       1       4       3 a2    b2    28462.
-## 4       1       4       4 a2    b2    25798.
-## # … with 2,396 more rows
+## # A tibble: 1,040 x 7
+##     row subj_id list_id item_id A     B         Y
+##   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1     1 one           4       1 A2    B2     5.45
+## 2     2 one           4       2 A2    B2     5.69
+## 3     3 one           4       3 A2    B2     5.65
+## 4     4 one           4       4 A2    B2     5.55
+## # … with 1,036 more rows
 ```
+
+---
+# Converting Values Conditionally
+
+- **Conditionals** are statements we give the computer where we want it to do something **only if a condition is met**.
+
+- Using the tidyverse, we have a nice way to set these up using the function `case_when()`. It looks like this:
+
+
+```r
+case_when(
+  data == value ~ replacement,
+  TRUE ~ data
+)
+```
+
+- We give this function an argument relating to what **case** we care about (e.g. when the data is equal to a value).
+
+- To the right of the `~` we tell R what the value should be in this case.
+
+- We finally set a default value (`TRUE`), i.e. all other cases. Here, we tell R to just use the original value in the data.
+
 ---
 # Mutate
 
-Or we can use cases instead to change only specific values.
+- `case_when()` can work on individual vectors of data, or on columns within a data frame if we combine it with the `mutate()` function.
+
+- Here, we'll we'll recode an item in the item_id column. Let's change item 1 to item 20.
 
 
 ```r
 mutate(
-  cleaned_data, 
+  data_a, 
   item_id = case_when(
     item_id == 1 ~ 20,
     TRUE ~ item_id
@@ -285,57 +316,56 @@ mutate(
 ```
 
 ```
-## # A tibble: 2,400 x 6
-##   subj_id list_id item_id A     B         Y
-##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
-## 1       1       4      20 a2    b2     234.
-## 2       1       4       2 a2    b2     295.
-## 3       1       4       3 a2    b2     285.
-## 4       1       4       4 a2    b2     258.
-## # … with 2,396 more rows
+## # A tibble: 1,040 x 7
+##     row subj_id list_id item_id A     B         Y
+##   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1     1 one           4      20 A2    B2     234.
+## 2     2 one           4       2 A2    B2     295.
+## 3     3 one           4       3 A2    B2     285.
+## 4     4 one           4       4 A2    B2     258.
+## # … with 1,036 more rows
 ```
 
 ---
 # Bind Rows
 
-Let's imagine we had our data stored in two separate tables. How might we join the rows of the tables together?
-
-Making this easy, we'll just take out the first two rows of our data and all their columns.
-
-We'll then join the rows together using `bind_rows()`.
+Our data is stored in two separate tables. Let's join them together using `bind_rows()`.
 
 
 ```r
-# get our data
-row_one &lt;- cleaned_data[1, ]
-row_two &lt;- cleaned_data[2, ]
-
 # bind it together
-bind_rows(row_one, row_two)
+combined_data &lt;- bind_rows(data_a, data_b)
+
+# print it out
+combined_data
 ```
 
 ```
-## # A tibble: 2 x 6
-##   subj_id list_id item_id A     B         Y
-##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
-## 1       1       4       1 a2    b2     234.
-## 2       1       4       2 a2    b2     295.
+## # A tibble: 2,400 x 7
+##     row subj_id list_id item_id A     B         Y
+##   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1     1 one           4       1 A2    B2     234.
+## 2     2 one           4       2 A2    B2     295.
+## 3     3 one           4       3 A2    B2     285.
+## 4     4 one           4       4 A2    B2     258.
+## # … with 2,396 more rows
 ```
+Now our data has a total of 2400 rows. We've combined the tables together!
 
 ---
 # Bind Cols
 
-We have a similar process when we bind columns.
+We can bind columns together in a similar way.
 
-First, we'll extract the columns A and B, both only having the first 4 rows of our data each. 
+- First, we'll extract the columns A and B, both only having the first 4 rows of our data each. 
 
-Then to show how the function works, we'll bind these objects together using `bind_cols()`.
+- Then to show how the function works, we'll bind these objects together using `bind_cols()`.
 
 
 ```r
 # get our data
-col_a &lt;- cleaned_data[1:4, "A"]
-col_b &lt;- cleaned_data[1:4, "B"]
+col_a &lt;- combined_data[1:4, "A"]
+col_b &lt;- combined_data[1:4, "B"]
 
 # bind it together
 bind_cols(col_a, col_b)
@@ -345,10 +375,10 @@ bind_cols(col_a, col_b)
 ## # A tibble: 4 x 2
 ##   A     B    
 ##   &lt;chr&gt; &lt;chr&gt;
-## 1 a2    b2   
-## 2 a2    b2   
-## 3 a2    b2   
-## 4 a2    b2
+## 1 A2    B2   
+## 2 A2    B2   
+## 3 A2    B2   
+## 4 A2    B2
 ```
 
 ---
@@ -356,17 +386,17 @@ bind_cols(col_a, col_b)
 
 We know...
 
-- What tidy data is, and why we want our data to be in this format.
+- What **tidy data** is, and why we want our data to be in this format.
 
-- How to manipulate one-table data for cleaning and preparation for analysis/graphing, including:
+- How to **manipulate one-table data** for cleaning and preparation for analysis/graphing, including:
 
-    - How to filter observations out of our data set.
+    - How to **filter** observations out of our data set.
 
-    - How to select particular columns in our data set.
+    - How to **select** particular columns in our data set.
 
-    - How to mutate or modify existing data and even create new columns of data.
+    - How to **mutate** or modify existing data and even create new columns of data.
 
-    - How to bind rows and columns together from multiple tables.
+- How to bind rows and columns together from **multiple tables**.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

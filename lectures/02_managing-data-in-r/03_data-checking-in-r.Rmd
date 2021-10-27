@@ -3,7 +3,7 @@ title: "Managing Data in R"
 subtitle: "Data Checking in R"
 author: "Glenn Williams"
 institute: "University of Sunderland"
-date: "2021-10-26 (updated: `r Sys.Date()`)"
+date: "2021-10-27 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -35,7 +35,7 @@ colorise <- function(x, color) {
 
 # Understanding our Data
 
-To have a good understanding of how you should clean and analyse your data, you have to understand how your data was made. Ask yourself:
+To have a good understanding of how you should **clean and analyse your data**, you have to **understand how your data was made**. Ask yourself:
 
 - How was the study performed?
 
@@ -52,10 +52,18 @@ Answering these questions makes you understand your data better, so you'll make 
 ---
 # Reading in Data
 
-In the data folder of this repository is a file called factorial_data.csv. If I'm working from this project folder I can read it in as follows:
+In the data folder of this repository are files called **factorial_data_a.csv** and **factorial_data_b.csv**. If I'm working from this project folder I can read it in and combine the data as follows:
 
-```{r read-csv}
-raw_data <- read_csv(here("data", "factorial_data.csv"))
+```{r read-csv, message = FALSE}
+# read the data
+data_a <- read_csv(here("data", "factorial_data_a.csv"))
+data_b <- read_csv(here("data", "factorial_data_b.csv"))
+
+# combine the data
+combined_data <- bind_rows(data_a, data_b)
+
+# print it
+combined_data
 ```
 
 Let's take a look at this data so we can understand it...
@@ -66,7 +74,7 @@ Let's take a look at this data so we can understand it...
 What does the data look like? The `head()` function allows you to see the top of your data set.
 
 ```{r raw-data-inspect}
-head(raw_data)
+head(combined_data)
 ```
 
 *The function `tail()` does the opposite to `head()`. Try it out!*
@@ -95,14 +103,29 @@ We should check that the data is coded as expected.
 
 - Our first step to understanding our data should be to **check that we have read it into R correctly**, and that `read_csv()` has sensibly guessed at our data types.
 
-- We can do this using the `glimpse()` function. This gives us a **look at our data on its side**, so we can see how our data are stored and how they are coded. There's a few problems here...
+- We can do this using the `glimpse()` function. This gives us a **look at our data on its side**, so we can see how our data are stored and how they are coded.
 
 ```{r inspect-data-types}
-glimpse(raw_data)
+glimpse(combined_data)
 ```
 
+There's a few problems with our coding system here. Subject ID should probably be numeric, and we need consistent codes for A and B.
+
 ---
-# Fixing Problems
+# Inspecting Data
+
+- We can get a summary of our data, albeit in a confusing printout, using `summary()`.
+
+- Here, we'll reduce the summary only to our numeric columns for easier presentation (selecting columns, only if they are numeric).
+
+```{r summary-of-the-data}
+summary(select_if(combined_data, is.numeric))
+```
+
+Our Y outcome, reaction time, seems to have a minimum of a negative value. We need to get rid of this clear error.
+
+---
+# Inspecting Codes
 
 Our list IDs and Item IDs are properly coded, but we should check our variables A and B, which indicate the conditions of the study. 
 
@@ -113,53 +136,33 @@ Our list IDs and Item IDs are properly coded, but we should check our variables 
 Which unique values do we have here?
 
 ```{r unique-A-and-B}
-unique(raw_data$A)
-unique(raw_data$B)
+unique(combined_data$A)
+unique(combined_data$B)
 ```
 
 It looks like we have a mix of issues here. R is **case sensitive, meaning A is different to a**. We can make some initial fixes here by making everything the same case. Do this by using the `tolower()` function.
 
 ---
-# Fixing Remaining Problems
+# Fixing Problems
 
 Set the values in A and B to lower case.
 
 ```{r unique-A-and-B-tolower}
 # change values
-raw_data$A <- tolower(raw_data$A)
-raw_data$B <- tolower(raw_data$B)
+combined_data$A <- tolower(combined_data$A)
+combined_data$B <- tolower(combined_data$B)
 ```
 
 How does it look?
 
 ```{r inspect-unique-A-and-B-tolower}
-unique(raw_data$A)
-unique(raw_data$B)
+unique(combined_data$A)
+unique(combined_data$B)
 ```
 
 We've fixed the codes for variable A, but variable B still has some problems. Someone has mistakenly entered bb2 and bb1 as codes.
 
 Let's change these!
-
----
-# Converting Values Conditionally
-
-- **Conditionals** are statements we give the computer where we want it to do something **only if a condition is met**.
-
-- Using the tidyverse, we have a nice way to set these up using the function `case_when()`. It looks like this:
-
-```{r case-when-example, eval = FALSE}
-case_when(
-  data == value ~ replacement,
-  TRUE ~ data
-)
-```
-
-- We give this function an argument relating to what **case** we care about (e.g. when the data is equal to a value).
-
-- To the right of the `~` we tell R what the value should be in this case.
-
-- We finally set a default value (`TRUE`), i.e. all other cases. Here, we tell R to just use the original value in the data.
 
 ---
 # Fixing Remaining Problems
@@ -169,17 +172,20 @@ We'll use the `case_when()` function again here.
 If column B has the value "bb1" change it to "b1", otherwise if it has "bb2" change it to "b2", else just leave values as they are.
 
 ```{r case_when-B}
-raw_data$B <- case_when(
-  raw_data$B == "bb1" ~ "b1",
-  raw_data$B == "bb2" ~ "b2",
-  TRUE ~ raw_data$B
-)
+combined_data <- mutate(
+  combined_data,
+  B = case_when(
+    B == "bb1" ~ "b1",
+    B == "bb2" ~ "b2",
+    TRUE ~ B
+  )
+) 
 ```
 
 How do the values look now?
 
 ```{r inspect-case_when-B}
-unique(raw_data$B)
+unique(combined_data$B)
 ```
 
 Nice and consistent!
@@ -190,7 +196,7 @@ Nice and consistent!
 - We can see that subject IDs are stored as characters. Why is that? Let's see what unique values we have here.
 
 ```{r inspect-subject-id}
-unique(raw_data$subj_id)
+unique(combined_data$subj_id)
 ```
 
 We have a mix of integers, and the two values "one" and "last" as IDs. We need to make this consistent.
@@ -201,17 +207,18 @@ We have a mix of integers, and the two values "one" and "last" as IDs. We need t
 Let's change the "one" and "last" values to more sensible values. Notice we have to stick with characters for now so the column has the same data types in it.
 
 ```{r change-subj-id}
-raw_data$subj_id <- case_when(
-  raw_data$subj_id == "one" ~ "1",
-  raw_data$subj_id == "last" ~ "60",
-  TRUE ~ raw_data$subj_id
+combined_data$subj_id <- case_when(
+  combined_data$subj_id == "one" ~ "1",
+  combined_data$subj_id == "twenty-eight" ~ "28",
+  combined_data$subj_id == "last" ~ "60",
+  TRUE ~ combined_data$subj_id
 )
 ```
 
 How have the values changed?
 
 ```{r check-subj-id}
-unique(raw_data$subj_id)
+unique(combined_data$subj_id)
 ```
 
 Nicely, the numbers now go from 1 to 60! But they're still characters.
@@ -222,18 +229,32 @@ Nicely, the numbers now go from 1 to 60! But they're still characters.
 We can convert between data types using the `as.` functions. We have e.g. `as.character()`, `as.factor()`, and `as.numeric()`. We'll use `as.numeric()` to make these strings into numeric values now they're consistently coded.
 
 ```{r convert-data-type}
-raw_data$subj_id <- as.numeric(raw_data$subj_id)
+combined_data$subj_id <- as.numeric(combined_data$subj_id)
 ```
 
-How do the values look? Check the data again.
+How do the values look? Check the data again. All good!
 
 ```{r inspect-converted-data}
-glimpse(raw_data)
+glimpse(combined_data)
 ```
 
-All good!
+---
+# Fixing Remaining Problems
+
+Finally, we can't have negative reaction times. Let's remove any reaction times below 100ms under the assumption they're far too quick for this task.
+
+```{r remove-negative-rts}
+# filter only to RTs above 100ms
+combined_data <- filter(combined_data, Y > 100)
+
+# inspect it
+combined_data
+```
+
+All done!
 
 ---
+
 # Save our Cleaned Data
 
 Finally, we did all that work with our data. To save repeating all these steps again, we can save it to an external file. We do this using 'write_csv()`.
@@ -242,11 +263,11 @@ Let's save our file in the data folder. This takes two arguments:
 
 1. Which R object will you save to file?
 
-2. Where should you save it?
+2. Where should you save it? What will the data be called?
 
 ```{r cleaned-data-save}
 write_csv(
-  raw_data, 
+  combined_data, 
   here("data", "cleaned_data.csv")
 )
 ```
@@ -265,6 +286,8 @@ We know...
 - how to find out how our data are coded.
 
 - how to identify unique elements of our data.
+
+- how to get a summary of our data.
 
 - how to convert and clean up data.
 
