@@ -3,7 +3,7 @@ title: "Using R for Data Processing"
 subtitle: "Getting Started in R"
 author: "Glenn Williams"
 institute: "University of Sunderland"
-date: "2020-09-14 (updated: `r Sys.Date()`)"
+date: "2021-10-25 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -38,7 +38,7 @@ colorise <- function(x, color) {
 
 - Choose a mirror from which to download R. Any will do.
 
-- Select the correct distribution for your operating system and then click through to **install R for the first time** if on Windows, or just click the most recent install version for Mac/Linux.
+- Select the distribution for your operating system. On Windows, click **install R for the first time**. On Mac/Linux click the most recent install version.
 
 - You'll see a new page; For Windows, click on **"Download R [version number] for Windows."**.
 ]
@@ -85,7 +85,7 @@ knitr::include_graphics(c(
 ---
 # Getting Started in the Cloud
 
-Alternatively, we can use [RStudio Cloud](https://rstudio.cloud) to do everything online. For consistency.
+Alternatively, we can use [RStudio Cloud](https://rstudio.cloud) to do everything online.
 
 .pull-left[
 - This may be the **easiest** route, especially if your system is locked down (e.g. on University controlled computers).
@@ -103,7 +103,7 @@ knitr::include_graphics(c(
 
 - **Works with Chromebooks** etc. that do not allow local installs of R.
 
-- Please note that [rstudio.cloud](https://rstudio.cloud/) **has usage limits**. You can only do 15 hours per month in it. If you can, get a local install.
+- Please note that [rstudio.cloud](https://rstudio.cloud/) **has usage limits**. You can only work for 15 hours per month in it at the free tier. If you can, get a local install.
 
 Sign up for an account by clicking sign up on the [homepage](https://rstudio.cloud/). 
 
@@ -141,7 +141,7 @@ knitr::include_graphics(c(
 ```
 
 ---
-# Understanding the Editor?
+# Understanding the Editor
 
 .pull-left[
 ```{r rstudio-interface2, echo = FALSE, out.width = 450, fig.cap="The RStudio Interface"}
@@ -163,9 +163,9 @@ knitr::include_graphics(c(
 **Files/Plots/Help/Viewer** (bottom-right): See any plots in your **working dirctory (i.e. in your project)**, view any recently created plots or help on how to use R functions.
 
 ---
-# Making a Notebook
+# Working with Notebooks
 
-Now, we can make a notebook to get started in R. Go to **File $\rightarrow$ New File $\rightarrow$ R Notebook**. Give your file a title by changing `title:` at the top. Then save it with a sensible name in your folder.
+After making a notebook (by clicking **File $\rightarrow$ New File $\rightarrow$ R Notebook**). Give your notebook a title by changing the text following `title:` at the top.
 
 Notebooks are made up of:
 
@@ -188,7 +188,7 @@ When you save your notebook, you can **preview it**. It will create an HTML file
 ---
 # Preview Your Notebook
 
-Make sure you press play on your code chunks. When done, save your work (Command/Ctrl + S) and **click Preview**. You should see this:
+Make sure you press play on your code chunks. This will run your code and show you the output. When done, save your work (Command/Ctrl + S) and **click Preview**. You should see this:
 
 ```{r r-notebook-output, echo = FALSE, out.width = 350, fig.align="center"}
 knitr::include_graphics(c(
@@ -214,7 +214,7 @@ We could do it by hand:
 .pull-right[
 Or we could write a function, and apply this to our numbers:
 
-```{r}
+```{r baisc-addition-function}
 add_one <- function(x) {x + 1}
 
 add_one(1)
@@ -226,13 +226,13 @@ add_one(3)
 ---
 # Making Life Easy with Pre-built Functions
 
-Some users know that functions they write can be useful to others, so they put them together in a **package**. 
+Some developers make functions available to others as a **package**. 
 
-- The two packages (or pacakge of packages) we'll use are `tidyverse` and `here`. 
+- The two packages (or package of packages) we'll use are `tidyverse` and `here`. 
 
     - **Tidyverse**: has several functions for making working with data and creating plots easier.
 
-    - **Here**: makes your R-scripts read and write files relative to where the project is. This means you can write scripts that work on any PC, and not just your own.
+    - **Here**: makes your R-scripts read and write files relative to where the project is. This means you can write scripts that work on any PC (not just your own).
     
 This will be made clear once we start using these packages.
 
@@ -257,7 +257,7 @@ library("here")
 ---
 # What Next?
 
-Now we know the basics, we'll perform some calculations in R.
+Now we know the basics of R and RStudio, we'll learn how to code in R.
 
 ```{r bye-gif, echo=FALSE, out.width = 450, fig.align="center"}
 knitr::include_graphics("https://media.giphy.com/media/kaBU6pgv0OsPHz2yxy/giphy.gif")

@@ -1,0 +1,63 @@
+---
+title: "PSY260 - Research Methods and Analysis"
+subtitle: "R Workshop 2 - Processing Data in R"
+output: 
+  html_document:
+    css: "../../style.css"
+    toc: true
+    toc_float: true
+    theme: united
+    highlight: tango
+author: "Dr Glenn Williams"
+date: "2021-10-25 (Updated `r Sys.Date()`)"
+---
+
+# Instructions for this Week's Workshop
+
+Each week you will learn about R from lectures before doing further learning in each workshop. In the workshops you will read about each lesson on R in more detail before completing some additional exercises and questions that rely on you using R. Each week, the exercises and questions can be found within the seminars folder for a given lesson under the file name **questions.Rmd**.
+
+This week we will look at working with functions and using R to work with data saved to an external .csv file. This is a very common use case for R. After reading the background on the content in this file, move on to completing the exercises and questions in **seminars/02_processing-data-in-r/questions.Rmd**.
+
+## Installing Packages and Loading Data
+
+In the main, PSY260-r folder, you'll notice that theres a subfolder called "data". This contains a number of made-up data files that we'll use in the lectures and workshops. 
+
+The data we need this week is called **seminar_two_data.csv**. This data is made up, but we can assume it looks at how quickly people can respond to a target on screen by pressing a button after having had caffeine or not, and when responding with their **dominant or non-dominant hands**. (We might assume people will be faster to respond when on caffeine and when using their dominant hand.) The dependent variable is thus reaction time in milliseconds and the independent variables are caffeine and response hand. We also have ages for our participants.
+
+Open up the questions file. This has one code chunk in it that you have to run if you aren't on a University computer. If you haven't installed the `tidyverse` and `here` packages, do so only once per computer (or per project in RStudio Cloud) as follows.
+
+To do this, **copy the code from this code chunk and paste it in the console, then press enter**. This should install the packages we need for this workshop.
+
+**Please do not try to run this chunk as the 'eval = FALSE' chunk option means it won't be evaluated, and the code won't run**. I've kept this here to ensure that we don't keep re-installing packages every time you try to run this file.
+
+```{r install-packages, eval = FALSE}
+install.packages("tidyverse")
+install.packages("here")
+```
+
+Each time we start R, we have to load the installed packages to use the functions from them. To do this, we use the `library()` function in R. We want to load up our newly installed tidyverse and here packages. Do this by adding a code chunk and simply pressing play on that chunk. **This has been done for you in the questions file**.
+
+```{r load-packages, message = FALSE}
+library("tidyverse")
+library("here")
+```
+
+Finally, any time we want to load data into R, we need to know a few things: Where is the data relative to our working directory, and in what format is the data stored in? 
+
+Knowing the file format is important because R expects us to tell it the file name we want to read, including it's file extension (e.g. .txt, .csv, .RData). Additionally, the functions for reading in data files in R tend to be specialised for that specific file format. For consistency, we'll mainly use .csv files in this course. Now, we know that we'll need the function `read_csv()` from the `tidyverse` package, and we need to add ".csv" to the end of our file name.
+
+Next, knowing where the file is located relative to our working directory is important because R is strict in asking us to state exactly where on our computer the file is located. When we use RStudio Projects R automatically makes our working directory the folder where the project lives. We can then specify the location of our data file **relative to the working directory**. The `here` package makes working with these **relative file paths** easier in R. With this, we know we can pass the sub-folder where the data lives relative to our working directory, along with the data name to the `here()` function as follows: `here("data", "seminar_two_data.csv")`. This function call transforms this into a more complete, computer-readable path for R. Try pasting this function call directly in the console to see how it works.
+
+Combining this knowledge together, we can read our data from this location and assign it to a variable for use in R as follows:
+
+```{r load-data, message = FALSE}
+raw_data <- read_csv(here("data", "seminar_two_data.csv"))
+```
+
+**This has been done for you in the questions file**.
+
+# Tasks for this Workshop
+
+Make sure you have the `tidyverse` and `here` packages installed on your computer using the steps above.
+
+Then move on to the questions file. Run the two chunks which load packages and load the data and attempt the exercises before the additional questions.

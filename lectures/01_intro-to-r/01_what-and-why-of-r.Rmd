@@ -3,7 +3,7 @@ title: "Using R for Data Processing"
 subtitle: "The What and Why of R"
 author: "Glenn Williams"
 institute: "University of Sunderland"
-date: "2020-09-14 (updated: `r Sys.Date()`)"
+date: "2021-10-25 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
     lib_dir: libs

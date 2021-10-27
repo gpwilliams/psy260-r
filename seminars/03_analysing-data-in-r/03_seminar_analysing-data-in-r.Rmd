@@ -1,0 +1,56 @@
+---
+title: "PSY260 - Research Methods and Analysis"
+subtitle: "R Workshop 3 - Analysing Data in R"
+output: 
+  html_document:
+    css: "../../style.css"
+    toc: true
+    toc_float: true
+    theme: united
+    highlight: tango
+author: "Dr Glenn Williams"
+date: "2020-10-25 (Updated `r Sys.Date()`)"
+---
+
+# Instructions for this Week's Workshop
+
+Each week you will learn about R from lectures before doing further learning in each workshop. In the workshops you will read about each lesson on R in more detail before completing some additional exercises and questions that rely on you using R. Each week, the exercises and questions can be found within the seminars folder for a given lesson under the file name **questions.Rmd**.
+
+## Installing Packages and Loading Data
+
+This week we will look at analysing and summarising our data in R. After reading the background on the content in this file, move on to completing the exercises and questions in **seminars/03_analysing-data-in-r/questions.Rmd**.
+
+We will work with the **seminar_three_data.csv** data set in the "data" sub-folder within the PSY260-r directory.
+
+This data in **seminar_three_data.csv** is made up, but we can assume this comes from a Stroop task. Here, words are presented either with congruent colour and text (e.g. <span style="color: purple;">purple</span>), or incongruent colour and text (e.g. <span style="color: purple;">green</span>). The participants had to name the colour of the ink (rather than read the word). It is hypothesised that items presented in the incongruent condition (i.e. where ink colour and colour name don't match) would be more difficult to process than those presented in the congruent condition (i.e. where the ink colour and colour name match), leading to slower reaction times in this case.
+
+We have columns as follows:
+
+- subj_id: numerical label for each participant.
+
+- list_id: numerical label for the randomisation of words within participants.
+
+- item_id: numerical label for the number corresponding to each word.
+
+- A: Whether or not words were presented in a congruent or incongruent colour. A1 = congruent, A2 = incongruent. 
+
+- Y: reaction time in milliseconds (the dependent variable).
+
+Each participant completes 40 trials during the experiment. This data set is already cleaned and ready for processing (unless you'd like to rename anything).
+
+Open up the questions file. This has one code chunk in it that you have to run if you aren't on a University computer. If you haven't installed the `tidyverse` and `here` packages, **do so only once per computer (or per project in RStudio Cloud)**. For instructions on how to do this, please see the materials from the previous workshop.
+
+Each time we start R, we have to load the installed packages to use the functions from them. To do this, we use the `library()` function in R. We want to load up our newly installed tidyverse and here packages. Do this by adding a code chunk and simply pressing play on that chunk. **This has been done for you in the questions file**.
+
+```{r loading-packages, message = FALSE}
+library(tidyverse)
+library(here)
+```
+
+Next, we will load in our data in the same way that we did in the previous workshop.
+
+```{r read-data}
+raw_data <- read_csv(here("data", "seminar_three_data.csv"))
+```
+
+**Note**: If you get an error with this code, try installing the packages first using e.g. `install.packages("tidyverse)` and `install.packages("here")`. Remember, you only need to do this once per computer or RStudio Cloud project.

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Summarising and Plotting Data in R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Glenn Williams" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Summarising and Plotting Data in R
+## Visualising Data
+### Glenn Williams
+### University of Sunderland
+### 2021-10-27 (updated: 2021-10-27)
+
+---
+
+
+&lt;style type="text/css"&gt;
+.left-code {
+  width: 58%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 40%;
+  float: right;
+  padding-left: 1%;
+}
+&lt;/style&gt;
+
+
+
+
+
+# Data Visualisation
+
+What's a better way to summarise the relationship between height and mass in our star wars data set?
+
+.pull-left[
+
+We could report a correlation and **some averages**, though that's going to be hard to picture.
+
+
+```
+## # A tibble: 31 x 3
+##   species  mean_height mean_weight
+##   &lt;chr&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+## 1 Aleena            79          15
+## 2 Besalisk         198         102
+## 3 Cerean           198          82
+## 4 Clawdite         168          55
+## # … with 27 more rows
+```
+
+]
+
+.pull-right[
+
+So **plots** do a lot of the work.
+
+&lt;img src="02_data-visualisation-in-r_files/figure-html/plot-hw-1.png" width="75%" /&gt;
+
+]
+
+*Note below I excluded Jabba the Hutt who is **short and massive***.
+
+---
+# A Grammar of Graphics
+
+R has an inbuilt (base) plotting system, but we'll use **`ggplot2`** from the `tidyverse`.
+
+`ggplot2` has a consistent method of building up plots layer by layer.
+
+We have to:
+
+- Define how we want to **map** the data onto the plot.
+
+- Define the **geom**etric shapes we want to use to draw the data.
+
+- Define any **aes**thetics for the look for our plot.
+
+---
+# Grammar of Graphics with ggplot2
+
+.left-code[
+
+As with all R functions, we need to pass arguments to ggplot2. Let's start with our data:
+
+
+```r
+ggplot(data = starwars)
+```
+
+That's not too exciting, but we can see we've made the beginninings of a plot (the background).
+
+]
+
+.right-plot[
+![](02_data-visualisation-in-r_files/figure-html/blank-data-1.png)
+]
+
+---
+# Mapping our Data
+
+.left-code[
+
+Then we can define how we want to map data onto aesthetics.
+
+Here, we tell R to map the mass and height data from starwars onto the X and Y axes respectively.
+
+
+```r
+ggplot(
+  data = starwars, 
+  mapping = aes(x = mass, y = height)
+)
+```
+
+That looks a little better. Now we know the ranges of our data!
+
+]
+
+.right-plot[
+![](02_data-visualisation-in-r_files/figure-html/blank-hw-1.png)
+]
+
+---
+# Adding Geoms
+
+.left-code[
+
+Next, we can tell R how we want to present the data on screen in a new **layer**.
+
+We do this by defining the **geometric shapes** of the data, or geoms.
+
+
+```r
+ggplot(
+  data = starwars, 
+  mapping = aes(x = mass, y = height)
+) +
+  geom_point()
+```
+
+Now we can see how mass and height relate to one another.
+
+]
+
+.right-plot[
+![](02_data-visualisation-in-r_files/figure-html/blank-hw-point-1.png)
+]
+
+---
+# Differentiating Data
+
+.left-code[
+
+We can add additional arguments to our mappings, for example **mapping colour onto sex**.
+
+
+```r
+ggplot(
+  data = starwars, 
+  mapping = aes(x = mass, y = height, colour = sex)
+) +
+  geom_point()
+```
+
+As you can see, we get different groups of data depending upon the sex of the individual.
+
+]
+
+.right-plot[
+![](02_data-visualisation-in-r_files/figure-html/blank-hw-point-col-1.png)
+]
+
+---
+# Filtering and Zooming
+
+.left-code[
+
+It's difficult to see the pattern between height and mass due to an extreme outlier.
+
+We can exclude this individual either by (a) Filtering observations first, (b) restricting limits on the axis of the plot using, e.g. `xlim()` in `coord_cartesian()`.
+
+
+```r
+ggplot(
+  data = starwars, 
+  mapping = aes(x = mass, y = height, colour = sex)
+) +
+  geom_point() +
+  coord_cartesian(xlim = c(0, 180))
+```
+
+]
+
+.right-plot[
+![](02_data-visualisation-in-r_files/figure-html/filter-plot-1.png)
+]
+
+---
+# Filtering and Zooming
+
+.left-code[
+
+We can exclude this individual either by:
+
+- Chaining `tidyverse` functions together. Here, we'll filter Jabba from the data before plotting.
+
+
+```r
+starwars %&gt;% 
+  filter(mass &lt; 180) %&gt;% 
+  ggplot(
+    mapping = aes(x = mass, y = height, colour = sex)
+  ) +
+  geom_point()
+```
+
+We pipe the data into the filter function which passes the filtered data to ggplot.
+
+*Warning: we pipe data using `%&gt;%` but build plot layers with `+`. Don't confuse the two.*
+
+]
+
+.right-plot[
+![](02_data-visualisation-in-r_files/figure-html/filter-data-1.png)
+
+]
+
+---
+# Setting Fixed Colours
+
+.left-code[
+
+What if you want all points to be the same colour? Don't map it to a group. Set it outside the mapping.
+
+
+```r
+starwars %&gt;% 
+  filter(mass &lt; 180) %&gt;% 
+  ggplot(mapping = aes(x = mass, y = height)) +
+  geom_point(colour = "purple")
+```
+
+Here, colour is defined in the `geom_point()` call. Colour only applies to this geometric shape.
+
+This overrides any specific group mappings.
+
+]
+
+.right-plot[
+![](02_data-visualisation-in-r_files/figure-html/filter-data-fixedcol-geom-1.png)
+
+]
+
+---
+# Continuous Colour
+
+.left-code[
+
+`ggplot` is pretty smart in how it handles colour. Categorical variables get indiviudal colours, while scales get continuous palettes.
+
+
+```r
+starwars %&gt;% 
+  filter(mass &lt; 180) %&gt;% 
+  ggplot(
+    mapping = aes(
+      x = mass, 
+      y = height,
+      colour = birth_year
+    )
+  ) +
+  geom_point()
+```
+
+Now the legend doesn't have categories, but a scale.
+
+]
+
+.right-plot[
+![](02_data-visualisation-in-r_files/figure-html/filter-data-contcol-1.png)
+
+]
+
+---
+# Combining Geoms
+
+.left-code[
+
+We can add geoms like a line of best fit with 95% confidence intervals!
+
+Without getting too into it, this is defined as a **linear model** in a **smoothing function**, hence we use `geom_smooth()`.
+
+
+```r
+starwars %&gt;% 
+  filter(mass &lt; 180) %&gt;% 
+  ggplot(
+    mapping = aes(
+      x = mass, 
+      y = height,
+      colour = birth_year
+    )
+  ) +
+  geom_point() +
+  geom_smooth(
+    method = "lm", 
+    formula = "y ~ x"
+  )
+```
+
+]
+
+.right-plot[
+![](02_data-visualisation-in-r_files/figure-html/filter-data-smooth-1.png)
+
+]
+
+---
+# Some Other Geoms
+## Bar Plots for Count Data
+
+.left-code[
+
+For a **bar plot of count data**, we just need to pass a column of data to the aesthetics, and say it should appear on the x-axis.
+
+We then use `geom_bar()` to make the bar plot.
+
+This is what this looks like for counting up characters of different sexes.
+
+
+```r
+ggplot(data = starwars, mapping = aes(x = sex)) +
+  geom_bar()
+```
+
+]
+
+.right-plot[
+![](02_data-visualisation-in-r_files/figure-html/barplot-1.png)
+]
+
+---
+# Some Other Geoms
+## Box Plots
+
+.left-code[
+
+What if we want to display a **continuous variable** across groups? A **boxplot** is handy here.
+
+Let's get heights of characters from each sex. Now, we just add height to the y-axis, and change `geom_bar()` to `geom_boxplot()`
+
+
+```r
+ggplot(
+  data = starwars, 
+  mapping = aes(x = sex,y = height)
+) +
+  geom_boxplot()
+```
+
+Remember, the dark line is the median, the box the middle 50% of scores. 
+
+]
+
+.right-plot[
+![](02_data-visualisation-in-r_files/figure-html/boxplot-1.png)
+
+Lines represent the remainder, and dots represent outliers.
+
+]
+
+---
+# Saving Plots
+
+We can save graphics from R using a number of methods, but for plots produced in `ggplot2`, we can use `ggsave()`.
+
+We can either make our plot without assigning it to a variable, and then save it as follows:
+
+
+```r
+ggplot(data = starwars, aes(x = height)) + 
+  geom_density()
+
+ggsave(here("myplot.png"), last_plot())
+```
+
+Or we can make a plot and assign it to a variable, and save it as follows:
+
+
+```r
+my_plot &lt;- ggplot(data = starwars, aes(x = height)) + 
+  geom_density()
+
+ggsave(here("myplot.png"), my_plot)
+```
+
+I prefer the latter. Why? Once a plot is stored as a variable, you can change it by adding `ggplot` arguments! For example...
+
+
+```r
+my_plot + coord_cartesian(xlim = c(0, 180))
+```
+
+---
+# Recap
+
+We've learned...
+
+- About the importance of graphs for communicating findings.
+
+- About a **grammar of graphics** for defining plots in code.
+
+- How to **map** data onto a plot, how to display that data with **geom**etric shapes, and how to control the **aes**thetics of the plot.
+
+- How to build up a plot layer by layer in `ggplot2`.
+
+- How to use ggplot functions to **differentiate data**.
+
+- How to use ggplot functions to filter data, or how to **chain functions together** from other packages.
+
+- How to **use different geoms** to summarise your data in different ways.
+
+- How to **save your plots**.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

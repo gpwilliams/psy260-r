@@ -1,0 +1,294 @@
+---
+title: "Managing Data in R"
+subtitle: "Data Checking in R"
+author: "Glenn Williams"
+institute: "University of Sunderland"
+date: "2021-10-27 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+set.seed(100)
+library(tidyverse)
+library(here)
+
+options(tibble.print_min = 4)
+```
+
+```{r functions, include = FALSE}
+colorise <- function(x, color) {
+  if (knitr::is_latex_output()) {
+    sprintf("\\textcolor{%s}{%s}", color, x)
+  } else if (knitr::is_html_output()) {
+    sprintf("<span style='color: %s;'>%s</span>", color, 
+      x)
+  } else x
+}
+```
+
+# Understanding our Data
+
+To have a good understanding of how you should **clean and analyse your data**, you have to **understand how your data was made**. Ask yourself:
+
+- How was the study performed?
+
+- What do the variables in the data set represent?
+
+- What levels can these variables have?
+
+- Was a consistent coding scheme used throughout?
+
+- How is missing data coded (if at all)?
+
+Answering these questions makes you understand your data better, so you'll make fewer mistakes and do a better job of analysing it.
+
+---
+# Reading in Data
+
+In the data folder of this repository are files called **factorial_data_a.csv** and **factorial_data_b.csv**. If I'm working from this project folder I can read it in and combine the data as follows:
+
+```{r read-csv, message = FALSE}
+# read the data
+data_a <- read_csv(here("data", "factorial_data_a.csv"))
+data_b <- read_csv(here("data", "factorial_data_b.csv"))
+
+# combine the data
+combined_data <- bind_rows(data_a, data_b)
+
+# print it
+combined_data
+```
+
+Let's take a look at this data so we can understand it...
+
+---
+# Some Notes on the Data
+
+What does the data look like? The `head()` function allows you to see the top of your data set.
+
+```{r raw-data-inspect}
+head(combined_data)
+```
+
+*The function `tail()` does the opposite to `head()`. Try it out!*
+
+---
+# Understanding our Data
+
+Let's assume we gave people a task where they had to read **sentences that imply an upwards or downwards motion (variable A)** and then **identify targets at the top or bottom of the screen (variable B)** as quickly as they could. We captured their response times in the task (variable Y).
+
+We have the following columns:
+
+- **subj_id** = Subject/participant ID for the person who gave the data to us.
+
+- **list_id** = List ID for how items were randomised.
+
+- **item_id** = Item ID.
+
+- **variable A** = Implied sentence location (upwards or downwards); e.g. "the bird flew in the sky."
+
+- **variable B** = Location of target (up or down on the screen).
+
+We should check that the data is coded as expected.
+
+---
+# Inspecting Data
+
+- Our first step to understanding our data should be to **check that we have read it into R correctly**, and that `read_csv()` has sensibly guessed at our data types.
+
+- We can do this using the `glimpse()` function. This gives us a **look at our data on its side**, so we can see how our data are stored and how they are coded.
+
+```{r inspect-data-types}
+glimpse(combined_data)
+```
+
+There's a few problems with our coding system here. Subject ID should probably be numeric, and we need consistent codes for A and B.
+
+---
+# Inspecting Data
+
+- We can get a summary of our data, albeit in a confusing printout, using `summary()`.
+
+- Here, we'll reduce the summary only to our numeric columns for easier presentation (selecting columns, only if they are numeric).
+
+```{r summary-of-the-data}
+summary(select_if(combined_data, is.numeric))
+```
+
+Our Y outcome, reaction time, seems to have a minimum of a negative value. We need to get rid of this clear error.
+
+---
+# Inspecting Codes
+
+Our list IDs and Item IDs are properly coded, but we should check our variables A and B, which indicate the conditions of the study. 
+
+- We can ask for only values from one column using dollar indexing; e.g. `data$column`.
+
+- The `unique()` function tells us what unique observations we have in a column.
+
+Which unique values do we have here?
+
+```{r unique-A-and-B}
+unique(combined_data$A)
+unique(combined_data$B)
+```
+
+It looks like we have a mix of issues here. R is **case sensitive, meaning A is different to a**. We can make some initial fixes here by making everything the same case. Do this by using the `tolower()` function.
+
+---
+# Fixing Problems
+
+Set the values in A and B to lower case.
+
+```{r unique-A-and-B-tolower}
+# change values
+combined_data$A <- tolower(combined_data$A)
+combined_data$B <- tolower(combined_data$B)
+```
+
+How does it look?
+
+```{r inspect-unique-A-and-B-tolower}
+unique(combined_data$A)
+unique(combined_data$B)
+```
+
+We've fixed the codes for variable A, but variable B still has some problems. Someone has mistakenly entered bb2 and bb1 as codes.
+
+Let's change these!
+
+---
+# Fixing Remaining Problems
+
+We'll use the `case_when()` function again here.
+
+If column B has the value "bb1" change it to "b1", otherwise if it has "bb2" change it to "b2", else just leave values as they are.
+
+```{r case_when-B}
+combined_data <- mutate(
+  combined_data,
+  B = case_when(
+    B == "bb1" ~ "b1",
+    B == "bb2" ~ "b2",
+    TRUE ~ B
+  )
+) 
+```
+
+How do the values look now?
+
+```{r inspect-case_when-B}
+unique(combined_data$B)
+```
+
+Nice and consistent!
+
+---
+# Identifying Remaining Problems
+
+- We can see that subject IDs are stored as characters. Why is that? Let's see what unique values we have here.
+
+```{r inspect-subject-id}
+unique(combined_data$subj_id)
+```
+
+We have a mix of integers, and the two values "one" and "last" as IDs. We need to make this consistent.
+
+---
+# Converting Values Conditionally
+
+Let's change the "one" and "last" values to more sensible values. Notice we have to stick with characters for now so the column has the same data types in it.
+
+```{r change-subj-id}
+combined_data$subj_id <- case_when(
+  combined_data$subj_id == "one" ~ "1",
+  combined_data$subj_id == "twenty-eight" ~ "28",
+  combined_data$subj_id == "last" ~ "60",
+  TRUE ~ combined_data$subj_id
+)
+```
+
+How have the values changed?
+
+```{r check-subj-id}
+unique(combined_data$subj_id)
+```
+
+Nicely, the numbers now go from 1 to 60! But they're still characters.
+
+---
+# Fixing Remaining Problems
+
+We can convert between data types using the `as.` functions. We have e.g. `as.character()`, `as.factor()`, and `as.numeric()`. We'll use `as.numeric()` to make these strings into numeric values now they're consistently coded.
+
+```{r convert-data-type}
+combined_data$subj_id <- as.numeric(combined_data$subj_id)
+```
+
+How do the values look? Check the data again. All good!
+
+```{r inspect-converted-data}
+glimpse(combined_data)
+```
+
+---
+# Fixing Remaining Problems
+
+Finally, we can't have negative reaction times. Let's remove any reaction times below 100ms under the assumption they're far too quick for this task.
+
+```{r remove-negative-rts}
+# filter only to RTs above 100ms
+combined_data <- filter(combined_data, Y > 100)
+
+# inspect it
+combined_data
+```
+
+All done!
+
+---
+
+# Save our Cleaned Data
+
+Finally, we did all that work with our data. To save repeating all these steps again, we can save it to an external file. We do this using 'write_csv()`.
+
+Let's save our file in the data folder. This takes two arguments: 
+
+1. Which R object will you save to file?
+
+2. Where should you save it? What will the data be called?
+
+```{r cleaned-data-save}
+write_csv(
+  combined_data, 
+  here("data", "cleaned_data.csv")
+)
+```
+
+The nice thing is, if you made a mistake in one of your steps, you can just change that step and rerun your code. 
+
+If you change things by hand, who knows if you'll even detect the mistake, never mind how difficult it might be to fix it! 
+
+---
+# Recap
+
+We know...
+
+- how to read data into R.
+
+- how to find out how our data are coded.
+
+- how to identify unique elements of our data.
+
+- how to get a summary of our data.
+
+- how to convert and clean up data.
+
+- how to perform case-specific operations using conditional logic.

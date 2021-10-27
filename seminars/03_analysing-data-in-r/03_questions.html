@@ -324,178 +324,180 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">PSY260 - Research Methods and Analysis</h1>
-<h3 class="subtitle">R Workshop 1 - Using R for Data Processing Questions</h3>
+<h3 class="subtitle">R Workshop 3 - Analysing Data in R</h3>
 <h4 class="author">Dr Glenn Williams</h4>
-<h4 class="date">2021-10-25 (Updated 2021-10-25)</h4>
+<h4 class="date">2020-10-27 (Updated 2021-10-27)</h4>
 
 </div>
 
 
-<p>Now you know how to download and install R and RStudio, how to set up RStudio Projects, and how to create and use a notebook, you’re ready to get started working within a notebook in RStudio.</p>
-<p>Complete the following exercises. This will get you used to working with R notebooks and carrying out basic operations. After this, complete the questions at the end of the session or in your own time.</p>
+<p>Here, we’ll get used to performing analyses and summarising data in R. This set of questions introduces some more advanced functions for analysing data. These exercises are more introductory while the questions are intended to be more difficult to help test your knowledge.</p>
 <div id="exercises" class="section level1">
 <h1>Exercises</h1>
-<p>Please complete the following exercises within this file (questions.Rmd).</p>
+<p>Please run the following code chunk before getting started. This will load the 2 crucial packages for this workshop and the raw data we will use to entrench the concepts taught in the lecture.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># load data</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;seminar_three_data.csv&quot;</span>))</span></code></pre></div>
+<pre><code>## Warning: Missing column names filled in: &#39;X6&#39; [6], &#39;X7&#39; [7], &#39;X8&#39; [8], &#39;X9&#39; [9],
+## &#39;X10&#39; [10], &#39;X11&#39; [11]</code></pre>
 <div id="exercise-1" class="section level2">
 <h2>Exercise 1</h2>
-<p>Make a code chunk. In this, add together the numbers 1, 5, 999, and 67819.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">5</span> <span class="sc">+</span> <span class="dv">999</span> <span class="sc">+</span> <span class="dv">67819</span></span></code></pre></div>
-<pre><code>## [1] 68824</code></pre>
+<p>How many participants do we have in the experiment? How many items? Write some R code to check this.</p>
+<p><em>Hint</em>: <code>length()</code> and <code>unique()</code> are useful here.</p>
 </div>
 <div id="exercise-2" class="section level2">
 <h2>Exercise 2</h2>
-<p>Make a code chunk. In this, divide 1825031 by 534.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1825031</span><span class="sc">/</span><span class="dv">534</span></span></code></pre></div>
-<pre><code>## [1] 3417.661</code></pre>
+<p>The labels for the conditions in column A are not very informative. Please give these suitable names in the data set.</p>
+<p>There are (at least) two methods to achieve this. Create a column (or overwrite the existing one) using:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>case_when()</code> as in previous lectures/seminars.</p></li>
+<li><p><code>factor()</code> within <code>mutate()</code>.</p></li>
+</ol>
+<p><em>Please see the lecture on manipulating data if you get stuck.</em></p>
 </div>
 <div id="exercise-3" class="section level2">
 <h2>Exercise 3</h2>
-<p>Make a code chunk. Perform a boolean operation to check whether “Dog” is equal to “Cat”.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;Dog&quot;</span> <span class="sc">==</span> <span class="st">&quot;Cat&quot;</span></span></code></pre></div>
-<pre><code>## [1] FALSE</code></pre>
+<div id="part-a" class="section level3">
+<h3>Part A</h3>
+<p>Create a summary of the reaction times per condition for each participant. Choose a way to summarise this based on central tendency (e.g. mean, median, mode).</p>
+<p>Typically we use this data for inferential tests and plots.</p>
+<p>Assign this data to the object <code>data_summary</code>.</p>
+</div>
+<div id="part-b" class="section level3">
+<h3>Part B</h3>
+<p>Write a sentence to justify your choice of measure for central tendency and dispersion in your summary statistics.</p>
+</div>
 </div>
 <div id="exercise-4" class="section level2">
 <h2>Exercise 4</h2>
-<p>Make a code chunk. Concatenate the string “I’m using R” with the number 7. What output do you get? Can you explain why it is presented in this way?</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">&quot;I&#39;m using R&quot;</span>, <span class="dv">7</span>)</span></code></pre></div>
-<pre><code>## [1] &quot;I&#39;m using R&quot; &quot;7&quot;</code></pre>
-<p><em>You get a vector of strings containing “I’m using R” and “7”. Because you can only store one data type within a vector, 7 is coerced from an integer to a string. This is because you can’t sensibly go from a string to a number, but you can sensibly force a number to a string.</em></p>
+<p>Create a plot to display the average reaction time per condition in the experiment using the data from <code>data_summary</code> in Exercise 3. Justify your choice of plot.</p>
+<p>Assign this plot to a variable called <code>my_plot</code>.</p>
 </div>
 <div id="exercise-5" class="section level2">
 <h2>Exercise 5</h2>
-<p>Make a code chunk. In this, calculate the mean of the numbers 1 through to 10 (using <code>mean()</code>). Also in this chunk, calculate the median of the numbers 1 through to 10 (using <code>median()</code>). Also in this chunk, calculate the standard deviation of the numbers 1 through to 10 (using <code>sd()</code>).</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>))</span></code></pre></div>
-<pre><code>## [1] 5.5</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>))</span></code></pre></div>
-<pre><code>## [1] 5.5</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>))</span></code></pre></div>
-<pre><code>## [1] 3.02765</code></pre>
-<p>Can you simplify your code to cut down on repetition?</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>nums <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(nums)</span></code></pre></div>
-<pre><code>## [1] 5.5</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(nums)</span></code></pre></div>
-<pre><code>## [1] 5.5</code></pre>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(nums)</span></code></pre></div>
-<pre><code>## [1] 3.02765</code></pre>
-<p><em>Note</em>: If you don’t get the numbers you’d expect from e.g. <code>mean()</code>, make sure you’re concatenating your values with <code>c()</code>. If you don’t, it will just return the mean of the first value.</p>
+<p>Update your code used to plot <code>my_plot</code> in Exercise 4 to have different fills for each condition and to have proper labels on the X and Y axis titles.</p>
 </div>
 <div id="exercise-6" class="section level2">
 <h2>Exercise 6</h2>
-<p>Make a code chunk. Create an object called “numbers” that has the numbers 1, 5, 10, and 267 in it. Access the final number. After this, replace the final number with 3.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">267</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>numbers[<span class="dv">4</span>]</span></code></pre></div>
-<pre><code>## [1] 267</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>numbers[<span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>numbers</span></code></pre></div>
-<pre><code>## [1]  1  5 10  3</code></pre>
+<p>In this experiment we want to exclude participants with average scores two standard deviation above or below the mean.</p>
+<div id="part-a-1" class="section level3">
+<h3>Part A</h3>
+<p>Find out the overall mean and standard deviation from the reaction times saved in <code>data_summary</code>. Assign this summary to the variable <code>data_cutoffs</code>.</p>
+<p><em>Hint</em>: If you use <code>summarise()</code> (which you may not need to), be sure to use ungroup in your chain of functions first, e.g.: <code>data_summary %&gt;% ungroup() %&gt;% **your code goes here**</code>.</p>
+</div>
+<div id="part-b-1" class="section level3">
+<h3>Part B</h3>
+<p>Keep only participants with scores greater than 1 standard deviation below the mean <strong>and</strong> less than 1 standard deviation above the mean.</p>
+<p>Assign this data to the object <code>data_summary_filtered</code>.</p>
+<p><em>Hint</em>: You will need to use your answer from Part A to achieve this.</p>
+<p>First, assign the lower and upper bounds for outliers. Call these “outlier_low” and “outlier_high”.</p>
+<p>Then filter out low and high scoring values in the original data.</p>
+<p><em>Hint: &lt;, &gt; and | operators are useful here when combined with filter().</em></p>
+<p>Finally, remove any participant IDs who have outliers from your original data. Assign this to the object <strong>data_summary_filtered</strong>.</p>
+</div>
+<div id="part-c" class="section level3">
+<h3>Part C</h3>
+<p>Create a final plot as in Exercise 5, now with your data from <code>data_summary_filtered</code>.</p>
+</div>
 </div>
 <div id="exercise-7" class="section level2">
 <h2>Exercise 7</h2>
-<p>Replace the text in your R markdown file to explain what you did with your data. It’s usually best to explain what you did at each step before each code chunk.</p>
-<p><em>This is too subjective to provide an answer key.</em></p>
+<p>Taking your data from Exercise 6, conduct an appropriate statistical test to compare the mean scores for the congruent and incongruent conditions. Is there a significant difference between the groups?</p>
+<p>Remember to use the formula interface <code>outcome ~ predictor</code>. This means scores to the left of the <code>~</code> are predicted by the values assigned to the right side of the <code>~</code>; i.e. your condition dictates your score.</p>
 </div>
 </div>
 <div id="questions" class="section level1">
 <h1>Questions</h1>
-<p>These questions are designed to test your knowledge further in R. Please try to tackle these once you’re done with the exercises.</p>
+<p>These remaining questions are designed to push you a little further to improve your knowledge. Please complete these in your own time.</p>
+<p>Please run the following R code chunk by pressing the green play button. This will load the data up from the “data” folder and print it out in your console.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>qdata <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;cleanish_data.csv&quot;</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>qdata <span class="co"># inspect it</span></span></code></pre></div>
+<pre><code>## # A tibble: 2,400 x 7
+##       X1 subj_id list_id item_id A     B         Y
+##    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+##  1     1       1       4       1 a2    b2     234.
+##  2     2       1       4       2 a2    b2     295.
+##  3     3       1       4       3 a2    b2     285.
+##  4     4       1       4       4 a2    b2     258.
+##  5     5       1       4       5 a2    b2     268.
+##  6     6       1       4       6 a2    b2     282.
+##  7     7       1       4       7 a2    b2     281.
+##  8     8       1       4       8 a2    b2     291.
+##  9     9       1       4       9 a2    b2     292.
+## 10    10       1       4      10 a2    b2     243.
+## # … with 2,390 more rows</code></pre>
+<p>This data set is that from lecture 2b - Data Checking in R. The columns have the following interpretation:</p>
+<ul>
+<li><p><strong>X1</strong> = Row number for the data.</p></li>
+<li><p><strong>subj_id</strong> = Subject/participant ID for the person who gave the data to us.</p></li>
+<li><p><strong>list_id</strong> = list ID for how items were randomised.</p></li>
+<li><p><strong>item_id</strong> = Item ID.</p></li>
+<li><p><strong>variable A</strong> = Implied sentence location (upwards or downwards); e.g. “the bird flew in the sky.” a1 is up, a2 is down.</p></li>
+<li><p><strong>variable B</strong> = Location of target (up or down on the screen). b1 is up, b2 is down.</p></li>
+</ul>
 <div id="question-1" class="section level2">
 <h2>Question 1</h2>
-<p>What’s wrong with the following code? Fix it in the second block below.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>sequence <span class="sc">&lt;</span> <span class="sc">-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</span></code></pre></div>
-<p>Can you explain why the code above does not work?</p>
-<p><em>It has a space between &lt; and - so assignment won’t work (it will read this as less than then minus, but fail because sequence doesn’t exist)</em></p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sequence <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</span></code></pre></div>
+<p>Remove any unnecessary columns from this data set.</p>
 </div>
 <div id="question-2" class="section level2">
 <h2>Question 2</h2>
-<p>Why doesn’t this return anything? Change the code to make it run.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># draw 10 times from a uniform distribution between 0 and 1</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>my_object <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">1</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>my_obejct</span></code></pre></div>
-<p>Can you explain why the code above does not work?</p>
-<p><em>The name of the object has a typo.</em></p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>my_object</span></code></pre></div>
-<pre><code>##  [1] 0.4075924 0.4206612 0.6583094 0.5670445 0.2240844 0.9396541 0.5689664
-##  [8] 0.1737905 0.9224505 0.7145129</code></pre>
+<p>Give proper levels names to the levels A1 and A2 in column A and to B1 and B2 in column B.</p>
 </div>
 <div id="question-3" class="section level2">
 <h2>Question 3</h2>
-<p>Create an object with names of 5 of your closest friends, family members, or favourite musicians. Name this object “people”. <em>Hint</em> you will need to concatenate 5 strings with the <code>c()</code> function.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>people <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Rachel&quot;</span>, <span class="st">&quot;Ross&quot;</span>, <span class="st">&quot;Joey&quot;</span>, <span class="st">&quot;Chandler&quot;</span>, <span class="st">&quot;Monica&quot;</span>)</span></code></pre></div>
+<p>Give proper (column) names to the variables A, B, and Y.</p>
 </div>
 <div id="question-4" class="section level2">
 <h2>Question 4</h2>
-<p>Create an object called <code>scores</code> that will store the scores of your 5 people on some test. Give them some random numbers. You can do this by hand, or learn how to use the <code>rnorm()</code> function by typing <code>?rnorm()</code> into the console.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">5</span>, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">15</span>)</span></code></pre></div>
+<p>Make a summary of the data creating averages of the reaction times for each level of each condition for every participant. Assign this to the object <code>summary_data</code>.</p>
 </div>
 <div id="question-5" class="section level2">
 <h2>Question 5</h2>
-<p>Finally, create some ages for your people and store them in the object <code>ages</code>. Feel free to make up their ages. If you want to learn a new function, look into how <code>sample()</code> works. This is a function that draws numbers randomly from a set of numbers. Again, type <code>?sample()</code> to figure this out.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ages <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">20</span><span class="sc">:</span><span class="dv">30</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Remove participants 1 through to 10 from <code>summary_data</code>.</p>
 </div>
 <div id="question-6" class="section level2">
 <h2>Question 6</h2>
-<p>Create a data frame called <code>my_data</code> consisting of your people, their ages, and test scores. Remember to use the <code>data.frame()</code> function here. Again, if you’d like some help on how this works, type <code>?data.frame()</code> into the console.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">people =</span> people,</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">ages =</span> ages,</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">scores =</span> scores</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>my_data</span></code></pre></div>
-<pre><code>##     people ages    scores
-## 1   Rachel   22 105.32699
-## 2     Ross   30  73.51923
-## 3     Joey   24  95.30238
-## 4 Chandler   30  75.03347
-## 5   Monica   25 114.89418</code></pre>
+<p>Make a boxplot of the data. Does there appear to be any reliable differences between conditions? Explain your logic.</p>
 </div>
 <div id="question-7" class="section level2">
 <h2>Question 7</h2>
-<p>Change the name of the first person in <code>my_data</code> to someone else. Don’t worry about changing their other values. <em>Hint</em>: You will need to index that particular value in your data.frame and assign it a new value.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>my_data[<span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">&quot;Phoebe&quot;</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>my_data</span></code></pre></div>
-<pre><code>##     people ages    scores
-## 1   Phoebe   22 105.32699
-## 2     Ross   30  73.51923
-## 3     Joey   24  95.30238
-## 4 Chandler   30  75.03347
-## 5   Monica   25 114.89418</code></pre>
+<p>We can perform inferential statistics in R.</p>
+<p>I have simulated some data below for a one-variable, 3-group experiment. The three groups are “control”, “treatment_low”, and “treatment_high” which are assigned to the column “condition” while the outcome is in the column “outcome”. (It doesn’t matter what this column or study represents, data only have meaning we assign to it.)</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1892</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">60</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>simdat <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">condition =</span> <span class="fu">c</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="st">&quot;control&quot;</span>, n), </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="st">&quot;treatment_low&quot;</span>, n), </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="st">&quot;treatment_high&quot;</span>, n)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcome =</span> <span class="fu">c</span>(</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">15</span>),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">105</span>, <span class="at">sd =</span> <span class="dv">16</span>),</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">124</span>, <span class="at">sd =</span> <span class="dv">12</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Analyse this data using an appropraite ANOVA method. Report the results below.</p>
+<p>We can follow up with our analyses to determine where the effect lies. Do this by conducting a post-hoc tests using Tukey’s Honest Significant Differences method using the <code>TukeyHSD()</code> function. If you’re unsure how to do this type <code>?TukeyHSD</code> in the console. This will essentially give you a series of t-tests with your <em>p</em>-values adjusted for multiplicity.</p>
+<p>Describe the results of this test.</p>
 </div>
 <div id="question-8" class="section level2">
 <h2>Question 8</h2>
-<p>Access the 3rd row and 2nd column of <code>my_data</code>.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>my_data[<span class="dv">3</span>, <span class="dv">2</span>]</span></code></pre></div>
-<pre><code>## [1] 24</code></pre>
-</div>
-<div id="question-9" class="section level2">
-<h2>Question 9</h2>
-<p>Access the 2nd column all rows of <code>my_data</code>.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>my_data[, <span class="dv">2</span>]</span></code></pre></div>
-<pre><code>## [1] 22 30 24 30 25</code></pre>
-</div>
-<div id="question-10" class="section level2">
-<h2>Question 10</h2>
-<p>Calculate the mean age of the people in your sample. To do this, use the function <code>mean()</code>.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(my_data<span class="sc">$</span>ages)</span></code></pre></div>
-<pre><code>## [1] 26.2</code></pre>
-</div>
-<div id="question-11" class="section level2">
-<h2>Question 11</h2>
-<p>Calculate the standard deviation for the age of the people in your sample. To do this, use the function <code>sd()</code>.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(my_data<span class="sc">$</span>ages)</span></code></pre></div>
-<pre><code>## [1] 3.63318</code></pre>
-</div>
-<div id="question-12" class="section level2">
-<h2>Question 12</h2>
-<p>You can chain together functions in R.</p>
-<p>One function we can use is <code>unique()</code>, which returns a vector or data frame based on what we give it, only with duplicates removed. Another function is ’length()` which tells us how many things there are in a vector.</p>
-<p>Combine these two functions to get the number of unique names in your <code>people</code> column in <code>my_data</code>. <em>Hint</em>: pass your column to your functions. One function will be around the other one, e.g. <code>x(y(...))</code>.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(my_data<span class="sc">$</span>people))</span></code></pre></div>
-<pre><code>## [1] 5</code></pre>
-<p>That’s it for the introductory section. Well done on completing your first class in R!</p>
+<p>When we want to analyse two main effects from variables in an ANOVA, we can do so like this:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aov</span>(DV <span class="sc">~</span> IV1 <span class="sc">+</span> IV2, <span class="at">data =</span> YOUR_DATA)</span></code></pre></div>
+<p>Here, any terms added to the right of the <code>~</code> are evaluated as main effects if we make their effects additive. If instead we use a multiplication symbol, we get both main effects <strong>and interactions</strong>.</p>
+<p>Perform an ANOVA on the <strong>summary_data</strong> we created earlier. To get your typical ANOVA table output, you must use <code>summary(aov(...))</code> or assign your ANOVA model to an object and call <code>summary()</code> on that object. We would like main effects and interaction for the <strong>sentence_location and target_location variables</strong>. Are there any main effects or interactions here?</p>
+<p>This answer may appear correct, but with repeated measures we need to tell R to adjust the errors (i.e. to conduct a within- rather than a between-subjects ANOVA) for any terms we want to estimate within each participant. Do this as follows:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aov</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  DV <span class="sc">~</span> IV1 <span class="sc">*</span> IV2 <span class="sc">+</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Error</span>(SUVBJECT_ID<span class="sc">/</span>(IV1 <span class="sc">*</span> IV2)), </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> DATA</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Adjust your code to incorporate this. Do your estimates change? Can you explain why?</p>
 </div>
 </div>
 

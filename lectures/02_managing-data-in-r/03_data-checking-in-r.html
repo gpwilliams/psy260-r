@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Managing Data in R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Glenn Williams" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Managing Data in R
+## Data Checking in R
+### Glenn Williams
+### University of Sunderland
+### 2021-10-27 (updated: 2021-10-27)
+
+---
+
+
+
+
+
+
+# Understanding our Data
+
+To have a good understanding of how you should **clean and analyse your data**, you have to **understand how your data was made**. Ask yourself:
+
+- How was the study performed?
+
+- What do the variables in the data set represent?
+
+- What levels can these variables have?
+
+- Was a consistent coding scheme used throughout?
+
+- How is missing data coded (if at all)?
+
+Answering these questions makes you understand your data better, so you'll make fewer mistakes and do a better job of analysing it.
+
+---
+# Reading in Data
+
+In the data folder of this repository are files called **factorial_data_a.csv** and **factorial_data_b.csv**. If I'm working from this project folder I can read it in and combine the data as follows:
+
+
+```r
+# read the data
+data_a &lt;- read_csv(here("data", "factorial_data_a.csv"))
+data_b &lt;- read_csv(here("data", "factorial_data_b.csv"))
+
+# combine the data
+combined_data &lt;- bind_rows(data_a, data_b)
+
+# print it
+combined_data
+```
+
+```
+## # A tibble: 2,400 x 7
+##     row subj_id list_id item_id A     B         Y
+##   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1     1 one           4       1 A2    B2     234.
+## 2     2 one           4       2 A2    B2     295.
+## 3     3 one           4       3 A2    B2     285.
+## 4     4 one           4       4 A2    B2     258.
+## # … with 2,396 more rows
+```
+
+Let's take a look at this data so we can understand it...
+
+---
+# Some Notes on the Data
+
+What does the data look like? The `head()` function allows you to see the top of your data set.
+
+
+```r
+head(combined_data)
+```
+
+```
+## # A tibble: 6 x 7
+##     row subj_id list_id item_id A     B         Y
+##   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1     1 one           4       1 A2    B2     234.
+## 2     2 one           4       2 A2    B2     295.
+## 3     3 one           4       3 A2    B2     285.
+## 4     4 one           4       4 A2    B2     258.
+## 5     5 one           4       5 A2    B2     268.
+## 6     6 one           4       6 A2    B2     282.
+```
+
+*The function `tail()` does the opposite to `head()`. Try it out!*
+
+---
+# Understanding our Data
+
+Let's assume we gave people a task where they had to read **sentences that imply an upwards or downwards motion (variable A)** and then **identify targets at the top or bottom of the screen (variable B)** as quickly as they could. We captured their response times in the task (variable Y).
+
+We have the following columns:
+
+- **subj_id** = Subject/participant ID for the person who gave the data to us.
+
+- **list_id** = List ID for how items were randomised.
+
+- **item_id** = Item ID.
+
+- **variable A** = Implied sentence location (upwards or downwards); e.g. "the bird flew in the sky."
+
+- **variable B** = Location of target (up or down on the screen).
+
+We should check that the data is coded as expected.
+
+---
+# Inspecting Data
+
+- Our first step to understanding our data should be to **check that we have read it into R correctly**, and that `read_csv()` has sensibly guessed at our data types.
+
+- We can do this using the `glimpse()` function. This gives us a **look at our data on its side**, so we can see how our data are stored and how they are coded.
+
+
+```r
+glimpse(combined_data)
+```
+
+```
+## Rows: 2,400
+## Columns: 7
+## $ row     &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,…
+## $ subj_id &lt;chr&gt; "one", "one", "one", "one", "one", "one", "one", "one", "one",…
+## $ list_id &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,…
+## $ item_id &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,…
+## $ A       &lt;chr&gt; "A2", "A2", "A2", "A2", "A2", "A2", "A2", "A2", "A2", "A2", "A…
+## $ B       &lt;chr&gt; "B2", "B2", "B2", "B2", "B2", "B2", "B2", "B2", "B2", "B2", "B…
+## $ Y       &lt;dbl&gt; 233.5056, 294.6706, 284.6235, 257.9815, 267.9257, 282.1853, 28…
+```
+
+There's a few problems with our coding system here. Subject ID should probably be numeric, and we need consistent codes for A and B.
+
+---
+# Inspecting Data
+
+- We can get a summary of our data, albeit in a confusing printout, using `summary()`.
+
+- Here, we'll reduce the summary only to our numeric columns for easier presentation (selecting columns, only if they are numeric).
+
+
+```r
+summary(select_if(combined_data, is.numeric))
+```
+
+```
+##       row            list_id        item_id            Y         
+##  Min.   :   1.0   Min.   :1.00   Min.   : 1.00   Min.   :-200.0  
+##  1st Qu.: 600.8   1st Qu.:1.75   1st Qu.:10.75   1st Qu.: 231.7  
+##  Median :1200.5   Median :2.50   Median :20.50   Median : 251.6  
+##  Mean   :1200.5   Mean   :2.50   Mean   :20.50   Mean   : 255.4  
+##  3rd Qu.:1800.2   3rd Qu.:3.25   3rd Qu.:30.25   3rd Qu.: 270.6  
+##  Max.   :2400.0   Max.   :4.00   Max.   :40.00   Max.   :4000.0  
+##                                                  NA's   :45
+```
+
+Our Y outcome, reaction time, seems to have a minimum of a negative value. We need to get rid of this clear error.
+
+---
+# Inspecting Codes
+
+Our list IDs and Item IDs are properly coded, but we should check our variables A and B, which indicate the conditions of the study. 
+
+- We can ask for only values from one column using dollar indexing; e.g. `data$column`.
+
+- The `unique()` function tells us what unique observations we have in a column.
+
+Which unique values do we have here?
+
+
+```r
+unique(combined_data$A)
+```
+
+```
+## [1] "A2" "A1" "a1" "a2"
+```
+
+```r
+unique(combined_data$B)
+```
+
+```
+## [1] "B2"  "B1"  "b2"  "BB2" "BB1" "b1"
+```
+
+It looks like we have a mix of issues here. R is **case sensitive, meaning A is different to a**. We can make some initial fixes here by making everything the same case. Do this by using the `tolower()` function.
+
+---
+# Fixing Problems
+
+Set the values in A and B to lower case.
+
+
+```r
+# change values
+combined_data$A &lt;- tolower(combined_data$A)
+combined_data$B &lt;- tolower(combined_data$B)
+```
+
+How does it look?
+
+
+```r
+unique(combined_data$A)
+```
+
+```
+## [1] "a2" "a1"
+```
+
+```r
+unique(combined_data$B)
+```
+
+```
+## [1] "b2"  "b1"  "bb2" "bb1"
+```
+
+We've fixed the codes for variable A, but variable B still has some problems. Someone has mistakenly entered bb2 and bb1 as codes.
+
+Let's change these!
+
+---
+# Fixing Remaining Problems
+
+We'll use the `case_when()` function again here.
+
+If column B has the value "bb1" change it to "b1", otherwise if it has "bb2" change it to "b2", else just leave values as they are.
+
+
+```r
+combined_data &lt;- mutate(
+  combined_data,
+  B = case_when(
+    B == "bb1" ~ "b1",
+    B == "bb2" ~ "b2",
+    TRUE ~ B
+  )
+) 
+```
+
+How do the values look now?
+
+
+```r
+unique(combined_data$B)
+```
+
+```
+## [1] "b2" "b1"
+```
+
+Nice and consistent!
+
+---
+# Identifying Remaining Problems
+
+- We can see that subject IDs are stored as characters. Why is that? Let's see what unique values we have here.
+
+
+```r
+unique(combined_data$subj_id)
+```
+
+```
+##  [1] "one"          "2"            "3"            "4"            "5"           
+##  [6] "6"            "7"            "8"            "9"            "10"          
+## [11] "11"           "12"           "13"           "14"           "15"          
+## [16] "16"           "17"           "18"           "19"           "20"          
+## [21] "21"           "22"           "23"           "24"           "25"          
+## [26] "26"           "27"           "twenty-eight" "29"           "30"          
+## [31] "31"           "32"           "33"           "34"           "35"          
+## [36] "36"           "37"           "38"           "39"           "40"          
+## [41] "41"           "42"           "43"           "44"           "45"          
+## [46] "46"           "47"           "48"           "49"           "50"          
+## [51] "51"           "52"           "53"           "54"           "55"          
+## [56] "56"           "57"           "58"           "59"           "last"
+```
+
+We have a mix of integers, and the two values "one" and "last" as IDs. We need to make this consistent.
+
+---
+# Converting Values Conditionally
+
+Let's change the "one" and "last" values to more sensible values. Notice we have to stick with characters for now so the column has the same data types in it.
+
+
+```r
+combined_data$subj_id &lt;- case_when(
+  combined_data$subj_id == "one" ~ "1",
+  combined_data$subj_id == "twenty-eight" ~ "28",
+  combined_data$subj_id == "last" ~ "60",
+  TRUE ~ combined_data$subj_id
+)
+```
+
+How have the values changed?
+
+
+```r
+unique(combined_data$subj_id)
+```
+
+```
+##  [1] "1"  "2"  "3"  "4"  "5"  "6"  "7"  "8"  "9"  "10" "11" "12" "13" "14" "15"
+## [16] "16" "17" "18" "19" "20" "21" "22" "23" "24" "25" "26" "27" "28" "29" "30"
+## [31] "31" "32" "33" "34" "35" "36" "37" "38" "39" "40" "41" "42" "43" "44" "45"
+## [46] "46" "47" "48" "49" "50" "51" "52" "53" "54" "55" "56" "57" "58" "59" "60"
+```
+
+Nicely, the numbers now go from 1 to 60! But they're still characters.
+
+---
+# Fixing Remaining Problems
+
+We can convert between data types using the `as.` functions. We have e.g. `as.character()`, `as.factor()`, and `as.numeric()`. We'll use `as.numeric()` to make these strings into numeric values now they're consistently coded.
+
+
+```r
+combined_data$subj_id &lt;- as.numeric(combined_data$subj_id)
+```
+
+How do the values look? Check the data again. All good!
+
+
+```r
+glimpse(combined_data)
+```
+
+```
+## Rows: 2,400
+## Columns: 7
+## $ row     &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,…
+## $ subj_id &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+## $ list_id &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,…
+## $ item_id &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,…
+## $ A       &lt;chr&gt; "a2", "a2", "a2", "a2", "a2", "a2", "a2", "a2", "a2", "a2", "a…
+## $ B       &lt;chr&gt; "b2", "b2", "b2", "b2", "b2", "b2", "b2", "b2", "b2", "b2", "b…
+## $ Y       &lt;dbl&gt; 233.5056, 294.6706, 284.6235, 257.9815, 267.9257, 282.1853, 28…
+```
+
+---
+# Fixing Remaining Problems
+
+Finally, we can't have negative reaction times. Let's remove any reaction times below 100ms under the assumption they're far too quick for this task.
+
+
+```r
+# filter only to RTs above 100ms
+combined_data &lt;- filter(combined_data, Y &gt; 100)
+
+# inspect it
+combined_data
+```
+
+```
+## # A tibble: 2,349 x 7
+##     row subj_id list_id item_id A     B         Y
+##   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+## 1     1       1       4       1 a2    b2     234.
+## 2     2       1       4       2 a2    b2     295.
+## 3     3       1       4       3 a2    b2     285.
+## 4     4       1       4       4 a2    b2     258.
+## # … with 2,345 more rows
+```
+
+All done!
+
+---
+
+# Save our Cleaned Data
+
+Finally, we did all that work with our data. To save repeating all these steps again, we can save it to an external file. We do this using 'write_csv()`.
+
+Let's save our file in the data folder. This takes two arguments: 
+
+1. Which R object will you save to file?
+
+2. Where should you save it? What will the data be called?
+
+
+```r
+write_csv(
+  combined_data, 
+  here("data", "cleaned_data.csv")
+)
+```
+
+The nice thing is, if you made a mistake in one of your steps, you can just change that step and rerun your code. 
+
+If you change things by hand, who knows if you'll even detect the mistake, never mind how difficult it might be to fix it! 
+
+---
+# Recap
+
+We know...
+
+- how to read data into R.
+
+- how to find out how our data are coded.
+
+- how to identify unique elements of our data.
+
+- how to get a summary of our data.
+
+- how to convert and clean up data.
+
+- how to perform case-specific operations using conditional logic.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

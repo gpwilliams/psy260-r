@@ -4,6 +4,7 @@
     <title>Managing Data in R</title>
     <meta charset="utf-8" />
     <meta name="author" content="Glenn Williams" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
   </head>
@@ -15,7 +16,7 @@ class: center, middle, inverse, title-slide
 ## Importing Data into R
 ### Glenn Williams
 ### University of Sunderland
-### 2020-09-29 (updated: 2020-10-13)
+### 2021-10-26 (updated: 2021-10-27)
 
 ---
 
@@ -24,131 +25,133 @@ class: center, middle, inverse, title-slide
 
 
 
-# Starting a New Project
-
-Assuming you're using a local installation of R/RStudio:
-
-- Make a folder somewhere on your computer.
-- Open RStudio.
-- **Click File `\(\rightarrow\)` New Project `\(\rightarrow\)` New Directory `\(\rightarrow\)` New Project**.
-- Give this a name (e.g. "managing-data") and save it somewhere you can access on your computer (e.g. Desktop)
-
-Assuming you're using rstudio.cloud:
-
-- Make a new Space and give it a name, then **click New Project**.
-
-You now have a **folder and an rstudio project** for your work. You can put data and code in here, and all outputs will be saved in this place.
-
-&lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="../../img/project-directory.png" alt="creating a new project" width="350" /&gt;
-&lt;p class="caption"&gt;creating a new project&lt;/p&gt;
-&lt;/div&gt;
-
----
-# Create a New R Markdown File
-
-Create a new R Markdown file. If you want your html file to update in real time, make it an **html notebook**. If you want it to only update when compiled, make it an **html document**.
-
-e.g. Click File `\(\rightarrow\)` New File `\(\rightarrow\)` R Notebook. This will open an R notebook in the Editor.
-
-&lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="../../img/rstudio-interface.png" alt="RStudio Interface" width="500" /&gt;
-&lt;p class="caption"&gt;RStudio Interface&lt;/p&gt;
-&lt;/div&gt;
-
----
 # Understanding File Systems
 
-Before we read in any data, it probably makes sense to understand file paths on your computer.
+Before we read in any data, we need to understand file paths on your computer.
 
 - Computers are often split up into different **drives** where you can store data: e.g. a C drive on a PC, a Macintosh HD drive on newer Macs. 
 
 - The more drives you have, the more places data can live.
 
-- Files are stored at unique **paths** (places) on these drives.
+- Usually we organise files into folders on these drives.
+
+- Any file is saved at a unique **paths** (places) on these drives.
 
 ---
 # Understanding File Systems
 
-Let's say we have a file on our Desktop called "document.txt". This is a text file (.txt extension). 
+.pull-left[
 
-How does the computer know where it is though? 
+We have a file on our Desktop called "document.txt". This is a text file (.txt extension). 
 
-- On a PC, it might live at `C:\Users\glenn\desktop\document.txt`.
+How does the computer know where it is?
 
-- Another file, "document2.txt" on the Desktop, would live at `C:\Users\glenn\desktop\document2.txt`.
+- On a PC, it might live at `C:\Users\glenn\Desktop\document.txt`.
 
-You need to be able to **uniquely identify** files within file paths. That's why these files need unique names when in the same location, but could have the same name if in different paths (e.g. folders on the Desktop).
+- Another file, "document2.txt", could live at `C:\Users\glenn\Desktop\document2.txt`.
+
+You need to be able to **uniquely identify** files within file paths. 
+
+They either need unique names in a given location, or can have the same name in a different location.
+]
+
+.pull-right[
+
+&lt;div class="figure" style="text-align: right"&gt;
+&lt;img src="../../img/file_path.png" alt="A flow chart of these files on the system." width="250" /&gt;
+&lt;p class="caption"&gt;A flow chart of these files on the system.&lt;/p&gt;
+&lt;/div&gt;
+
+]
 
 ---
 # How R Reads Files
 
 By default, R will either ask you to:
 
-- Specify the exact file path to access a file (e.g. `C:\Users\glenn\desktop\document.txt`), or...
+- Specify the **exact (absolute) file path** to access a file (e.g. `C:\Users\glenn\desktop\document.txt`), or...
 
 - Specify a file path **relative** to the **working directory**.
 
-The second method is generally best if you want your code to work on someone else's computer. Why? I can guarantee that I won't share my code with another `User` called `glenn`.
+Using a relative file path is best if you want your code to work on any computer besides the one you wrote your code in. That's because other computers aren't likely to have a `C:\Users\glenn\desktop` path.
 
-Where's the **working directory** though? This is where it gets awkward...
+Where's the **working directory** though?
 
 ---
 # The Working Directory
 
-- The working directory in R by default is wherever you open up an R file, or wherever R is installed if you open it without first opening a file.
 
-- This is obviously awkard. **Depending on how you start R, it could be anywhere!**
-
-- RStudio Projects and the `here` package to the rescue!
-
-- If you open an RStudio Project, your working directory is wherever the project is.
-
-- If you read files in with `here`, no matter where your working directory is right now, it reads files **relative** to where the RStudio Project lives.
-
----
-# Projects and Here: An Example
-
-What if we want to read a file called **raw_data.csv** from a folder on our **desktop** called **my_data**?
 
 .pull-left[
 
-## Without Project and Here
+- The working directory in R by default is wherever you open up an R file, or wherever R is installed if you open RStudio without first opening a file.
 
-Method one will only work on my PC. Method two will only work if you know your working directory is on Desktop. (It probably isn't.)
+- **Depending on how you start R, it could be anywhere!**
 
-
-```r
-# using absolute paths
-read_csv(
-  "C:/Users/glenn/Desktop
-  /my_data/raw_data.csv"
-)
-
-# using relative paths if
-# the directory is Dekstop
-read_csv("my_data/raw_data.csv")
-```
+- RStudio Projects and the `here` package to the rescue!
 
 ]
 
 .pull-right[
 
-## With Project and Here
+&lt;div class="figure" style="text-align: right"&gt;
+&lt;img src="../../img/r-project.png" alt="Making an RStudio Project." width="250" /&gt;
+&lt;p class="caption"&gt;Making an RStudio Project.&lt;/p&gt;
+&lt;/div&gt;
 
-Assuming you have a folder (called anything) containing your data and an RStudio project, **this will always work** if you open R from the project:
+]
+
+- If you open an **RStudio Project**, your working directory is wherever the project is.
+
+- If you read files in with `here`, no matter where your working directory is right now, it reads files **relative** to where the RStudio Project lives.
+
+Having your work associated with an **RStudio project ensures the working directory is always the same** in any session and on any computer.
+
+---
+# Projects and Here: An Example
+
+Read a file called **raw_data.csv** from a folder on our **desktop** called **my_data**.
+
+.pull-left[
+
+### Method
+
+1. Using an **absolute file path** requires you to state exactly where the file is on your computer. This will only work on your computer.
+
+2. Using a **relative file path** is better, but only works if the working directory is the my_data folder.
+
+3. Using an **RStudio Project** fixes the working directory to the my_data folder. You can then read files relative to that folder using the **here function**.
+
+]
+
+.pull-right[
+
+### Code
 
 
 ```r
+# using absolute paths
+read_csv(
+  "C:/Users/glenn/Desktop/
+  my_data/raw_data.csv"
+)
+
+
+# using relative paths
+read_csv("my_data/raw_data.csv")
+
+
+
+# using the here function
 read_csv(here("raw_data.csv"))
 ```
 
-It will work for anyone who is sent your folder, on any computer, as long as they have R installed.
+*(3) is best for reproducibility.*
 
 ]
 
 ---
-# Reading Data into R
+# Reading and Writing Data in R
 
 There are a few inbuilt functions in R that allow us to read in data from a file and to write data to a file, but they sometimes take arguments in different orders and can behave unexpectedly.
 
@@ -162,17 +165,23 @@ There are a few inbuilt functions in R that allow us to read in data from a file
 # Reading Data into R
 ## An Example
 
-We already have some data stored in the /data/ folder. It's stored as a .csv file.
+- We already have some data stored in the /data/ folder. It's stored as a .csv file.
 
-Values in the file are separated by commas (hence, **comma-seperated values; csv**). 
+- Values in the file are separated by commas (hence, **comma-seperated values; csv**).
 
-It's a good idea to save data (e.g. in Excel) in this format for sharing; it's lightweight and can be read for free by most programs.
+- It's a good idea to save data (e.g. from Excel) in this format for sharing; it's lightweight and can be read for free by most programs.
 
 ---
 # Reading Data into R
 ## An Example
 
-We read the data in using `read_csv()`, and tell it where to find the data using `here()`. We then assign it to an object called **raw_data**. By default, read_csv() tells us how it parsed each column (i.e. what the data is stored as).
+- We read the data in using `read_csv()`
+
+- We tell R where to find the data using `here()`. 
+
+- We then assign the data to an object called **raw_data** so we can work with it in R. 
+
+- By default, `read_csv()` tells us how R parsed each column (i.e. what the data is stored as).
 
 
 ```r
@@ -180,13 +189,8 @@ raw_data &lt;- read_csv(here("data", "factorial_data.csv"))
 ```
 
 ```
-## Warning: Missing column names filled in: 'X1' [1]
-```
-
-```
 ## Parsed with column specification:
 ## cols(
-##   X1 = col_double(),
 ##   subj_id = col_character(),
 ##   list_id = col_double(),
 ##   item_id = col_double(),
@@ -200,8 +204,6 @@ raw_data &lt;- read_csv(here("data", "factorial_data.csv"))
 # Recap
 
 We know...
-
-- how to create our own **RStudio Projects** and **Notebooks**.
 
 - how **file paths** work and that these paths can be very different depending upon your computer set up.
 

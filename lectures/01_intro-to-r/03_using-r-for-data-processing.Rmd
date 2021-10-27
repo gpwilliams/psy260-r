@@ -3,7 +3,7 @@ title: "Using R for Data Processing"
 subtitle: "Using R for Data Processing"
 author: "Glenn Williams"
 institute: "University of Sunderland"
-date: "2020-09-14 (updated: `r Sys.Date()`)"
+date: "2021-10-25 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -62,7 +62,7 @@ These can be stored on their own in **objects** called vectors.
 # Data Types
 # Using R to Print Data
 
-You can use R for basic things like printing out your data, even using it as a calculator.
+You can use R for basic things like printing out your data or using it as a calculator.
 
 ```{r printing-simple-stuff}
 "cat"
@@ -110,8 +110,9 @@ my_object
 
 What if we have several strings or numbers we'd like to store together? We can combine them by **concatenation** with `c()`. 
 
+This is a **function** for combining data. Like all R functions, it has a name, and begins and ends with `()`.
+
 .pull-left[
-This is a **function** for combining data. Like all R functions, it has a name, and begins and ends with ().
 
 ```{r concat}
 my_strings <- c("A", "B")
@@ -124,9 +125,7 @@ my_numbers
 ]
 
 .pull-right[
-Be careful that you **understand how R handles clashes with data types**, though. If you combine a string and a number, it'll make it all a string. 
-
-Why? Because you can write out a "1", or "2" as text, but you can't make "hello, class" into a number sensibly.
+Be careful when **mixing data types**. If you combine a string and a number, R will make everything a string. Why? You can write out a "1", or "2" as text, but you can't make "hello, class" into a number.
 
 ```{r mixing-types}
 c(my_strings, my_numbers)
@@ -139,12 +138,13 @@ c(my_strings, my_numbers)
 
 We can store data together in different ways. 
 
-The most common way in R is to use a `data.frame`. This lets you have columns mixed up of different data types.
+The most common way in R is to use a `data.frame`. This lets you to make a table of data with columns of different data types.
 
 ```{r data-frame}
 my_frame <- data.frame(
   instructor = c("Glenn", "Becci", "Shannon"),
-  has_cat = c(1, 1, 0)
+  has_cat = c(TRUE, TRUE, FALSE),
+  n_cats = c(2, 1, 0)
 )
 
 my_frame
@@ -226,7 +226,7 @@ mean(a)
 ---
 #	Accessing Data from Vectors
 
-When have data stored, we can **pull out specific values**.
+When we have data stored in an R object, we can **pull out specific values**.
 
 **With vectors, we do this by their index** (position) in the vector, starting with 1. These values are accessed with square brackets after the vector name.
 
@@ -245,18 +245,18 @@ my_numbers
 ---
 #	Accessing Data from Data Frames
 
-When have data stored, we can **pull out specific values**.
+When we have data stored in an R object, we can **pull out specific values**.
 
-With **data frames**, we can do this by their **column name, position**, or some mix of the two. These values are indexed by square brackets after the data.frame name. Values in this are separated as follows: **data.frame[row number, column number]**.
+With **data frames**, we can do this by their **column name, position**, or some mix of the two. Values are indexed by square brackets after the data.frame name, separated like: **[row number, column number]**.
 
 .pull-left[
-```{r column-indexing}
+```{r the-data-frame}
 df <- data.frame(
   a = c(1, 2, 3),
   b = c("x", "y", "z")
 )
 
-df$a # access column a
+df # show the data
 ```
 ]
 
@@ -264,10 +264,12 @@ df$a # access column a
 ```{r row-column-indexing}
 df[2, 1] # row 2, column 1
 df[2, "a"] # row 2, column "a"
+df$a # access column "a"
 ```
 
-If you want all rows from column b, use `df[, "b"]`. If you want a specific row for all columns, use e.g. `df[1, ]`
 ]
+
+If you want all rows from column b, use `df[, "b"]`. If you want a specific row for all columns, use e.g. `df[1, ]`.
 
 ---
 #	Using Packages
