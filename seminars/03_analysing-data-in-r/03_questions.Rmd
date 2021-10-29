@@ -9,7 +9,7 @@ output:
     theme: united
     highlight: tango
 author: "Dr Glenn Williams"
-date: "2020-10-27 (Updated `r Sys.Date()`)"
+date: "2021-10-27 (Updated `r Sys.Date()`)"
 ---
 
 Here, we'll get used to performing analyses and summarising data in R. This set of questions introduces some more advanced functions for analysing data. These exercises are more introductory while the questions are intended to be more difficult to help test your knowledge.
@@ -49,7 +49,7 @@ There are (at least) two methods to achieve this. Create a column (or overwrite 
 
 ### Part A
 
-Create a summary of the reaction times per condition for each participant. Choose a way to summarise this based on central tendency (e.g. mean, median, mode).
+Create a summary of the reaction times per condition for each participant grouped by the variable "A". Choose a way to summarise this based on central tendency (e.g. mean, median, mode).
 
 Typically we use this data for inferential tests and plots.
 
@@ -67,17 +67,17 @@ Assign this plot to a variable called `my_plot`.
 
 ## Exercise 5
 
-Update your code used to plot `my_plot` in Exercise 4 to have different fills for each condition and to have proper labels on the X and Y axis titles.
+Update your code used to plot `my_plot` in Exercise 4 to have different fills for each condition and to have proper labels on the X and Y axis titles. The aesthetic mapping is where you should add the fill. Use the function `labs()` to add labels to plots.
 
 ## Exercise 6
 
-In this experiment we want to exclude participants with average scores two standard deviation above or below the mean.
+In this experiment we want to exclude participants with average scores two standard deviations above or below the mean. Another way to think of this is as keeping only participants with scores greater than 2 standard deviation below the mean **and** less than 2 standard deviation above the mean. We will do this in parts.
 
 ### Part A
 
 Find out the overall mean and standard deviation from the reaction times saved in `data_summary`. Assign this summary to the variable `data_cutoffs`.
 
-*Hint*: If you use `summarise()` (which you may not need to), be sure to use ungroup in your chain of functions first, e.g.: `data_summary %>% ungroup() %>% **your code goes here**`.
+Use the function `summarise()` to do this. Be sure to ungroup the data in your chain of functions first, e.g.: `data_summary %>% ungroup() %>% **your code goes here**`.
 
 ```{r exercise-6a-answer}
 
@@ -85,19 +85,15 @@ Find out the overall mean and standard deviation from the reaction times saved i
 
 ### Part B
 
-Keep only participants with scores greater than 1 standard deviation below the mean **and** less than 1 standard deviation above the mean.
-
-Assign this data to the object `data_summary_filtered`.
+First, assign the lower and upper bounds for outliers to variables called "outlier_low" and "outlier_high".
 
 *Hint*: You will need to use your answer from Part A to achieve this.
-
-First, assign the lower and upper bounds for outliers. Call these "outlier_low" and "outlier_high".
 
 ```{r exercise-6b-answer-part1}
 
 ```
 
-Then filter out low and high scoring values in the original data.
+Then filter out low and high scoring values in the original data using the variables above as your boundaries. Assign this to the variable "outliers".
 
 *Hint: <, > and | operators are useful here when combined with filter().*
 
@@ -105,7 +101,7 @@ Then filter out low and high scoring values in the original data.
 
 ```
 
-Finally, remove any participant IDs who have outliers from your original data. Assign this to the object **data_summary_filtered**.
+Finally, remove any participant IDs who from the "outliers" variable who appear in your original data. Assign this to the object **data_summary_filtered**.
 
 ```{r exercise-6b-answer-part3}
 
@@ -121,7 +117,7 @@ Create a final plot as in Exercise 5, now with your data from `data_summary_filt
 
 ## Exercise 7
 
-Taking your data from Exercise 6, conduct an appropriate statistical test to compare the mean scores for the congruent and incongruent conditions. Is there a significant difference between the groups?
+Make a code chunk. Taking your data from Exercise 6, conduct an appropriate statistical test to compare the mean scores for the congruent and incongruent conditions. Is there a significant difference between the groups?
 
 Remember to use the formula interface `outcome ~ predictor`. This means scores to the left of the `~` are predicted by the values assigned to the right side of the `~`; i.e. your condition dictates your score.
 
@@ -192,7 +188,7 @@ Remove participants 1 through to 10 from `summary_data`.
 
 ## Question 6
 
-Make a boxplot of the data. Does there appear to be any reliable differences between conditions? Explain your logic.
+Make a boxplot of the data. Are there any reliable differences between conditions? Explain your logic.
 
 ```{r answer-6}
 
@@ -202,7 +198,7 @@ Make a boxplot of the data. Does there appear to be any reliable differences bet
 
 We can perform inferential statistics in R. 
 
-I have simulated some data below for a one-variable, 3-group experiment. The three groups are "control", "treatment_low", and "treatment_high" which are assigned to the column "condition" while the outcome is in the column "outcome". (It doesn't matter what this column or study represents, data only have meaning we assign to it.)
+I have simulated some data below for a one-variable, 3-group experiment. The three groups are "control", "treatment_low", and "treatment_high" which are assigned to the column "condition" while the outcome is in the column "outcome". (It doesn't matter what this column or study represents, data only have meaning we assign to it.) This is a between-subjects design.
 
 ```{r simulate-data-question-7}
 set.seed(1892)
@@ -222,7 +218,7 @@ simdat <- tibble(
 )
 ```
 
-Analyse this data using an appropraite ANOVA method. Report the results below.
+Analyse this data using an appropriate ANOVA method. Report the results below.
 
 ```{r aov-question-7-answer}
 

@@ -72,12 +72,14 @@ Can you explain why the code above does not work?
 
 ## Question 2
 
-Why doesn't this return anything? Change the code to make it run.
+This code generates random numbers between 0 and 1 from a uniform distribution.
 
 ```{r question-2-a}
 # draw 10 times from a uniform distribution between 0 and 1
 my_object <- runif(n = 10, min = 0, max = 1)
 ```
+
+Why doesn't the below code run?
 
 ```{r question-2-b, eval = FALSE}
 my_obejct
@@ -107,7 +109,7 @@ Create an object called `scores` that will store the scores of your 5 people on 
 
 ## Question 5
 
-Finally, create some ages for your people and store them in the object `ages`. Feel free to make up their ages. If you want to learn a new function, look into how `sample()` works. This is a function that draws numbers randomly from a set of numbers. Again, type `?sample()` to figure this out.
+Finally, create some ages for your people and store them in the object `ages`. Feel free to make up their ages. If you want to learn a new function, look into how `sample()` works. This is a function that draws numbers randomly from a set of numbers. Again, type `?sample()` in the console and press enter to figure this out.
 
 ```{r answer-5}
 
@@ -115,7 +117,7 @@ Finally, create some ages for your people and store them in the object `ages`. F
 
 ## Question 6
 
-Create a data frame called `my_data` consisting of your people, their ages, and test scores. Remember to use the `data.frame()` function here. Again, if you'd like some help on how this works, type `?data.frame()` into the console.
+Create a data frame called `my_data` consisting of your people, their ages, and test scores. Remember to use the `data.frame()` function here. Again, if you'd like some help on how this works, type `?data.frame()` into the console and press enter.
 
 ```{r answer-6}
 
@@ -165,9 +167,11 @@ Calculate the standard deviation for the age of the people in your sample. To do
 
 You can chain together functions in R. 
 
-One function we can use is `unique()`, which returns a vector or data frame based on what we give it, only with duplicates removed. Another function is 'length()` which tells us how many things there are in a vector.
+One function we can use is `unique()`, which returns a vector or data frame based on what we give it, only with duplicates removed. Another function is `length()` which tells us how many things there are in a vector.
 
-Combine these two functions to get the number of unique names in your `people` column in `my_data`. *Hint*: pass your column to your functions. One function will be around the other one, e.g. `x(y(...))`.
+Combine these two functions to get the number of unique names in your `people` column in `my_data`. 
+
+*Hint*: pass your column to your functions. One function will be around the other one, e.g. `x(y(...))`.
 
 ```{r answer-12}
 

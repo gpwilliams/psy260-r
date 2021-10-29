@@ -326,7 +326,7 @@ div.tocify {
 <h1 class="title toc-ignore">PSY260 - Research Methods and Analysis</h1>
 <h3 class="subtitle">R Workshop 2 - Processing Data in R Questions</h3>
 <h4 class="author">Dr Glenn Williams</h4>
-<h4 class="date">2021-10-25 (Updated 2021-10-25)</h4>
+<h4 class="date">2021-10-25 (Updated 2021-10-29)</h4>
 
 </div>
 
@@ -357,7 +357,7 @@ div.tocify {
 <h2>Exercise 4</h2>
 <p>Make a code chunk. Using your data from Exercise 3, clean up any issues you might have with the caffeine variable. Remember, you can use <code>mutate()</code> and <code>case_when()</code> together to solve this.</p>
 <p><strong>Assign this to a new object called cleaned_data_one</strong></p>
-<p>If you’re unsure how these functions work, type <code>?mutate</code> and then <code>?case_when</code> in the console. The Help pane outlines how these functions work, and gives examples of working code.</p>
+<p>If you’re unsure how these functions work, type <code>?mutate</code> and then <code>?case_when</code> in the console and press enter. The Help pane outlines how these functions work, and gives examples of working code.</p>
 <p>If you’re still stuck, refer back to Lecture 2 part 3.</p>
 </div>
 <div id="exercise-5" class="section level2">
@@ -371,7 +371,7 @@ div.tocify {
 </div>
 <div id="exercise-7" class="section level2">
 <h2>Exercise 7</h2>
-<p>Make a code chunk. Filter out any observations on the dependent variable which are NAs. Remember, to use <code>is.na()</code>. Assign this new data to a object called “cleaned_data_three”.</p>
+<p>Make a code chunk. Filter out any observations on the dependent variable which are NAs. Remember to use <code>is.na()</code> or <code>drop_na()</code>. Assign this new data to a object called “cleaned_data_three”.</p>
 </div>
 </div>
 <div id="questions" class="section level1">
@@ -421,30 +421,31 @@ div.tocify {
 <p>We will work on this data to advance our knowledge of managing data in R.</p>
 <div id="question-1" class="section level2">
 <h2>Question 1</h2>
-<p>The ID column should be numeric. They do not need to be in any particular order or pattern. Can you make the IDs all numeric?</p>
+<p>The ID column should be numeric. They do not need to be in any particular order or pattern. Can you make the IDs all numeric? For this, you want to <strong>match</strong> the <strong>unique</strong> ID’s in the data set. You’ll need the function <code>match()</code> and one other function to do this that you’ve seen before.</p>
 </div>
 <div id="question-2" class="section level2">
 <h2>Question 2</h2>
-<p>The language column should have only two values (excluding NAs): English and Other. Can you change these to be a consistent code? Remember codes are case sensitive.</p>
+<p>The language column should have only two values (excluding NAs): English and Other. Can you change these to be a consistent code? Remember codes are case sensitive. Perhaps changing them to be lower case would help?</p>
 </div>
 <div id="question-3" class="section level2">
 <h2>Question 3</h2>
-<p>Are there any problems with the gender, age, and tester columns? Explain your thinking. You can use code to demonstrate your work.</p>
+<p>Are there any problems with the gender, age, and tester columns? Explain your thinking. You can use code to demonstrate your work. If there aren’t, that’s fine too!</p>
 <p>There are no obvious problems with these variables.</p>
 </div>
 <div id="question-4" class="section level2">
 <h2>Question 4</h2>
-<p>We have two columkns, funRec and completion_time, which actually store two variables each within a cell.</p>
+<p>We have two columns, funRec and completion_time, which actually store two variables each within a cell.</p>
 <p>funRec stores a number from 1-7 for how fun people found the task and whether or not they would recommend the study to a friend (yes/no). These are separated by a minus (-) sign.</p>
 <p>completion_time stores date times in the format of YYYY-MM-DD HH:MM:SS for when participants started and finished the study, separated by an underscore (_) sign.</p>
-<p>Learn about the function, <code>separate()</code> from tidyr in the tidyverse. This will help to create two columns for each of these columns to keep our data separate.</p>
+<p>Learn about the function, <code>separate()</code> from tidyr in the tidyverse. This will help to create two columns for each of these columns to keep our data separate. You can read about how <code>separate()</code> works by typing <code>?separate()</code> into the console and pressing enter.</p>
 <div id="question-4a" class="section level3">
 <h3>Question 4a</h3>
 <p>Separate the data in funRec into two columns, fun and recommend.</p>
 </div>
 <div id="question-4b" class="section level3">
 <h3>Question 4b</h3>
-<p>Separate the data from completion_time into two columns, start and end. <em>Hint</em>: For this one, you’ll need to be specific about what separates the two forms of data in the column.</p>
+<p>Separate the data from completion_time into two columns, start and end.</p>
+<p><em>Hint</em>: For this one, you’ll need to be specific about what separates the two forms of data in the column.</p>
 </div>
 </div>
 <div id="question-5" class="section level2">

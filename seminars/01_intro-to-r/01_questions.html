@@ -326,7 +326,7 @@ div.tocify {
 <h1 class="title toc-ignore">PSY260 - Research Methods and Analysis</h1>
 <h3 class="subtitle">R Workshop 1 - Using R for Data Processing Questions</h3>
 <h4 class="author">Dr Glenn Williams</h4>
-<h4 class="date">2021-10-25 (Updated 2021-10-25)</h4>
+<h4 class="date">2021-10-25 (Updated 2021-10-29)</h4>
 
 </div>
 
@@ -378,9 +378,10 @@ div.tocify {
 </div>
 <div id="question-2" class="section level2">
 <h2>Question 2</h2>
-<p>Why doesn’t this return anything? Change the code to make it run.</p>
+<p>This code generates random numbers between 0 and 1 from a uniform distribution.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># draw 10 times from a uniform distribution between 0 and 1</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>my_object <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p>Why doesn’t the below code run?</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>my_obejct</span></code></pre></div>
 <p>Can you explain why the code above does not work? Write your answer below and the valid R code needed to fix this issue.</p>
 </div>
@@ -394,11 +395,11 @@ div.tocify {
 </div>
 <div id="question-5" class="section level2">
 <h2>Question 5</h2>
-<p>Finally, create some ages for your people and store them in the object <code>ages</code>. Feel free to make up their ages. If you want to learn a new function, look into how <code>sample()</code> works. This is a function that draws numbers randomly from a set of numbers. Again, type <code>?sample()</code> to figure this out.</p>
+<p>Finally, create some ages for your people and store them in the object <code>ages</code>. Feel free to make up their ages. If you want to learn a new function, look into how <code>sample()</code> works. This is a function that draws numbers randomly from a set of numbers. Again, type <code>?sample()</code> in the console and press enter to figure this out.</p>
 </div>
 <div id="question-6" class="section level2">
 <h2>Question 6</h2>
-<p>Create a data frame called <code>my_data</code> consisting of your people, their ages, and test scores. Remember to use the <code>data.frame()</code> function here. Again, if you’d like some help on how this works, type <code>?data.frame()</code> into the console.</p>
+<p>Create a data frame called <code>my_data</code> consisting of your people, their ages, and test scores. Remember to use the <code>data.frame()</code> function here. Again, if you’d like some help on how this works, type <code>?data.frame()</code> into the console and press enter.</p>
 </div>
 <div id="question-7" class="section level2">
 <h2>Question 7</h2>
@@ -423,8 +424,9 @@ div.tocify {
 <div id="question-12" class="section level2">
 <h2>Question 12</h2>
 <p>You can chain together functions in R.</p>
-<p>One function we can use is <code>unique()</code>, which returns a vector or data frame based on what we give it, only with duplicates removed. Another function is ’length()` which tells us how many things there are in a vector.</p>
-<p>Combine these two functions to get the number of unique names in your <code>people</code> column in <code>my_data</code>. <em>Hint</em>: pass your column to your functions. One function will be around the other one, e.g. <code>x(y(...))</code>.</p>
+<p>One function we can use is <code>unique()</code>, which returns a vector or data frame based on what we give it, only with duplicates removed. Another function is <code>length()</code> which tells us how many things there are in a vector.</p>
+<p>Combine these two functions to get the number of unique names in your <code>people</code> column in <code>my_data</code>.</p>
+<p><em>Hint</em>: pass your column to your functions. One function will be around the other one, e.g. <code>x(y(...))</code>.</p>
 <p>That’s it for the introductory section. Well done on completing your first class in R!</p>
 </div>
 </div>

@@ -326,7 +326,7 @@ div.tocify {
 <h1 class="title toc-ignore">PSY260 - Research Methods and Analysis</h1>
 <h3 class="subtitle">R Workshop 3 - Analysing Data in R</h3>
 <h4 class="author">Dr Glenn Williams</h4>
-<h4 class="date">2020-10-27 (Updated 2021-10-27)</h4>
+<h4 class="date">2021-10-27 (Updated 2021-10-29)</h4>
 
 </div>
 
@@ -362,7 +362,7 @@ div.tocify {
 <h2>Exercise 3</h2>
 <div id="part-a" class="section level3">
 <h3>Part A</h3>
-<p>Create a summary of the reaction times per condition for each participant. Choose a way to summarise this based on central tendency (e.g. mean, median, mode).</p>
+<p>Create a summary of the reaction times per condition for each participant grouped by the variable “A”. Choose a way to summarise this based on central tendency (e.g. mean, median, mode).</p>
 <p>Typically we use this data for inferential tests and plots.</p>
 <p>Assign this data to the object <code>data_summary</code>.</p>
 </div>
@@ -378,25 +378,23 @@ div.tocify {
 </div>
 <div id="exercise-5" class="section level2">
 <h2>Exercise 5</h2>
-<p>Update your code used to plot <code>my_plot</code> in Exercise 4 to have different fills for each condition and to have proper labels on the X and Y axis titles.</p>
+<p>Update your code used to plot <code>my_plot</code> in Exercise 4 to have different fills for each condition and to have proper labels on the X and Y axis titles. The aesthetic mapping is where you should add the fill. Use the function <code>labs()</code> to add labels to plots.</p>
 </div>
 <div id="exercise-6" class="section level2">
 <h2>Exercise 6</h2>
-<p>In this experiment we want to exclude participants with average scores two standard deviation above or below the mean.</p>
+<p>In this experiment we want to exclude participants with average scores two standard deviations above or below the mean. Another way to think of this is as keeping only participants with scores greater than 2 standard deviation below the mean <strong>and</strong> less than 2 standard deviation above the mean. We will do this in parts.</p>
 <div id="part-a-1" class="section level3">
 <h3>Part A</h3>
 <p>Find out the overall mean and standard deviation from the reaction times saved in <code>data_summary</code>. Assign this summary to the variable <code>data_cutoffs</code>.</p>
-<p><em>Hint</em>: If you use <code>summarise()</code> (which you may not need to), be sure to use ungroup in your chain of functions first, e.g.: <code>data_summary %&gt;% ungroup() %&gt;% **your code goes here**</code>.</p>
+<p>Use the function <code>summarise()</code> to do this. Be sure to ungroup the data in your chain of functions first, e.g.: <code>data_summary %&gt;% ungroup() %&gt;% **your code goes here**</code>.</p>
 </div>
 <div id="part-b-1" class="section level3">
 <h3>Part B</h3>
-<p>Keep only participants with scores greater than 1 standard deviation below the mean <strong>and</strong> less than 1 standard deviation above the mean.</p>
-<p>Assign this data to the object <code>data_summary_filtered</code>.</p>
+<p>First, assign the lower and upper bounds for outliers to variables called “outlier_low” and “outlier_high”.</p>
 <p><em>Hint</em>: You will need to use your answer from Part A to achieve this.</p>
-<p>First, assign the lower and upper bounds for outliers. Call these “outlier_low” and “outlier_high”.</p>
-<p>Then filter out low and high scoring values in the original data.</p>
+<p>Then filter out low and high scoring values in the original data using the variables above as your boundaries. Assign this to the variable “outliers”.</p>
 <p><em>Hint: &lt;, &gt; and | operators are useful here when combined with filter().</em></p>
-<p>Finally, remove any participant IDs who have outliers from your original data. Assign this to the object <strong>data_summary_filtered</strong>.</p>
+<p>Finally, remove any participant IDs who from the “outliers” variable who appear in your original data. Assign this to the object <strong>data_summary_filtered</strong>.</p>
 </div>
 <div id="part-c" class="section level3">
 <h3>Part C</h3>
@@ -405,7 +403,7 @@ div.tocify {
 </div>
 <div id="exercise-7" class="section level2">
 <h2>Exercise 7</h2>
-<p>Taking your data from Exercise 6, conduct an appropriate statistical test to compare the mean scores for the congruent and incongruent conditions. Is there a significant difference between the groups?</p>
+<p>Make a code chunk. Taking your data from Exercise 6, conduct an appropriate statistical test to compare the mean scores for the congruent and incongruent conditions. Is there a significant difference between the groups?</p>
 <p>Remember to use the formula interface <code>outcome ~ predictor</code>. This means scores to the left of the <code>~</code> are predicted by the values assigned to the right side of the <code>~</code>; i.e. your condition dictates your score.</p>
 </div>
 </div>
@@ -460,12 +458,12 @@ div.tocify {
 </div>
 <div id="question-6" class="section level2">
 <h2>Question 6</h2>
-<p>Make a boxplot of the data. Does there appear to be any reliable differences between conditions? Explain your logic.</p>
+<p>Make a boxplot of the data. Are there any reliable differences between conditions? Explain your logic.</p>
 </div>
 <div id="question-7" class="section level2">
 <h2>Question 7</h2>
 <p>We can perform inferential statistics in R.</p>
-<p>I have simulated some data below for a one-variable, 3-group experiment. The three groups are “control”, “treatment_low”, and “treatment_high” which are assigned to the column “condition” while the outcome is in the column “outcome”. (It doesn’t matter what this column or study represents, data only have meaning we assign to it.)</p>
+<p>I have simulated some data below for a one-variable, 3-group experiment. The three groups are “control”, “treatment_low”, and “treatment_high” which are assigned to the column “condition” while the outcome is in the column “outcome”. (It doesn’t matter what this column or study represents, data only have meaning we assign to it.) This is a between-subjects design.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1892</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">60</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -481,7 +479,7 @@ div.tocify {
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">124</span>, <span class="at">sd =</span> <span class="dv">12</span>)</span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p>Analyse this data using an appropraite ANOVA method. Report the results below.</p>
+<p>Analyse this data using an appropriate ANOVA method. Report the results below.</p>
 <p>We can follow up with our analyses to determine where the effect lies. Do this by conducting a post-hoc tests using Tukey’s Honest Significant Differences method using the <code>TukeyHSD()</code> function. If you’re unsure how to do this type <code>?TukeyHSD</code> in the console. This will essentially give you a series of t-tests with your <em>p</em>-values adjusted for multiplicity.</p>
 <p>Describe the results of this test.</p>
 </div>
