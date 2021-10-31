@@ -16,15 +16,39 @@ class: center, middle, inverse, title-slide
 ## Summarising Data
 ### Glenn Williams
 ### University of Sunderland
-### 2021-10-27 (updated: 2021-10-27)
+### 2021-10-27 (updated: 2021-10-31)
 
 ---
 
 
+&lt;style type="text/css"&gt;
+.left-code {
+  width: 58%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 40%;
+  float: right;
+  padding-left: 1%;
+}
+.centre-plot[
+  margin: auto;
+  width: 25%;
+]
+&lt;/style&gt;
 
 
 
 
+
+---
+
+class: inverse, center, middle
+
+# Summarising Data
+
+---
 # Summarising Data
 
 Individual data points are some **abstraction away from reality**, essentially removing some detail.
@@ -349,7 +373,7 @@ starwars %&gt;%
 *We could even add `select()` and `mutate()` in here if we wanted*.
 
 ---
-# Recap
+# Interim Recap
 
 We've learned...
 
@@ -365,10 +389,876 @@ We've learned...
 
 - How to **combine tidy functions** like `filter()` and `summarise()` in one pipeline.
 
+---
+class: inverse, center, middle
+
+# Visualising Data
+
+---
+# Data Visualisation
+
+What's a better way to summarise the relationship between height and mass in our star wars data set?
+
+.pull-left[
+
+We could report a correlation and **some averages**, though that's going to be hard to picture.
+
+
+```
+## # A tibble: 31 x 3
+##   species  mean_height mean_weight
+##   &lt;chr&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+## 1 Aleena            79          15
+## 2 Besalisk         198         102
+## 3 Cerean           198          82
+## # … with 28 more rows
+```
+
+]
+
+.pull-right[
+
+So **plots** do a lot of the work.
+
+&lt;img src="01_summarising-data-in-r_files/figure-html/plot-hw-1.png" width="75%" /&gt;
+
+]
+
+*Note below I excluded Jabba the Hutt who is **short and massive***.
+
+---
+# A Grammar of Graphics
+
+R has an inbuilt (base) plotting system, but we'll use **`ggplot2`** from the `tidyverse`.
+
+`ggplot2` has a consistent method of building up plots layer by layer.
+
+We have to:
+
+- Define how we want to **map** the data onto the plot.
+
+- Define the **geom**etric shapes we want to use to draw the data.
+
+- Define any **aes**thetics for the look for our plot.
+
+---
+# Grammar of Graphics with ggplot2
+
+.left-code[
+
+As with all R functions, we need to pass arguments to ggplot2. Let's start with our data:
+
+
+```r
+ggplot(data = starwars)
+```
+
+That's not too exciting, but we can see we've made the beginninings of a plot (the background).
+
+]
+
+.right-plot[
+![](01_summarising-data-in-r_files/figure-html/blank-data-1.png)
+]
+
+---
+# Mapping our Data
+
+.left-code[
+
+Then we can define how we want to map data onto aesthetics.
+
+Here, we tell R to map the mass and height data from starwars onto the X and Y axes respectively.
+
+
+```r
+ggplot(
+  data = starwars, 
+  mapping = aes(x = mass, y = height)
+)
+```
+
+That looks a little better. Now we know the ranges of our data!
+
+]
+
+.right-plot[
+![](01_summarising-data-in-r_files/figure-html/blank-hw-1.png)
+]
+
+---
+# Adding Geoms
+
+.left-code[
+
+Next, we can tell R how we want to present the data on screen in a new **layer**.
+
+We do this by defining the **geometric shapes** of the data, or geoms.
+
+
+```r
+ggplot(
+  data = starwars, 
+  mapping = aes(x = mass, y = height)
+) +
+  geom_point()
+```
+
+```
+## Warning: Removed 28 rows containing missing values (geom_point).
+```
+
+Now we can see how mass and height relate to one another.
+
+]
+
+.right-plot[
+![](01_summarising-data-in-r_files/figure-html/blank-hw-point-1.png)
+]
+
+---
+# Differentiating Data
+
+.left-code[
+
+We can add additional arguments to our mappings, for example **mapping colour onto sex**.
+
+
+```r
+ggplot(
+  data = starwars, 
+  mapping = aes(x = mass, y = height, colour = sex)
+) +
+  geom_point()
+```
+
+```
+## Warning: Removed 28 rows containing missing values (geom_point).
+```
+
+As you can see, we get different groups of data depending upon the sex of the individual.
+
+]
+
+.right-plot[
+![](01_summarising-data-in-r_files/figure-html/blank-hw-point-col-1.png)
+]
+
+---
+# Filtering and Zooming
+
+.left-code[
+
+It's difficult to see the pattern between height and mass due to an extreme outlier.
+
+We can exclude this individual either by (a) Filtering observations first, (b) restricting limits on the axis of the plot using, e.g. `xlim()` in `coord_cartesian()`.
+
+
+```r
+ggplot(
+  data = starwars, 
+  mapping = aes(x = mass, y = height, colour = sex)
+) +
+  geom_point() +
+  coord_cartesian(xlim = c(0, 180))
+```
+
+```
+## Warning: Removed 28 rows containing missing values (geom_point).
+```
+
+]
+
+.right-plot[
+![](01_summarising-data-in-r_files/figure-html/filter-plot-1.png)
+]
+
+---
+# Filtering and Zooming
+
+.left-code[
+
+We can exclude this individual either by:
+
+- Chaining `tidyverse` functions together. Here, we'll filter Jabba from the data before plotting.
+
+
+```r
+starwars %&gt;% 
+  filter(mass &lt; 180) %&gt;% 
+  ggplot(
+    mapping = aes(x = mass, y = height, colour = sex)
+  ) +
+  geom_point()
+```
+
+We pipe the data into the filter function which passes the filtered data to ggplot.
+
+*Warning: we pipe data using `%&gt;%` but build plot layers with `+`. Don't confuse the two.*
+
+]
+
+.right-plot[
+![](01_summarising-data-in-r_files/figure-html/filter-data-1.png)
+
+]
+
+---
+# Setting Fixed Colours
+
+.left-code[
+
+What if you want all points to be the same colour? Don't map it to a group. Set it outside the mapping.
+
+
+```r
+starwars %&gt;% 
+  filter(mass &lt; 180) %&gt;% 
+  ggplot(mapping = aes(x = mass, y = height)) +
+  geom_point(colour = "purple")
+```
+
+Here, colour is defined in the `geom_point()` call. Colour only applies to this geometric shape.
+
+This overrides any specific group mappings.
+
+]
+
+.right-plot[
+![](01_summarising-data-in-r_files/figure-html/filter-data-fixedcol-geom-1.png)
+
+]
+
+---
+# Continuous Colour
+
+.left-code[
+
+`ggplot` is pretty smart in how it handles colour. Categorical variables get indiviudal colours, while scales get continuous palettes.
+
+
+```r
+starwars %&gt;% 
+  filter(mass &lt; 180) %&gt;% 
+  ggplot(
+    mapping = aes(
+      x = mass, 
+      y = height,
+      colour = birth_year
+    )
+  ) +
+  geom_point()
+```
+
+Now the legend doesn't have categories, but a scale.
+
+]
+
+.right-plot[
+![](01_summarising-data-in-r_files/figure-html/filter-data-contcol-1.png)
+
+]
+
+---
+# Combining Geoms
+
+.left-code[
+
+We can add geoms like a line of best fit with 95% confidence intervals!
+
+Without getting too into it, this is defined as a **linear model** in a **smoothing function**, hence we use `geom_smooth()`.
+
+
+```r
+starwars %&gt;% 
+  filter(mass &lt; 180) %&gt;% 
+  ggplot(
+    mapping = aes(
+      x = mass, 
+      y = height,
+      colour = birth_year
+    )
+  ) +
+  geom_point() +
+  geom_smooth(
+    method = "lm", 
+    formula = "y ~ x"
+  )
+```
+
+]
+
+.right-plot[
+![](01_summarising-data-in-r_files/figure-html/filter-data-smooth-1.png)
+
+]
+
+---
+# Some Other Geoms
+## Bar Plots for Count Data
+
+.left-code[
+
+For a **bar plot of count data**, we just need to pass a column of data to the aesthetics, and say it should appear on the x-axis.
+
+We then use `geom_bar()` to make the bar plot.
+
+This is what this looks like for counting up characters of different sexes.
+
+
+```r
+ggplot(data = starwars, mapping = aes(x = sex)) +
+  geom_bar()
+```
+
+]
+
+.right-plot[
+![](01_summarising-data-in-r_files/figure-html/barplot-1.png)
+]
+
+---
+# Some Other Geoms
+## Box Plots
+
+.left-code[
+
+What if we want to display a **continuous variable** across groups? A **boxplot** is handy here.
+
+Let's get heights of characters from each sex. Now, we just add height to the y-axis, and change `geom_bar()` to `geom_boxplot()`
+
+
+```r
+ggplot(
+  data = starwars, 
+  mapping = aes(x = sex,y = height)
+) +
+  geom_boxplot()
+```
+
+Remember, the dark line is the median, the box the middle 50% of scores. 
+
+]
+
+.right-plot[
+![](01_summarising-data-in-r_files/figure-html/boxplot-1.png)
+
+Lines represent the remainder, and dots represent outliers.
+
+]
+
+---
+# Saving Plots
+
+We can save graphics from R using a number of methods, but for plots produced in `ggplot2`, we can use `ggsave()`.
+
+We can either make our plot without assigning it to a variable, and then save it as follows:
+
+
+```r
+ggplot(data = starwars, aes(x = height)) + 
+  geom_density()
+
+ggsave(here("myplot.png"), last_plot())
+```
+
+Or we can make a plot and assign it to a variable, and save it as follows:
+
+
+```r
+my_plot &lt;- ggplot(data = starwars, aes(x = height)) + 
+  geom_density()
+
+ggsave(here("myplot.png"), my_plot)
+```
+
+I prefer the latter. Why? Once a plot is stored as a variable, you can change it by adding `ggplot` arguments! For example...
+
+
+```r
+my_plot + coord_cartesian(xlim = c(0, 180))
+```
+
+---
+# Interim Recap
+
+We've learned...
+
+- About the importance of graphs for communicating findings.
+
+- About a **grammar of graphics** for defining plots in code.
+
+- How to **map** data onto a plot, how to display that data with **geom**etric shapes, and how to control the **aes**thetics of the plot.
+
+- How to build up a plot layer by layer in `ggplot2`.
+
+- How to use ggplot functions to **differentiate data**.
+
+- How to use ggplot functions to filter data, or how to **chain functions together** from other packages.
+
+- How to **use different geoms** to summarise your data in different ways.
+
+- How to **save your plots**.
+
+---
+class: inverse, center, middle
+
+# Analysing Data
+
+---
+# Some Background
+
+Data analysis is surprisingly one of the easiest parts of working with R.
+
+- Once your data is in the correct (long) format, analysis using any test is highly consistent.
+
+- We rely on a formula interface like this:
+
+
+```r
+DV ~ IV
+```
+    
+- Our dependent variable/predicted variable goes to the left of the ~ (tilde), while our independent variables or predictors go to the right.
+    
+- After this we specify our data:
+
+
+```r
+DV ~ IV, data
+```
+
+We then apply a function to our formula which is the name of our test. There's some minor options we can choose within tests, but that's pretty much it!
+
+---
+# Correlations
+## The Data
+
+Let's check out the **starwars** data set again. We'll use this for our tests.
+
+
+```r
+starwars &lt;- starwars %&gt;% filter(mass &lt; 500)
+```
+
+We will use the height and mass columns, looking at whether mass is associated with height.
+
+
+```
+## Rows: 58
+## Columns: 14
+## $ name       &lt;chr&gt; "Luke Skywalker", "C-3PO", "R2-D2", "Darth Vader", "Leia Or…
+## $ height     &lt;int&gt; 172, 167, 96, 202, 150, 178, 165, 97, 183, 182, 188, 228, 1…
+## $ mass       &lt;dbl&gt; 77.0, 75.0, 32.0, 136.0, 49.0, 120.0, 75.0, 32.0, 84.0, 77.…
+## $ hair_color &lt;chr&gt; "blond", NA, NA, "none", "brown", "brown, grey", "brown", N…
+## $ skin_color &lt;chr&gt; "fair", "gold", "white, blue", "white", "light", "light", "…
+## $ eye_color  &lt;chr&gt; "blue", "yellow", "red", "yellow", "brown", "blue", "blue",…
+## $ birth_year &lt;dbl&gt; 19.0, 112.0, 33.0, 41.9, 19.0, 52.0, 47.0, NA, 24.0, 57.0, …
+## $ sex        &lt;chr&gt; "male", "none", "none", "male", "female", "male", "female",…
+## $ gender     &lt;chr&gt; "masculine", "masculine", "masculine", "masculine", "femini…
+## $ homeworld  &lt;chr&gt; "Tatooine", "Tatooine", "Naboo", "Tatooine", "Alderaan", "T…
+## $ species    &lt;chr&gt; "Human", "Droid", "Droid", "Human", "Human", "Human", "Huma…
+## $ films      &lt;list&gt; &lt;"The Empire Strikes Back", "Revenge of the Sith", "Return…
+## $ vehicles   &lt;list&gt; &lt;"Snowspeeder", "Imperial Speeder Bike"&gt;, &lt;&gt;, &lt;&gt;, &lt;&gt;, "Imp…
+## $ starships  &lt;list&gt; &lt;"X-wing", "Imperial shuttle"&gt;, &lt;&gt;, &lt;&gt;, "TIE Advanced x1",…
+```
+
+---
+# Correlation
+
+- Here, we aren't predicting any one variable from the other, so both variables go to the right of the tilde. 
+
+- We add multiple variables with a `+`.
+
+- We choose the type of correlation we want (e.g. Pearson, Spearman) with the method.
+
+
+```r
+cor.test(~ height + mass, starwars, method = "pearson")
+```
+
+```
+## 
+## 	Pearson's product-moment correlation
+## 
+## data:  height and mass
+## t = 8.7853, df = 56, p-value = 4.018e-12
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.6260700 0.8520232
+## sample estimates:
+##       cor 
+## 0.7612612
+```
+
+---
+# Tests of Difference
+
+- We'll use some different data here on out. 
+
+- Let's assume this data looks at giving people a placebo or drug, and tests the effect of that drug at two different time points. 
+
+- We care about improvements in reaction times.
+
+
+```r
+mixed_data &lt;- read_csv(here("data", "mixed_factorial.csv"))
+head(mixed_data)
+```
+
+```
+## # A tibble: 6 x 4
+##   id    drug    time          rt
+##   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt;
+## 1 S001  control daylater    431.
+## 2 S001  control monthlater  421.
+## 3 S002  control daylater    372.
+## 4 S002  control monthlater  350.
+## 5 S003  control daylater    393.
+## 6 S003  control monthlater  368.
+```
+
+---
+# t-tests
+## One-sample t-test
+
+- We have only one variable here, so we don't even need a formula. 
+
+- We compare the mean of this variable against a specified baseline mean (here 400).
+
+
+```r
+t.test(mixed_data$rt, mu = 400)
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  mixed_data$rt
+## t = -9.5311, df = 479, p-value &lt; 2.2e-16
+## alternative hypothesis: true mean is not equal to 400
+## 95 percent confidence interval:
+##  376.3267 384.4193
+## sample estimates:
+## mean of x 
+##   380.373
+```
+---
+# t-tests
+## Independent-samples t-test
+
+- Do reaction times vary depending on the drug given to participants?
+
+- We test reaction times predicted by drug, with a regular t-test where variances are assumed to be equal (`var.equal = TRUE`).
+
+
+```r
+t.test(rt ~ drug, mixed_data, var.equal = TRUE)
+```
+
+```
+## 
+## 	Two Sample t-test
+## 
+## data:  rt by drug
+## t = 3.732, df = 478, p-value = 0.0002128
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##   7.18135 23.15251
+## sample estimates:
+##   mean in group control mean in group treatment 
+##                387.9564                372.7895
+```
+
+---
+# t-tests
+## Paired t-test
+
+- Do reaction times vary over time (i.e. practice)?
+
+- We test reaction times predicted by the time of testing. This is a paired test (`paired = TRUE`) and a regular t-test where variances are assumed to be equal (`var.equal = TRUE`).
+
+
+```r
+t.test(rt ~ time, mixed_data, paired = TRUE, var.equal = TRUE)
+```
+
+```
+## 
+## 	Paired t-test
+## 
+## data:  rt by time
+## t = 18.348, df = 239, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  49.10644 60.91970
+## sample estimates:
+## mean of the differences 
+##                55.01307
+```
+
+---
+# One-way ANOVA
+### Between-subjects
+
+- What if we had **more than two groups** for the drug condition? We use an ANOVA.
+
+- We simply change the test function to `aov()` (**A**nalysis **O**f **V**ariance)
+
+- We need to summarise the model results here to get a regular ANOVA output.
+
+
+```r
+summary(aov(rt ~ drug, mixed_data))
+```
+
+```
+##              Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## drug          1  27604   27604   13.93 0.000213 ***
+## Residuals   478 947379    1982                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+# One-way ANOVA
+### Within-subjects
+
+- What if we have more than two groups and a **within-subjects design**?
+
+- We do the same as before, but need to add an **Error term** to the formula. This states that we adjust our errors to account for the fact scores in each group belong to the same participant (i.e. **id** in our data).
+
+
+```r
+summary(aov(rt ~ time + Error(id), mixed_data))
+```
+
+```
+## 
+## Error: id
+##            Df Sum Sq Mean Sq F value Pr(&gt;F)
+## Residuals 239 353969    1481               
+## 
+## Error: Within
+##            Df Sum Sq Mean Sq F value Pr(&gt;F)    
+## time        1 363173  363173   336.6 &lt;2e-16 ***
+## Residuals 239 257842    1079                   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+# Two-Way ANOVA
+## Mixed
+
+
+```r
+summary(aov(rt ~ time * drug + Error(id), mixed_data))
+```
+
+```
+## 
+## Error: id
+##            Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## drug        1  27604   27604   20.13 1.13e-05 ***
+## Residuals 238 326365    1371                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Error: Within
+##            Df Sum Sq Mean Sq F value Pr(&gt;F)    
+## time        1 363173  363173   806.3 &lt;2e-16 ***
+## time:drug   1 150636  150636   334.4 &lt;2e-16 ***
+## Residuals 238 107206     450                   
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+# Throw Away the Alphabet Soup
+
+All of the statistical tests you know (e.g. *t*-tests, ANOVA, chi-square) are just extensions of the **general linear model**. This is the most important thing you can learn to use in statistics.
+
+Learn the mean and *variance* of some measurement by using an additive combination of other measurements.
+
+- The **geocentric model of applied statistics**: used wisely, can be useful. But we shouldn't read too much into the numbers produced. They're almost certainly wrong because we can't (and shouldn't) model all sources of variance.
+
+- Predict a **linear relationship** between one or more variable(s) and a continuous (e.g. scale) dependent variable.
+
+- Predictor variables can be continuous or categorical.
+
+---
+# Linear Regression
+
+Takes the general form:
+
+`$$Y = \alpha + \beta X + e$$`
+
+- **Outcome** `\(Y\)` = intercept + (slope `\(\times\)` X) + residual error
+
+- **Residuals** `\(e\)` = distance of observed values from predicted values
+
+- *Note*: We do not fit a perfect model, hence the error term. This is a good thing, otherwise we are probably **overfitting** to our data; relying too much on our observed sample to draw infferences.
+
+---
+# Linear Regression
+
+Takes the general form: 
+
+`$$Y = \alpha + \beta X + e$$`
+
+- The **intercept**, `\(\alpha\)`, is usually the point on the y-axis at the lowest value of X (usually 0).
+
+- The **slope**, `\(\beta\)`, corresponds to how much Y increases by for every increment in X.
+
+- The **error**, `\(e\)`, corresponds to a constant by which to add to our estimates accounting for additional variation from other sources that we do not model.
+
+---
+# Linear Regression
+
+Fit the model predicting height from weight from the starwars data.
+
+`$$Y = \alpha + \beta X + e$$`
+`$$height = intercept + slope \times mass + error$$`
+
+
+```r
+starlm &lt;- lm(height ~ mass, starwars)
+summary(starlm)
+```
+
+```
+## 
+## Call:
+## lm(formula = height ~ mass, data = starwars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -53.369  -6.816   2.042  13.851  44.719 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 103.5133     8.5937  12.045  &lt; 2e-16 ***
+## mass          0.9327     0.1062   8.785 4.02e-12 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 23.45 on 56 degrees of freedom
+## Multiple R-squared:  0.5795,	Adjusted R-squared:  0.572 
+## F-statistic: 77.18 on 1 and 56 DF,  p-value: 4.018e-12
+```
+
+---
+# Comparing tests we know...
+## Correlation
+
+
+```r
+broom::tidy(cor.test(~ height + mass, starwars, method = "pearson"))
+```
+
+```
+## # A tibble: 1 x 8
+##   estimate statistic  p.value parameter conf.low conf.high method    alternative
+##      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;      
+## 1    0.761      8.79 4.02e-12        56    0.626     0.852 Pearson'… two.sided
+```
+
+
+```r
+broom::tidy(lm(height ~ mass, starwars, method = "pearson"))
+```
+
+```
+## Warning in lm(height ~ mass, starwars, method = "pearson"): method = 'pearson'
+## is not supported. Using 'qr'
+```
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)  104.        8.59      12.0  3.53e-17
+## 2 mass           0.933     0.106      8.79 4.02e-12
+```
+
+- *t* statistics match exactly.
+
+---
+# Comparing tests we know...
+## t-tests
+
+
+```r
+broom::tidy(t.test(rt ~ drug, mixed_data, var.equal = TRUE))
+```
+
+```
+## # A tibble: 1 x 10
+##   estimate estimate1 estimate2 statistic  p.value parameter conf.low conf.high
+##      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1     15.2      388.      373.      3.73 0.000213       478     7.18      23.2
+## # … with 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;
+```
+
+```r
+broom::tidy(summary(lm(rt ~ drug, mixed_data)))
+```
+
+```
+## # A tibble: 2 x 5
+##   term          estimate std.error statistic  p.value
+##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)      388.       2.87    135.   0       
+## 2 drugtreatment    -15.2      4.06     -3.73 0.000213
+```
+- *t* statistics match exactly.
+
+---
+# Comparing tests we know...
+## ANOVA
+
+
+```r
+summary(aov(rt ~ drug, mixed_data))
+```
+
+```
+##              Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## drug          1  27604   27604   13.93 0.000213 ***
+## Residuals   478 947379    1982                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+
+```r
+broom::tidy(lm(rt ~ drug, mixed_data))
+```
+
+```
+## # A tibble: 2 x 5
+##   term          estimate std.error statistic  p.value
+##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)      388.       2.87    135.   0       
+## 2 drugtreatment    -15.2      4.06     -3.73 0.000213
+```
+
+- *t* to *F* is just *t* squared. So, 3.732 squared = 13.93...
+
+---
+# Bye!
+
+&lt;img src="https://media.giphy.com/media/SbtWGvMSmJIaV8faS8/giphy.gif" width="450" style="display: block; margin: auto;" /&gt;
+
+*Effect sizes are easily handled by the {effectsize} package. Super-easy ANOVAs are done using the {afex} package*.
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
+"ratio": "16:9",
 "highlightStyle": "github",
 "highlightLines": true,
 "countIncrementalSlides": false

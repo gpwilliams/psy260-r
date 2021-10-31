@@ -1,6 +1,5 @@
 ---
 title: "Managing Data in R"
-subtitle: "Importing Data into R"
 author: "Glenn Williams"
 institute: "University of Sunderland"
 date: "2021-10-26 (updated: `r Sys.Date()`)"
@@ -33,6 +32,11 @@ colorise <- function(x, color) {
 }
 ```
 
+class: inverse, center, middle
+
+# Importing Data into R
+
+---
 # Understanding File Systems
 
 Before we read in any data, we need to understand file paths on your computer.
@@ -192,12 +196,12 @@ There are a few inbuilt functions in R that allow us to read in data from a file
 
 - By default, `read_csv()` tells us how R parsed each column (i.e. what the data is stored as).
 
-```{r read-csv, warning = FALSE}
+```{r read-csv-factorial, warning = FALSE}
 raw_data <- read_csv(here("data", "factorial_data.csv"))
 ```
 
 ---
-# Recap
+# Interim Recap
 
 We know...
 
@@ -208,3 +212,522 @@ We know...
 - why using **RStudio Projects** and the `here` package makes working with files easier. 
 
 - how to read different file types into R.
+
+---
+class: inverse, center, middle
+
+# Manipulating Data in R
+
+---
+# Loading our Cleaned Data
+
+Let's load up a data set.
+
+Remember, `read_csv()` takes one argument: where is your data!
+
+```{r load-data-a}
+data_a <- read_csv(here("data", "factorial_data_a.csv"))
+```
+
+The rest of our data is in a second table. Let's load this in too.
+
+```{r load-data-b, message = FALSE}
+data_b <- read_csv(here("data", "factorial_data_b.csv"))
+```
+
+---
+# Tidy Data
+
+Our data is in a tidy/long format.
+
+```{r tidy-data-1, echo = FALSE, out.width = 700, fig.align = "center", fig.cap="Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst"}
+knitr::include_graphics(c(
+   "../../img/allison-horst_illustrations/tidy-data/tidydata_1.jpg"
+))
+```
+
+---
+# Why Use Tidy Data?
+
+This makes cleaning, summarising, plotting, and modelling easier!
+
+```{r tidy-data-3, echo = FALSE, out.width = 700, fig.align = "center", fig.cap="Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst"}
+knitr::include_graphics(c(
+   "../../img/allison-horst_illustrations/tidy-data/tidydata_3.jpg"
+))
+```
+
+---
+# Common Data Processing Tasks
+
+The most common data manipulation problems can be handled effectively by `dplyr`, a package within the tidyverse:
+
+**One Table**:
+
+- `filter()`: filters our data to keep observations that only meet given conditions.
+
+- `select()`: selects a subset of columns in our table.
+
+- `mutate()`: changes our data in some way by the instructions you provide.
+
+**Multiple Tables**:
+
+- `bind_rows()`: adds rows from one data frame to another (if they have the same columns).
+
+- `bind_cols()`: adds columns to one data frame from another (if they have the same number of rows).
+
+---
+# Filter
+
+```{r dplyr-filter, echo = FALSE, out.width = 700, fig.align = "center", fig.cap="Artwork by @allison_horst"}
+knitr::include_graphics(c(
+   "../../img/allison-horst_illustrations/general/dplyr_filter.jpg"
+))
+```
+
+---
+# Filter
+
+Let's say we want to keep only observations from our first participant. This might be useful for exploring data individually.
+
+```{r keep-subject-one}
+filter(data_a, subj_id == 4)
+```
+
+We have only 40 observations now, all from subject 4.
+
+---
+# Combining Filter Conditions
+
+Maybe we want to check if subject 4 has any missing data in the variable Y. How might we do this? 
+
+We could apply two separate filters, or combine our filter conditions using logical operations.
+
+```{r subj-one-na}
+filter(data_a, subj_id == 4 & is.na(Y))
+```
+
+Note that **NAs are special in R**, so we have to use is.na() which checks for any NA values explicitly, rather than Y == NA.
+
+*It looks like subject 4 has 1 missing response!*
+
+---
+# Select
+
+Select works by defining the names of **columns you'd like to keep**, and in what order!
+
+```{r dplyr-select, echo = FALSE, out.width = 500, fig.align = "center", fig.cap="Artwork by @allison_horst"}
+knitr::include_graphics(c(
+   "../../img/allison-horst_illustrations/general/dplyr_select.png"
+))
+```
+
+---
+# Select
+
+Imagine we only want to **keep the subject_id** column.
+
+```{r select-keep}
+select(data_a, subj_id)
+```
+
+---
+# Select
+
+Imagine we want to **remove the list_id column**. We simply put a minus before the column name.
+
+```{r select-out}
+select(data_a, -list_id)
+```
+
+---
+# Select
+
+Maybe we'd like to **reorganise our columns so columns A and B come first and everything else after**. Select A and B, and then everything else using `everything()`; a dplyr helper function.
+
+```{r select-reorder}
+select(data_a, A, B, everything())
+```
+
+---
+# Muatate
+
+What if we want to **change our data**? Use `mutate()`.
+
+```{r dplyr-mutate, echo = FALSE, out.width = 500, fig.align = "center", fig.cap="Artwork by @allison_horst"}
+knitr::include_graphics(c(
+   "../../img/allison-horst_illustrations/general/dplyr_mutate.png"
+))
+```
+
+---
+# Mutate
+
+With mutate we can **change the data within columns**, or **create new columns** of data entirely.
+
+Let's create a new column. This will combine the text in columns A and B. We will use `paste()` to do this. The argument `sep = "+"` will add a plus between the entries.
+
+```{r mutate-create}
+mutate(data_a, AB = paste(A, B, sep = "+"))
+```
+
+---
+# Mutate
+
+Perhaps instead we want to **change the data in a column in place**? Let's get the natural logarithm on the scores in Y.
+
+```{r mutate-change}
+mutate(data_a, Y = log(Y))
+```
+
+---
+# Converting Values Conditionally
+
+- **Conditionals** are statements we give the computer where we want it to do something **only if a condition is met**.
+
+- Using the tidyverse, we have a nice way to set these up using the function `case_when()`. It looks like this:
+
+```{r case-when-example, eval = FALSE}
+case_when(
+  data == value ~ replacement,
+  TRUE ~ data
+)
+```
+
+- We give this function an argument relating to what **case** we care about (e.g. when the data is equal to a value).
+
+- To the right of the `~` we tell R what the value should be in this case.
+
+- We finally set a default value (`TRUE`), i.e. all other cases. Here, we tell R to just use the original value in the data.
+
+---
+# Mutate
+
+- `case_when()` can work on individual vectors of data, or on columns within a data frame if we combine it with the `mutate()` function.
+
+- Here, we'll we'll recode an item in the item_id column. Let's change item 1 to item 20.
+
+```{r mutate-case-when}
+mutate(
+  data_a, 
+  item_id = case_when(
+    item_id == 1 ~ 20,
+    TRUE ~ item_id
+  )
+)
+```
+
+---
+# Bind Rows
+
+Our data is stored in two separate tables. Let's join them together using `bind_rows()`.
+
+```{r bind-rows}
+# bind it together
+combined_data <- bind_rows(data_a, data_b)
+
+# print it out
+combined_data
+```
+Now our data has a total of 2400 rows. We've combined the tables together!
+
+---
+# Bind Cols
+
+We can bind columns together in a similar way.
+
+- First, we'll extract the columns A and B, both only having the first 4 rows of our data each. 
+
+- Then to show how the function works, we'll bind these objects together using `bind_cols()`.
+
+```{r bind-cols}
+# get our data
+col_a <- combined_data[1:4, "A"]
+col_b <- combined_data[1:4, "B"]
+
+# bind it together
+bind_cols(col_a, col_b)
+```
+
+---
+# Interim Recap
+
+We know...
+
+- What **tidy data** is, and why we want our data to be in this format.
+
+- How to **manipulate one-table data** for cleaning and preparation for analysis/graphing, including:
+
+    - How to **filter** observations out of our data set.
+
+    - How to **select** particular columns in our data set.
+
+    - How to **mutate** or modify existing data and even create new columns of data.
+
+- How to bind rows and columns together from **multiple tables**.
+
+---
+class: inverse, center, middle
+
+# Data Checking in R
+
+---
+# Understanding our Data
+
+To have a good understanding of how you should **clean and analyse your data**, you have to **understand how your data was made**. Ask yourself:
+
+- How was the study performed?
+
+- What do the variables in the data set represent?
+
+- What levels can these variables have?
+
+- Was a consistent coding scheme used throughout?
+
+- How is missing data coded (if at all)?
+
+Answering these questions makes you understand your data better, so you'll make fewer mistakes and do a better job of analysing it.
+
+---
+# Reading in Data
+
+In the data folder of this repository are files called **factorial_data_a.csv** and **factorial_data_b.csv**. If I'm working from this project folder I can read it in and combine the data as follows:
+
+```{r read-csv-a-b, message = FALSE}
+# read the data
+data_a <- read_csv(here("data", "factorial_data_a.csv"))
+data_b <- read_csv(here("data", "factorial_data_b.csv"))
+
+# combine the data
+combined_data <- bind_rows(data_a, data_b)
+
+# print it
+combined_data
+```
+
+Let's take a look at this data so we can understand it...
+
+---
+# Some Notes on the Data
+
+What does the data look like? The `head()` function allows you to see the top of your data set.
+
+```{r raw-data-inspect}
+head(combined_data)
+```
+
+*The function `tail()` does the opposite to `head()`. Try it out!*
+
+---
+# Understanding our Data
+
+Let's assume we gave people a task where they had to read **sentences that imply an upwards or downwards motion (variable A)** and then **identify targets at the top or bottom of the screen (variable B)** as quickly as they could. We captured their response times in the task (variable Y).
+
+We have the following columns:
+
+- **subj_id** = Subject/participant ID for the person who gave the data to us.
+
+- **list_id** = List ID for how items were randomised.
+
+- **item_id** = Item ID.
+
+- **variable A** = Implied sentence location (upwards or downwards); e.g. "the bird flew in the sky."
+
+- **variable B** = Location of target (up or down on the screen).
+
+We should check that the data is coded as expected.
+
+---
+# Inspecting Data
+
+- Our first step to understanding our data should be to **check that we have read it into R correctly**, and that `read_csv()` has sensibly guessed at our data types.
+
+- We can do this using the `glimpse()` function. This gives us a **look at our data on its side**, so we can see how our data are stored and how they are coded.
+
+```{r inspect-data-types}
+glimpse(combined_data)
+```
+
+There's a few problems with our coding system here. Subject ID should probably be numeric, and we need consistent codes for A and B.
+
+---
+# Inspecting Data
+
+- We can get a summary of our data, albeit in a confusing printout, using `summary()`.
+
+- Here, we'll reduce the summary only to our numeric columns for easier presentation (selecting columns, only if they are numeric).
+
+```{r summary-of-the-data}
+summary(select_if(combined_data, is.numeric))
+```
+
+Our Y outcome, reaction time, seems to have a minimum of a negative value. We need to get rid of this clear error.
+
+---
+# Inspecting Codes
+
+Our list IDs and Item IDs are properly coded, but we should check our variables A and B, which indicate the conditions of the study. 
+
+- We can ask for only values from one column using dollar indexing; e.g. `data$column`.
+
+- The `unique()` function tells us what unique observations we have in a column.
+
+Which unique values do we have here?
+
+```{r unique-A-and-B}
+unique(combined_data$A)
+unique(combined_data$B)
+```
+
+It looks like we have a mix of issues here. R is **case sensitive, meaning A is different to a**. We can make some initial fixes here by making everything the same case. Do this by using the `tolower()` function.
+
+---
+# Fixing Problems
+
+Set the values in A and B to lower case.
+
+```{r unique-A-and-B-tolower}
+# change values
+combined_data$A <- tolower(combined_data$A)
+combined_data$B <- tolower(combined_data$B)
+```
+
+How does it look?
+
+```{r inspect-unique-A-and-B-tolower}
+unique(combined_data$A)
+unique(combined_data$B)
+```
+
+We've fixed the codes for variable A, but variable B still has some problems. Someone has mistakenly entered bb2 and bb1 as codes.
+
+Let's change these!
+
+---
+# Fixing Remaining Problems
+
+We'll use the `case_when()` function again here.
+
+If column B has the value "bb1" change it to "b1", otherwise if it has "bb2" change it to "b2", else just leave values as they are.
+
+```{r case_when-B}
+combined_data <- mutate(
+  combined_data,
+  B = case_when(
+    B == "bb1" ~ "b1",
+    B == "bb2" ~ "b2",
+    TRUE ~ B
+  )
+) 
+```
+
+How do the values look now?
+
+```{r inspect-case_when-B}
+unique(combined_data$B)
+```
+
+Nice and consistent!
+
+---
+# Identifying Remaining Problems
+
+- We can see that subject IDs are stored as characters. Why is that? Let's see what unique values we have here.
+
+```{r inspect-subject-id}
+unique(combined_data$subj_id)
+```
+
+We have a mix of integers, and the two values "one" and "last" as IDs. We need to make this consistent.
+
+---
+# Converting Values Conditionally
+
+Let's change the "one" and "last" values to more sensible values. Notice we have to stick with characters for now so the column has the same data types in it.
+
+```{r change-subj-id}
+combined_data$subj_id <- case_when(
+  combined_data$subj_id == "one" ~ "1",
+  combined_data$subj_id == "twenty-eight" ~ "28",
+  combined_data$subj_id == "last" ~ "60",
+  TRUE ~ combined_data$subj_id
+)
+```
+
+How have the values changed?
+
+```{r check-subj-id}
+unique(combined_data$subj_id)
+```
+
+Nicely, the numbers now go from 1 to 60! But they're still characters.
+
+---
+# Fixing Remaining Problems
+
+We can convert between data types using the `as.` functions. We have e.g. `as.character()`, `as.factor()`, and `as.numeric()`. We'll use `as.numeric()` to make these strings into numeric values now they're consistently coded.
+
+```{r convert-data-type}
+combined_data$subj_id <- as.numeric(combined_data$subj_id)
+```
+
+How do the values look? Check the data again. All good!
+
+```{r inspect-converted-data}
+glimpse(combined_data)
+```
+
+---
+# Fixing Remaining Problems
+
+Finally, we can't have negative reaction times. Let's remove any reaction times below 100ms under the assumption they're far too quick for this task.
+
+```{r remove-negative-rts}
+# filter only to RTs above 100ms
+combined_data <- filter(combined_data, Y > 100)
+
+# inspect it
+combined_data
+```
+
+All done!
+
+---
+
+# Save our Cleaned Data
+
+Finally, we did all that work with our data. To save repeating all these steps again, we can save it to an external file. We do this using 'write_csv()`.
+
+Let's save our file in the data folder. This takes two arguments: 
+
+1. Which R object will you save to file?
+
+2. Where should you save it? What will the data be called?
+
+```{r cleaned-data-save}
+write_csv(
+  combined_data, 
+  here("data", "cleaned_data.csv")
+)
+```
+
+The nice thing is, if you made a mistake in one of your steps, you can just change that step and rerun your code. 
+
+If you change things by hand, who knows if you'll even detect the mistake, never mind how difficult it might be to fix it! 
+
+---
+# Interim Recap
+
+We know...
+
+- how to read data into R.
+
+- how to find out how our data are coded.
+
+- how to identify unique elements of our data.
+
+- how to get a summary of our data.
+
+- how to convert and clean up data.
+
+- how to perform case-specific operations using conditional logic.
