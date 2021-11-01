@@ -18,15 +18,33 @@ Each week you will learn about R from lectures before doing further learning in 
 
 Please read the background this week on getting started in R, using RStudio Projects, and literate programming using R notebooks. After that, you will actively use R to complete exercises and answer questions. This week, you will complete the exercises and questions in **seminars/01_intro-to-r/questions.Rmd**.
 
+Please note that this instruction document gives extensive background on setting up R and RStudio and recaps content from the lecture. For main guidance on the seminar only please see **Tasks for this Workshop** at the bottom of the document.
+
 # Getting Started in R
 
 Please make sure that you have watched the three [introductory videos on Using R for Data Processing](https://canvas.sunderland.ac.uk/courses/47533/pages/lecture-week-6-2?module_item_id=826590). These cover why you might use R, how to install and create notebooks in R for data processing, and how to do basic data manipulation in R.
 
 # Installing R
 
-Please watch video 1b for details on installing R. Some details are provided below. Option 1 is preferable.
+Please watch the video on Canvas for installing R. Some details are provided below. Option 1 is preferable.
 
-## Option 1: Local Install
+## Option 1: R in the Cloud
+
+Register an account at [https://rstudio.cloud/](https://rstudio.cloud/) by clicking **Sign Up**.
+
+```{r rstudiocloud-signup, echo = FALSE, out.width = 750, fig.align = "center", fig.cap="rstudio.cloud signup page"}
+knitr::include_graphics(c(
+   "../../img/rstudio-cloud-signup.png"
+))
+```
+
+Click New Project, then click New Project from Git Repository and paste in this link: [https://github.com/gpwilliams/psy260-r](https://github.com/gpwilliams/psy260-r)
+
+This will copy my GitHub repository with all of the materials for this course. You can then complete the exercises each week in the semianars folder and access lecture slides etc. in the lectures folder.
+
+*Please note that you are limited to 25 hours per month at the free tier of this service.*
+
+## Option 2: Local Install
 
 Download and install R: Follow the link to [https://cloud.r-project.org/](https://cloud.r-project.org/) to install R. 
 
@@ -66,28 +84,13 @@ knitr::include_graphics(c(
 ))
 ```
 
-
 Click download RStudio for Linux, Mac, or Windows as appropriate and follow the install instructions.
-
-## Option 2: R in the Cloud
-
-Register an account at [https://rstudio.cloud/](https://rstudio.cloud/) by clicking **Sign Up**.
-
-```{r rstudiocloud-signup, echo = FALSE, out.width = 750, fig.align = "center", fig.cap="rstudio.cloud signup page"}
-knitr::include_graphics(c(
-   "../../img/rstudio-cloud-signup.png"
-))
-```
-
-That's it! 
-
-Please note that you are limited to 15 hours per month at the free tier of this service.
 
 ## Option 3: R at the University
 
 We have local installations of R/RStudio for use on the computers in Psychology. These are controlled so that you don't have admin rights, meaning you can't install any additional packages. However, we will have the core packages (e.g. here, tidyverse) installed for you.
 
-## Some Housekeeping
+## Some Housekeeping (Local Installs Only)
 
 RStudio and R by default will ask you if you want to save your workspace and restore it when opening RStudio again. What does this mean? Well, anything you create in R (e.g. objects holding data) in one session can be saved to a file and loaded back up every time you open R. This may sound convenient, but it's terrible for reproducibility and will likely cause you problems down the line; you'll have objects accessible to you that you haven't actually created in a session. It's best to just never save this information and to explicitly save and load anything back into R as and when you need it.
 
@@ -101,7 +104,7 @@ knitr::include_graphics(c(
 
 Make sure that the checkbox in **Workspace** saying "Restore .RData into workspace at startup" is unchecked like in the above image. Then make sure the line saying "Save workspace to R.Data on exit:" it set to **Never**. Click OK, and you're ready to get started. You'll only have to do this once in RStudio.
 
-# Getting Started
+# Getting Started with your Own Projects
 
 Normally, whenever you want to start a new project using R, it's good practice to set up an RStudio project. This is a file that sits in the folder of your project which makes this location your **working directory**. That means that whenever we read or write files with R it'll automatically look in this location when doing so if you use a relative file path system. (Details of this are covered in the first lecture.) 
 
@@ -131,7 +134,7 @@ knitr::include_graphics(c(
 ))
 ```
 
-## Assuming you're using rstudio.cloud
+## Assuming you're using RStudio Cloud
 
 ### Setting up an R Project
 
