@@ -5,7 +5,11 @@
 
 Some details are provided below. Please note that Option 1 is preferable.
 
-## Option 1: Local Install
+## Option 1: R in the Cloud
+
+Register an account at [https://rstudio.cloud/](https://rstudio.cloud/). Please note that you are limited to 15 hours per month at the free tier of this service at the time of writing.
+
+## Option 2: Local Install
 
 ### Download and install R
 
@@ -15,71 +19,44 @@ Follow the link to [https://cloud.r-project.org/](https://cloud.r-project.org/) 
 
 Follow the link to [https://rstudio.com/products/rstudio/download/](https://cloud.r-project.org/) and select the free version of RStudio Desktop. Click download RStudio for Linux, Mac, or Windows as appropriate and follow the install instructions.
 
-## Option 2: R in the Cloud
-
-Register an account at [https://rstudio.cloud/](https://rstudio.cloud/). Please note that you are limited to 15 hours per month at the free tier of this service at the time of writing.
-
 ## Option 3: R at the University of Sunderland
 
 We will have local installations of R/RStudio for use on the computers in Psychology. These are controlled so that you do not have admin rights, so cannot install any additional packages. However, we will have the core packages (e.g. `here`, `tidyverse`) installed for you so you do not need to install any packages.
-Seminars
 
 # Following the Content
 
-All seminars will involve working through the exercises in the seminars folder (described below). For the first seminar (split between an online and face to face session) we will use the face to face session as an opportunity for you to ask questions and engage in any troubleshooting in regards to your R installation and running R code.
+There are three weeks of content based around lectures and seminars. Please attend or watch a recording of the lecture each week in preparation for the seminar. 
+
+In seminars we will work through questions in the seminars folder (described below). Here you will complete exercises in an existing R-markdown file that builds upon content taught directly in the lecture. Following this there are additional questions which involve incorporating knowledge from within and across lectures and will sometimes involve learning new methods in the seminar from self-guided study.
+
+## With RStudio Cloud
+
+In RStudio Cloud set up your account and then click New Project. Select New Project from GitHub Repository, and then paste in the following: https://github.com/gpwilliams/psy260-r. This will clone this repository so you can work on the seminars file without manually downloading and uploading content.
+
+## With a Local R Installation
 
 Click the green Code button on this repository and click Download Zip and unzip the files. To do this either double click on the zipped folder (Mac) or right click and choose 7zip, Unzip here (PC). (Or use other methods if you are comfortable with GitHub.)
 
 You now have access to everything I used to create the lectures and seminar content.
 
-Please ensure that you are up to date with the lecture content stored in /lectures/ before completing the seminar content. 
+**To complete the seminar content each week, open RStudio by double-clicking the psy260-r.Rproj file in the root directory (main folder) of the repository. This ensures RStudio will work with the current working directory set properly.**
 
-In the /seminars/ folder there are subdirectories for each session. Please complete the main exercises before the additional, optional questions.
+## All Methods
 
-**IMPORTANT: PLEASE SAVE ANY UPDATED .RMD FILES ELSEWHERE ON YOUR COMPUTER. IF YOU RE-DOWNLOAD THE REPOSITORY, YOUR WORK MAY BE OVERWRITTEN (LOST).**
+Lecture content can be found in the /lectures/ subdirectory. In the /seminars/ folder there are subdirectories for each session. Please complete the main exercises before the additional, optional questions.
+
+**Please be aware that if you re-download this repository your changes will not be reflected in it. Keep your work safe and do not overwrite it.**
 
 # Session 1: Introduction to R
 
-Take the opportunity in this session to get to grips with R, catch up on any missed lecture videos, and complete the work below.
+Take the opportunity in this session to get to grips with R and complete the work below.
 
-The content for all seminars is in the seminars folder.
+The content for all seminars is in the seminars folder. For the first session, go into 01_intro-to-r. The guidance for this session is in the `01_seminar_intro-to-r.Rmd` and `01_seminar_intro-to-r.html` files. Open the .html file in your browser. This has some instructions on what to do in the seminar. You will work from the `01_questions.Rmd` file. Follow the instructions to create your own code chunks or add to existing code chunks. Press play to execute your code. When you are ready to finish your work, click Knit. This will overwrite the existing `01_questions.html` file with your added content. You can view this in a browser for ease of viewing.
 
-For the first session, go into 01_intro-to-r. The content for this session is in the `01_seminar_intro-to-r.Rmd` and `01_seminar_intro-to-r.html` files.
+## Session 2: Processing Data in R
 
-Open the .html file in your browser (or double click it). This has some instructions on what to do in the seminar.
-
-Once you have made your own RStudio Project and R markdown file within a folder on your computer, you can make changes to the R markdown file to complete the exercises from the `01_seminar-intro-to-r.html` file.
-
-After making changes to your .Rmd file, click knit or preview (pictured below). This will update the .html file. This way you can see how your R code changes the output in the .html file.
-
-1. Complete the exercises in the `01_seminar_intro-to-r.html` file.
-
-2. After this, if you have time work through the `01_questions.Rmd` file. This has some empty R code chunks for you to add your own answers to.
-
-Online and Face to Face sessions will be focused on this content. Face to face sessions simply offer an opportunity to ask questions and do more troubleshooting in person.
-
-*In this session, and in future sessions, it may be best to copy and paste the entire /data/ folder into your Project directory. This will make loading data in R easier using the existing code from the exercises and questions.*
-
-## Session 2: Managing and Cleaning Data in R
-
-Use your same RStudio project (double click it) from the same folder you set up last time for your work. Please create a new R markdown file for storing your work from exercises etc. from this session and save it in this folder.
-
-If you haven't done this yet, please make a folder somewhere on your computer where it will be safe, and create an RStudio Project in this folder (see instructions above from Session 1).
-
-1. As in the previous session, please see the instructions in `psy260-r/seminars/02_managing-data-in-r/02_seminar_managing-data-in-r.html`.
-
-You will have to copy and paste data from the `psy260-r/data/seminar_two_data.csv` file into your own folder where your RStudio project and R markdown files are located.
-
-2. After this, if you have time work through the `02_questions.Rmd` file. This has some empty R code chunks for you to add your own answers to.
+We will complete the content in a similar method as in Session 1. Guidance from the seminar is again in the seminar folder in the file `02_processing-data-in-r.Rmd` and `02_processing-data-in-r.html`. Answer the questions in `02_questions.Rmd` and Knit your final document to `02_questions.html` for ease of viewing.
 
 ## Session 3: Summarising and Plotting Data in R
 
-Use your same RStudio project (double click it) from the same folder you set up last time for your work. Please create a new R markdown file for storing your work from exercises etc. from this session and save it in this folder.
-
-If you haven't done this yet, please make a folder somewhere on your computer where it will be safe, and create an RStudio Project in this folder (see instructions above from Session 1).
-
-1. As in the previous session, please see the instructions in `psy260-r/seminars/03_summarising-data-in-r/03_seminar_summarising-data-in-r.html`.
-
-You will have to copy and paste data from the `psy260-r/data/seminar_three_data.csv` and `psy260-r/data/cleanish_data.csv` files into your own folder where your RStudio project and R markdown files are located.
-
-2. After this, if you have time work through the `03_questions.Rmd` file. This has some empty R code chunks for you to add your own answers to.
+We will complete the content in a similar method as in Session 1. Guidance from the seminar is again in the seminar folder in the file `03_analysing-data-in-r.Rmd` and `03_analysing-data-in-r.html`. Answer the questions in `03_questions.Rmd` and Knit your final document to `03_questions.html` for ease of viewing.
