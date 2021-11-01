@@ -7,7 +7,7 @@ Some details are provided below. Please note that Option 1 is preferable.
 
 ## Option 1: R in the Cloud
 
-Register an account at [https://rstudio.cloud/](https://rstudio.cloud/). Please note that you are limited to 15 hours per month at the free tier of this service at the time of writing.
+Register an account at [https://rstudio.cloud/](https://rstudio.cloud/). Please note that you are limited to 25 hours per month at the free tier of this service at the time of writing.
 
 ## Option 2: Local Install
 
