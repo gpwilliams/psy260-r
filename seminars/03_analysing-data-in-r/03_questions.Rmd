@@ -33,6 +33,10 @@ How many participants do we have in the experiment? How many items? Write some R
 
 *Hint*: `length()` and `unique()` are useful here.
 
+```{r exercise-1-answer}
+
+```
+
 ## Exercise 2
 
 The labels for the conditions in column A are not very informative. Please give these suitable names in the data set.
@@ -45,9 +49,11 @@ There are (at least) two methods to achieve this. Create a column (or overwrite 
 
 *Please see the lecture on manipulating data if you get stuck.*
 
-## Exercise 3
+```{r exercise-2-answer}
 
-### Part A
+```
+
+## Exercise 3
 
 Create a summary of the reaction times per condition for each participant grouped by the variable "A". Choose a way to summarise this based on central tendency (e.g. mean, median, mode).
 
@@ -55,71 +61,63 @@ Typically we use this data for inferential tests and plots.
 
 Assign this data to the object `data_summary`.
 
+```{r exercise-3-answer}
+
+```
+
+## Exercise 4
+
+### Part A
+
+Taking your summary data from Exercise 3, remove any participants with reaction times above 500ms. Save this to the object data_summary_filtered.
+
+```{r exercise-4a-answer}
+
+```
+
+### Part B
+
+After removing the participants in Exercise 4 part A, how many participants do you have left in your summary?
+
+```{r exercise-4b-answer}
+
+```
+
+## Exercise 5
+
+### Part A
+
+We'd like some descriptive statistics for the central tendency and measure of dispersion across both conditions. Calculate these for the data set you created in Exercise 4 part A, data_summary_filtered. Please name the columns as simply mean and sd.
+
+```{r exercise-5a-answer}
+
+```
+
 ### Part B
 
 Write a sentence to justify your choice of measure for central tendency and dispersion in your summary statistics.
 
-## Exercise 4
 
-Create a plot to display the average reaction time per condition in the experiment using the data from `data_summary` in Exercise 3. Justify your choice of plot.
-
-Assign this plot to a variable called `my_plot`.
-
-## Exercise 5
-
-Update your code used to plot `my_plot` in Exercise 4 to have different fills for each condition and to have proper labels on the X and Y axis titles. The aesthetic mapping is where you should add the fill. Use the function `labs()` to add labels to plots.
 
 ## Exercise 6
 
-In this experiment we want to exclude participants with average scores two standard deviations above or below the mean. Another way to think of this is as keeping only participants with scores greater than 2 standard deviation below the mean **and** less than 2 standard deviation above the mean. We will do this in parts.
+In our summary we'd also like the counts for the number of participants in each condition. Please add this to your code used in Exercise 5.
 
-### Part A
-
-Find out the overall mean and standard deviation from the reaction times saved in `data_summary`. Assign this summary to the variable `data_cutoffs`.
-
-Use the function `summarise()` to do this. Be sure to ungroup the data in your chain of functions first, e.g.: `data_summary %>% ungroup() %>% **your code goes here**`.
-
-```{r exercise-6a-answer}
-
-```
-
-### Part B
-
-First, assign the lower and upper bounds for outliers to variables called "outlier_low" and "outlier_high".
-
-*Hint*: You will need to use your answer from Part A to achieve this.
-
-```{r exercise-6b-answer-part1}
-
-```
-
-Then filter out low and high scoring values in the original data using the variables above as your boundaries. Assign this to the variable "outliers".
-
-*Hint: <, > and | operators are useful here when combined with filter().*
-
-```{r exercise-6b-answer-part2}
-
-```
-
-Finally, remove any participant IDs who from the "outliers" variable who appear in your original data. Assign this to the object **data_summary_filtered**.
-
-```{r exercise-6b-answer-part3}
-
-```
-
-### Part C
-
-Create a final plot as in Exercise 5, now with your data from `data_summary_filtered`.
-
-```{r exercise-6c-answer}
+```{r exercise-6-answer}
 
 ```
 
 ## Exercise 7
 
-Make a code chunk. Taking your data from Exercise 6, conduct an appropriate statistical test to compare the mean scores for the congruent and incongruent conditions. Is there a significant difference between the groups?
+Taking your data from Exercise 4A, data_summary_filtered, conduct an appropriate statistical test to compare the mean scores for the congruent and incongruent conditions. Is there a significant difference between the groups?
 
 Remember to use the formula interface `outcome ~ predictor`. This means scores to the left of the `~` are predicted by the values assigned to the right side of the `~`; i.e. your condition dictates your score.
+
+```{r exercise-7-answer}
+
+```
+
+
 
 # Questions
 
@@ -150,7 +148,7 @@ This data set is that from lecture 2b - Data Checking in R. The columns have the
 
 Remove any unnecessary columns from this data set.
 
-```{r question-1}
+```{r question-1-answer}
 
 ```
 
@@ -158,7 +156,7 @@ Remove any unnecessary columns from this data set.
 
 Give proper levels names to the levels A1 and A2 in column A and to B1 and B2 in column B.
 
-```{r question-2}
+```{r question-2-answer}
 
 ```
 
@@ -166,7 +164,7 @@ Give proper levels names to the levels A1 and A2 in column A and to B1 and B2 in
 
 Give proper (column) names to the variables A, B, and Y.
 
-```{r answer-3}
+```{r answer-3-answer}
 
 ```
 
@@ -174,7 +172,7 @@ Give proper (column) names to the variables A, B, and Y.
 
 Make a summary of the data creating averages of the reaction times for each level of each condition for every participant. Assign this to the object `summary_data`.
 
-```{r answer-4}
+```{r answer-4-answer}
 
 ```
 
@@ -182,21 +180,29 @@ Make a summary of the data creating averages of the reaction times for each leve
 
 Remove participants 1 through to 10 from `summary_data`.
 
-```{r answer-5}
+```{r answer-5-answer}
 
 ```
 
 ## Question 6
 
+R has a very powerful plotting pacakge called `ggplot2` which is part of the `tidyverse` family of functions. This works by building plots up layer by layer. You first define the data to plot, then how it maps onto the plot. After that, you add geometric shapes to the plot to represent the data.
+
+To make a botplot, we might run some code as follows, with the text in caps being replaced by your variables.
+
+```{r ggplot-example, eval = FALSE}
+ggplot(data = MY_DATA, mapping = aes(x = MY_IV1, fill = MY_IV2, y = MY_DV)) +
+  geom_boxplot()
+```
+
 Make a boxplot of the data. Are there any reliable differences between conditions? Explain your logic.
 
-```{r answer-6}
+```{r answer-6-answer}
 
 ```
 
-## Question 7
 
-We can perform inferential statistics in R. 
+## Question 7
 
 I have simulated some data below for a one-variable, 3-group experiment. The three groups are "control", "treatment_low", and "treatment_high" which are assigned to the column "condition" while the outcome is in the column "outcome". (It doesn't matter what this column or study represents, data only have meaning we assign to it.) This is a between-subjects design.
 
@@ -232,6 +238,8 @@ We can follow up with our analyses to determine where the effect lies. Do this b
 
 Describe the results of this test.
 
+*There is a significant difference between the treatment high condition and control and treatment low conditions, which don't differ.*
+
 ## Question 8
 
 When we want to analyse two main effects from variables in an ANOVA, we can do so like this:
@@ -248,6 +256,8 @@ Perform an ANOVA on the **summary_data** we created earlier. To get your typical
 
 ```
 
+**There are no main effects of interactions present (all *p*s > .186).**
+
 This answer may appear correct, but with repeated measures we need to tell R to adjust the errors (i.e. to conduct a within- rather than a between-subjects ANOVA) for any terms we want to estimate within each participant. Do this as follows:
 
 ```{r anova-example-2, eval = FALSE}
@@ -263,3 +273,5 @@ Adjust your code to incorporate this. Do your estimates change? Can you explain 
 ```{r anova-example-2-answer}
 
 ```
+
+*The results are still non-significant. The F-values are now smaller, likely due to partialling-out any random variance that is more attributable to participant level variance rather than consistent effects.*

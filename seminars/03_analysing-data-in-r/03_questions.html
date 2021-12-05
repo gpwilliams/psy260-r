@@ -326,7 +326,7 @@ div.tocify {
 <h1 class="title toc-ignore">PSY260 - Research Methods and Analysis</h1>
 <h3 class="subtitle">R Workshop 3 - Analysing Data in R</h3>
 <h4 class="author">Dr Glenn Williams</h4>
-<h4 class="date">2021-10-27 (Updated 2021-10-29)</h4>
+<h4 class="date">2021-10-27 (Updated 2021-12-05)</h4>
 
 </div>
 
@@ -341,8 +341,6 @@ div.tocify {
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># load data</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;seminar_three_data.csv&quot;</span>))</span></code></pre></div>
-<pre><code>## Warning: Missing column names filled in: &#39;X6&#39; [6], &#39;X7&#39; [7], &#39;X8&#39; [8], &#39;X9&#39; [9],
-## &#39;X10&#39; [10], &#39;X11&#39; [11]</code></pre>
 <div id="exercise-1" class="section level2">
 <h2>Exercise 1</h2>
 <p>How many participants do we have in the experiment? How many items? Write some R code to check this.</p>
@@ -360,50 +358,39 @@ div.tocify {
 </div>
 <div id="exercise-3" class="section level2">
 <h2>Exercise 3</h2>
-<div id="part-a" class="section level3">
-<h3>Part A</h3>
 <p>Create a summary of the reaction times per condition for each participant grouped by the variable “A”. Choose a way to summarise this based on central tendency (e.g. mean, median, mode).</p>
 <p>Typically we use this data for inferential tests and plots.</p>
 <p>Assign this data to the object <code>data_summary</code>.</p>
 </div>
+<div id="exercise-4" class="section level2">
+<h2>Exercise 4</h2>
+<div id="part-a" class="section level3">
+<h3>Part A</h3>
+<p>Taking your summary data from Exercise 3, remove any participants with reaction times above 500ms. Save this to the object data_summary_filtered.</p>
+</div>
 <div id="part-b" class="section level3">
+<h3>Part B</h3>
+<p>After removing the participants in Exercise 4 part A, how many participants do you have left in your summary?</p>
+</div>
+</div>
+<div id="exercise-5" class="section level2">
+<h2>Exercise 5</h2>
+<div id="part-a-1" class="section level3">
+<h3>Part A</h3>
+<p>We’d like some descriptive statistics for the central tendency and measure of dispersion across both conditions. Calculate these for the data set you created in Exercise 4 part A, data_summary_filtered. Please name the columns as simply mean and sd.</p>
+</div>
+<div id="part-b-1" class="section level3">
 <h3>Part B</h3>
 <p>Write a sentence to justify your choice of measure for central tendency and dispersion in your summary statistics.</p>
 </div>
 </div>
-<div id="exercise-4" class="section level2">
-<h2>Exercise 4</h2>
-<p>Create a plot to display the average reaction time per condition in the experiment using the data from <code>data_summary</code> in Exercise 3. Justify your choice of plot.</p>
-<p>Assign this plot to a variable called <code>my_plot</code>.</p>
-</div>
-<div id="exercise-5" class="section level2">
-<h2>Exercise 5</h2>
-<p>Update your code used to plot <code>my_plot</code> in Exercise 4 to have different fills for each condition and to have proper labels on the X and Y axis titles. The aesthetic mapping is where you should add the fill. Use the function <code>labs()</code> to add labels to plots.</p>
-</div>
 <div id="exercise-6" class="section level2">
 <h2>Exercise 6</h2>
-<p>In this experiment we want to exclude participants with average scores two standard deviations above or below the mean. Another way to think of this is as keeping only participants with scores greater than 2 standard deviation below the mean <strong>and</strong> less than 2 standard deviation above the mean. We will do this in parts.</p>
-<div id="part-a-1" class="section level3">
-<h3>Part A</h3>
-<p>Find out the overall mean and standard deviation from the reaction times saved in <code>data_summary</code>. Assign this summary to the variable <code>data_cutoffs</code>.</p>
-<p>Use the function <code>summarise()</code> to do this. Be sure to ungroup the data in your chain of functions first, e.g.: <code>data_summary %&gt;% ungroup() %&gt;% **your code goes here**</code>.</p>
-</div>
-<div id="part-b-1" class="section level3">
-<h3>Part B</h3>
-<p>First, assign the lower and upper bounds for outliers to variables called “outlier_low” and “outlier_high”.</p>
-<p><em>Hint</em>: You will need to use your answer from Part A to achieve this.</p>
-<p>Then filter out low and high scoring values in the original data using the variables above as your boundaries. Assign this to the variable “outliers”.</p>
-<p><em>Hint: &lt;, &gt; and | operators are useful here when combined with filter().</em></p>
-<p>Finally, remove any participant IDs who from the “outliers” variable who appear in your original data. Assign this to the object <strong>data_summary_filtered</strong>.</p>
-</div>
-<div id="part-c" class="section level3">
-<h3>Part C</h3>
-<p>Create a final plot as in Exercise 5, now with your data from <code>data_summary_filtered</code>.</p>
-</div>
+<p>In our summary we’d also like the counts for the number of participants in each condition. Please add this to your code used in Exercise 5.</p>
 </div>
 <div id="exercise-7" class="section level2">
 <h2>Exercise 7</h2>
-<p>Make a code chunk. Taking your data from Exercise 6, conduct an appropriate statistical test to compare the mean scores for the congruent and incongruent conditions. Is there a significant difference between the groups?</p>
+<p>Taking your data from Exercise 4A, data_summary_filtered, conduct an appropriate statistical test to compare the mean scores for the congruent and incongruent conditions. Is there a significant difference between the groups?</p>
 <p>Remember to use the formula interface <code>outcome ~ predictor</code>. This means scores to the left of the <code>~</code> are predicted by the values assigned to the right side of the <code>~</code>; i.e. your condition dictates your score.</p>
 </div>
 </div>
@@ -411,8 +398,8 @@ div.tocify {
 <h1>Questions</h1>
 <p>These remaining questions are designed to push you a little further to improve your knowledge. Please complete these in your own time.</p>
 <p>Please run the following R code chunk by pressing the green play button. This will load the data up from the “data” folder and print it out in your console.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>qdata <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;cleanish_data.csv&quot;</span>))</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>qdata <span class="co"># inspect it</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>qdata <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;cleanish_data.csv&quot;</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>qdata <span class="co"># inspect it</span></span></code></pre></div>
 <pre><code>## # A tibble: 2,400 x 7
 ##       X1 subj_id list_id item_id A     B         Y
 ##    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
@@ -458,11 +445,14 @@ div.tocify {
 </div>
 <div id="question-6" class="section level2">
 <h2>Question 6</h2>
+<p>R has a very powerful plotting pacakge called <code>ggplot2</code> which is part of the <code>tidyverse</code> family of functions. This works by building plots up layer by layer. You first define the data to plot, then how it maps onto the plot. After that, you add geometric shapes to the plot to represent the data.</p>
+<p>To make a botplot, we might run some code as follows, with the text in caps being replaced by your variables.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> MY_DATA, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> MY_IV1, <span class="at">fill =</span> MY_IV2, <span class="at">y =</span> MY_DV)) <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code></pre></div>
 <p>Make a boxplot of the data. Are there any reliable differences between conditions? Explain your logic.</p>
 </div>
 <div id="question-7" class="section level2">
 <h2>Question 7</h2>
-<p>We can perform inferential statistics in R.</p>
 <p>I have simulated some data below for a one-variable, 3-group experiment. The three groups are “control”, “treatment_low”, and “treatment_high” which are assigned to the column “condition” while the outcome is in the column “outcome”. (It doesn’t matter what this column or study represents, data only have meaning we assign to it.) This is a between-subjects design.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1892</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">60</span></span>
@@ -482,6 +472,7 @@ div.tocify {
 <p>Analyse this data using an appropriate ANOVA method. Report the results below.</p>
 <p>We can follow up with our analyses to determine where the effect lies. Do this by conducting a post-hoc tests using Tukey’s Honest Significant Differences method using the <code>TukeyHSD()</code> function. If you’re unsure how to do this type <code>?TukeyHSD</code> in the console. This will essentially give you a series of t-tests with your <em>p</em>-values adjusted for multiplicity.</p>
 <p>Describe the results of this test.</p>
+<p><em>There is a significant difference between the treatment high condition and control and treatment low conditions, which don’t differ.</em></p>
 </div>
 <div id="question-8" class="section level2">
 <h2>Question 8</h2>
@@ -489,6 +480,7 @@ div.tocify {
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aov</span>(DV <span class="sc">~</span> IV1 <span class="sc">+</span> IV2, <span class="at">data =</span> YOUR_DATA)</span></code></pre></div>
 <p>Here, any terms added to the right of the <code>~</code> are evaluated as main effects if we make their effects additive. If instead we use a multiplication symbol, we get both main effects <strong>and interactions</strong>.</p>
 <p>Perform an ANOVA on the <strong>summary_data</strong> we created earlier. To get your typical ANOVA table output, you must use <code>summary(aov(...))</code> or assign your ANOVA model to an object and call <code>summary()</code> on that object. We would like main effects and interaction for the <strong>sentence_location and target_location variables</strong>. Are there any main effects or interactions here?</p>
+<p><strong>There are no main effects of interactions present (all <em>p</em>s &gt; .186).</strong></p>
 <p>This answer may appear correct, but with repeated measures we need to tell R to adjust the errors (i.e. to conduct a within- rather than a between-subjects ANOVA) for any terms we want to estimate within each participant. Do this as follows:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aov</span>(</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  DV <span class="sc">~</span> IV1 <span class="sc">*</span> IV2 <span class="sc">+</span> </span>
@@ -496,6 +488,7 @@ div.tocify {
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> DATA</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Adjust your code to incorporate this. Do your estimates change? Can you explain why?</p>
+<p><em>The results are still non-significant. The F-values are now smaller, likely due to partialling-out any random variance that is more attributable to participant level variance rather than consistent effects.</em></p>
 </div>
 </div>
 

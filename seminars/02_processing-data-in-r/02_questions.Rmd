@@ -45,7 +45,7 @@ Make a code chunk. Using your data from Exercise 3, clean up any issues you migh
 
 **Assign this to a new object called cleaned_data_one**
 
-If you're unsure how these functions work, type `?mutate` and then `?case_when` in the console and press enter. The Help pane outlines how these functions work, and gives examples of working code.
+If you're unsure how these functions work, type `?mutate` and then `?case_when` in the console. The Help pane outlines how these functions work, and gives examples of working code.
 
 If you're still stuck, refer back to Lecture 2 part 3.
 
@@ -61,7 +61,7 @@ Make a code chunk. Add the age data from your initial data (raw_data) back in to
 
 ## Exercise 7
 
-Make a code chunk. Filter out any observations on the dependent variable which are NAs. Remember to use `is.na()` or `drop_na()`. Assign this new data to a object called "cleaned_data_three".
+Make a code chunk. Filter out any observations on the dependent variable which are NAs. Remember, to use `is.na()`. Assign this new data to a object called "cleaned_data_three".
 
 # Questions
 
@@ -98,7 +98,7 @@ We will work on this data to advance our knowledge of managing data in R.
 
 ## Question 1
 
-The ID column should be numeric. They do not need to be in any particular order or pattern. Can you make the IDs all numeric? For this, you want to **match** the **unique** ID's in the data set. You'll need the function `match()` and one other function to do this that you've seen before. 
+The ID column should be numeric. They do not need to be in any particular order or pattern. Can you make the IDs all numeric?
 
 ```{r answer-1}
 
@@ -106,7 +106,7 @@ The ID column should be numeric. They do not need to be in any particular order 
 
 ## Question 2
 
-The language column should have only two values (excluding NAs): English and Other. Can you change these to be a consistent code? Remember codes are case sensitive. Perhaps changing them to be lower case would help?
+The language column should have only two values (excluding NAs): English and Other. Can you change these to be a consistent code? Remember codes are case sensitive.
 
 ```{r question-2}
 
@@ -114,7 +114,7 @@ The language column should have only two values (excluding NAs): English and Oth
 
 ## Question 3
 
-Are there any problems with the gender, age, and tester columns? Explain your thinking. You can use code to demonstrate your work. If there aren't, that's fine too!
+Are there any problems with the gender, age, and tester columns? Explain your thinking. You can use code to demonstrate your work.
 
 ```{r answer-3}
 
@@ -124,13 +124,13 @@ There are no obvious problems with these variables.
 
 ## Question 4
 
-We have two columns, funRec and completion_time, which actually store two variables each within a cell. 
+We have two columkns, funRec and completion_time, which actually store two variables each within a cell. 
 
 funRec stores a number from 1-7 for how fun people found the task and whether or not they would recommend the study to a friend (yes/no). These are separated by a minus (-) sign.
 
 completion_time stores date times in the format of YYYY-MM-DD HH:MM:SS for when participants started and finished the study, separated by an underscore (_) sign.
 
-Learn about the function, `separate()` from tidyr in the tidyverse. This will help to create two columns for each of these columns to keep our data separate. You can read about how `separate()` works by typing `?separate()` into the console and pressing enter.
+Learn about the function, `separate()` from tidyr in the tidyverse. This will help to create two columns for each of these columns to keep our data separate.
 
 ### Question 4a
 
@@ -142,9 +142,7 @@ Separate the data in funRec into two columns, fun and recommend.
 
 ### Question 4b
 
-Separate the data from completion_time into two columns, start and end. 
-
-*Hint*: For this one, you'll need to be specific about what separates the two forms of data in the column.
+Separate the data from completion_time into two columns, start and end. *Hint*: For this one, you'll need to be specific about what separates the two forms of data in the column.
 
 ```{r question-4b}
 
@@ -206,7 +204,7 @@ final_row <- tibble(
 )
 ```
 
-```{r answer-8-error}
+```{r answer-8-error, eval = FALSE}
 
 ```
 
