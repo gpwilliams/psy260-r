@@ -1,5 +1,5 @@
 ---
-title: "Summarising and Plotting Data in R"
+title: "Summarising Data in R"
 subtitle: "Summarising Data"
 author: "Glenn Williams"
 institute: "University of Sunderland"
